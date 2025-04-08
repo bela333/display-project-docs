@@ -1,0 +1,21 @@
+---
+documentclass: elteikthesis
+classoption: 2025/04/08
+title: Kijelzők egyesítése gépi látás segítségével
+date: 2025
+author: Marton Zoltán
+toc: true
+biblatex: main.bib
+header-includes: |
+  \usepackage[newfloat]{minted}
+  \removefromtoclist[float]{lol}
+  \degree{programtervező informatikus BSc}
+  \supervisor{Kotroczó Roland}
+  \affiliation{egyetemi tanársegéd}
+  \university{Eötvös Loránd Tudományegyetem}
+  \faculty{Informatikai Kar}
+  \department{Információs rendszerek Tanszék}
+  \city{Budapest}
+  \logo{elte_cimer_szines}
+  \documentlang{hungarian}
+---
