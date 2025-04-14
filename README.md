@@ -1,3 +1,16 @@
+# CrossView dokumentáció
+
+## Előkövetelmények
+
+- LaTeX telepítve
+- Pandoc telepítve
+- `pandocfilters` python könyvtár telepítve
+- `pandoc-crossref` telepítése
+
+## Build
+
+`./build.ps1`
+
 ## TODOS
 
 - [ ] Felhasználó dokumentáció az a felhasználó E/3?

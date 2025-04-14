@@ -65,6 +65,32 @@ Sikeres kalibrálás után elérhetővé válik a `Broadcast` gomb, amivel átt�
 
 ### Közvetítési állapot használata
 
+A médiatartalmak elindítását és előnézetét a közvetítési állapotban lehet megtenni.
+
+A közvetítési állapotban a megjelenítő kliensek csak a virtuális kijelző tartalmát jelenítik meg.
+
+A konfiguráló kliensnek lehetősége van médiatartalmak típusát kiválasztani, a médiatartalmat kiválasztani, és a típustól függően feltölteni.
+
+Bal oldalon található a típus kiválasztó, tőle jobbra az adott típus konfigurációs panelje, majd a jobb oldalon egy előnézet. Az előnézet alatt opcionálisan megjelenhetnek az adott típushoz tartozó vezérlők is.<!--TODO: Kép, amiben be vannak ezek számozva-->
+
+Jelenleg két médiatartalom típus elérhető:<!--TODO: Ha lesz több médiatípus, ezt kibővíteni-->
+
+- Fénykép
+- Videó
+
+#### Fényképek közvetítése
+
+A bal sávon válasszuk ki a "Photos" lehetőséget. Ezzel láthatóvá válik a fénykép kezelő panel. Itt tudunk feltölteni képeket, illetve már feltöltött képeket "kiküldeni" a virtuális kijelzőre.
+
+Ennek a típusnak nincsenek vezérlői.
+
+
+#### Videók közvetítése
+
+A bal sávon válasszuk ki a "Videos" lehetőséget. Ezzel láthatóvá válik a videó kezelő panel. Itt meg tudunk adni egy videó elérési címét, amit megjeleníthetünk a virtuális kijelzőn.
+
+A cím lehet YouTube videóra mutató URL, vagy saját platformról kiszolgált tartalom. <!-- Biztos hogy engedünk custom kiszolgálót? Also, ide be lehetne írni, hogy a library mit supportál még. -->
+
 # Fejlesztői dokumentáció
 
 # Összegzés
