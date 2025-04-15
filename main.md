@@ -1,6 +1,7 @@
 ---
 numbersections: true
 ---
+
 # Bevezetés
 
 A mai világban körbevesznek minket a számítógépek. A zsebünkben lévő okostelefontól kezdve, a nappalinkban lévő televízión és számítógépen át, egészen a bolti vásárlásainkat segítő kioszkokig<!-- Ez a hivatalos magyar neve? Also, magyarázat? -->. Egyes kutatások szerint, egy személynek átlagosan **3,6** okos eszköze van<!-- Forrás! Mikori a kutatás? Csak a kijelzővel rendelkező eszközök relevánsak, de az lelőné a projekt célját. -->. Ezeknek az eszközönek viszont<!--ez így magyaros?--> a lehetőségeit korlátozza, hogy eredendően számítási és I/O kapacitása megoszlik. <!--Kivágva: A mai okostelefonok memóriája nagyobb, mint egyes laptopoké, és a kijelzőjük is jobb, mint a legtöbb monitor. Ennek ellenére vannak olyan --> Ezeknek a problémáknak a feloldására több megoldás is létezik, mind számítási<!--pl. Slurm, Spark etc. HPC-->, mind bemeneti oldalról<!--KVM-ek, Synergy és open source társai-->, de a kimeneti kérdésre kevesebb megoldás létezik.<!--Azért jó lenne egy-kettőt megemlíteni.-->
@@ -23,10 +24,11 @@ A szobákban lévő klienseknek két lehetséges **szerepe** van:
 
 - Konfiguráló
 
-    Ezek a kliensek felelnek a médiatartalmak kiválasztásáért, illetve a kijelzők helyzetének kalibrálásáért.
+  Ezek a kliensek felelnek a médiatartalmak kiválasztásáért, illetve a kijelzők helyzetének kalibrálásáért.
+
 - Megjelenítő
 
-    Ezeknek a klienseknek feladata, hogy a jelenleg megjelenítendő médiatartalomnak megjelenítsék azt a részét, amit az adott klienshez rendeltünk a kalibrálás során.
+  Ezeknek a klienseknek feladata, hogy a jelenleg megjelenítendő médiatartalomnak megjelenítsék azt a részét, amit az adott klienshez rendeltünk a kalibrálás során.
 
 Egy konfiguráló kliensből megjelenítő klienst lehet csinálni a jobb felső sarokban lévő `View` gomb kattintásával.
 
@@ -34,16 +36,17 @@ A szobáknak két lehetséges **állapota** van:
 
 - Kalibrálás
 
-    Ebben az állapotban minden megjelenítő kliensen egy kalibrációs jel jelenik meg. A konfiguráló kliensek feltölthetnek egy, a megjelenítő kliensekről készített fényképet (kalibráló képet<!--glossary-->).
+  Ebben az állapotban minden megjelenítő kliensen egy kalibrációs jel jelenik meg. A konfiguráló kliensek feltölthetnek egy, a megjelenítő kliensekről készített fényképet (kalibráló képet<!--glossary-->).
+
 - Közvetítés
 
-    Ebben az állapotban tudnak a konfiguráló kliensek médiatartalmakat kiválasztani, amiket a megjelenítő kliensek megjelenítenek. Ebbe az állapotba csak akkor lehet eljutni, ha kalibráló kép feldolgozása sikeres volt.
+  Ebben az állapotban tudnak a konfiguráló kliensek médiatartalmakat kiválasztani, amiket a megjelenítő kliensek megjelenítenek. Ebbe az állapotba csak akkor lehet eljutni, ha kalibráló kép feldolgozása sikeres volt.
 
 A két állapot között a konfiguráló kliensek tudnak váltani, az alkalmazás tetején levő gombpárral.
 
 ### Kalibrálási állapot használata
 
-Ahhoz, hogy minden kijelző síkbeli elhelyezkedését tudjuk, szükséges egy kalibrációs lépés. 
+Ahhoz, hogy minden kijelző síkbeli elhelyezkedését tudjuk, szükséges egy kalibrációs lépés.
 
 A kalibrálás során a felhasználó előkészítheti a megjelenítő klienseket. A legjobb eredmény elérésének érdekében próbáljuk meg az összes kijelzőt egy síkba helyezni.
 
@@ -71,7 +74,7 @@ A közvetítési állapotban a megjelenítő kliensek csak a virtuális kijelző
 
 A konfiguráló kliensnek lehetősége van médiatartalmak típusát kiválasztani, a médiatartalmat kiválasztani, és a típustól függően feltölteni.
 
-Bal oldalon található a típus kiválasztó, tőle jobbra az adott típus konfigurációs panelje, majd a jobb oldalon egy előnézet. Az előnézet alatt opcionálisan megjelenhetnek az adott típushoz tartozó vezérlők is.<!--TODO: Kép, amiben be vannak ezek számozva-->
+Bal oldalon található a típus kiválasztó **(1)**, tőle jobbra az adott típus konfigurációs panelje **(2)**, majd a jobb oldalon egy előnézet **(3)**. Az előnézet alatt opcionálisan megjelenhetnek az adott típushoz tartozó vezérlők is **(4)**.
 
 Jelenleg két médiatartalom típus elérhető:<!--TODO: Ha lesz több médiatípus, ezt kibővíteni-->
 
@@ -84,15 +87,17 @@ A bal sávon válasszuk ki a "Photos" lehetőséget. Ezzel láthatóvá válik a
 
 Ennek a típusnak nincsenek vezérlői.
 
-
 #### Videók közvetítése
 
 A bal sávon válasszuk ki a "Videos" lehetőséget. Ezzel láthatóvá válik a videó kezelő panel. Itt meg tudunk adni egy videó elérési címét, amit megjeleníthetünk a virtuális kijelzőn.
 
 A cím lehet YouTube videóra mutató URL, vagy saját platformról kiszolgált tartalom. <!-- Biztos hogy engedünk custom kiszolgálót? Also, ide be lehetne írni, hogy a library mit supportál még. -->
 
+A videó médiatartalom típus elérhetővé tesz egy vezérlő gombot is: a szünet/lejátszát (pause/play) gombot.
+
 # Fejlesztői dokumentáció
 
 # Összegzés
 
 # Irodalomjegyzék
+
