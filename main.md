@@ -76,6 +76,8 @@ A konfiguráló kliensnek lehetősége van médiatartalmak típusát kiválaszta
 
 Bal oldalon található a típus kiválasztó **(1)**, tőle jobbra az adott típus konfigurációs panelje **(2)**, majd a jobb oldalon egy előnézet **(3)**. Az előnézet alatt opcionálisan megjelenhetnek az adott típushoz tartozó vezérlők is **(4)**.
 
+![A konfiguráló kliens nézete a közvetítési állapotban](images/broadcast.png){width=50%}
+
 Jelenleg két médiatartalom típus elérhető:<!--TODO: Ha lesz több médiatípus, ezt kibővíteni-->
 
 - Fénykép
