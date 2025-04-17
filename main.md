@@ -162,8 +162,11 @@ A videó médiatartalom típus elérhetővé tesz egy vezérlő gombot is: a sz�
 
 # Fejlesztői dokumentáció
 
-<!-- Projekt szolgáltatás szintű felépítése -->
-<!-- main service, apriltag service, minio, redis -->
+A projekt magja a "Main Service" nevű React alapú full-stack alkalmazás. Ez implementálja mind a backend, mind a frontend funkcionalitást. 
+
+A kalibráláshoz készült egy "Apriltag Service" nevű Pythonos komponens is, ami egy microservice-ként funkcionál, és a kalibrálási jelek felismerését, illetve egyes kalibráláshoz kapcsolódó matematikai számításokat hajt végre.
+
+Külső fejlesztésű szolgáltatásként van használva a Redis mint adatbázis, és a Minio mint S3 kompatibilis tárhely.
 
 ## Quick Start
 
@@ -173,9 +176,69 @@ A videó médiatartalom típus elérhetővé tesz egy vezérlő gombot is: a sz�
 
 ## Adatbázis
 
-<!-- Redis ismertetése, indoklás -->
+A projekthez a Redis adatbázis szoftvert használtam. A Redis egy kulcs-érték adatbázis, ahol minden elérhető rögtön a memóriából, ezért gyakran használják például gyorsítótárakhoz.
 
-<!-- séma -->
+A Redis több szempontból is előnyös ehhez a projekthez:
+- gyors, hiszen minden memóriában van tárolva
+- mivel nincs huzamosabb ideig tárolt adat, ezért a memóriaigény alacsony
+- az adatok struktúrálatlanok, így nincs előnye az adatok táblákba rendezésének
+- beépített támogatás az alkalmazáson belüli üzenetküldésre (ezzel megkönnyítve a valós idejű adatszolgáltatást)
+
+Természetesen ez a választás hátrányokkal is járt:
+- a kulcs-érték felépítés miatt nincs széleskörű ORM támogatás, az adatbázishoz tartozó boilerplate kódod sajátkezűleg kell megírni
+- a JSON szerű adatbázisokhoz képest (pl. MongoDB) a Redis egy flat struktúrában tárolja az adatokat. Ennek hátránya, hogy hierarchikus adatok tárolására csak jól meggondolt kulcsokkal van lehetőség.
+
+  Például: `room:ROOMID:photos:PHOTOUUID:path`. Természetesen azért, hogy az SQL injection-re hajazó problémákat elkerüljük, szükséges, hogy a kulcs dinamikusan megadható tagjai validálva legyenek. Egy `:`-ot tartalmazó ROOMID könnyen problémákat okozhat a kódban.
+
+### Adatbázis séma
+
+Az alábbiakban a szoftver különböző komponenseiben használt Redis kulcsok találhatóak.
+
+A kulcsban `NAGY BETŰVEL` vannak jelölve a dinamikusan beillesztendő tagok:
+
+- `ROOM`: a szoba kódja
+
+#### Szoba-szintű adatbázis elemek
+
+| Kulcs | Típus | Leírás |
+| ----- | ----- | ------ |
+| `roomCount` | Szám | A létrehozott szobák számát tárolja. Értelmezhető úgy is, mint a legutoljára létrehozott szoba sorszáma. |
+| `room:ROOM` | PubSub csatorna | Ezzel a kulccsal nem létezik kulcs-érték páros. Ez a kulcs a [Pub/Sub](https://redis.io/docs/latest/develop/interact/pubsub/) üzeneteknek van fenntartva. Jelenleg csak a `ping` string küldhető el rajta. További információ: <!--TODO: ide rakni egy referenciát a Main Service-es PubSub részre --> |
+| `room:ROOM:mode` | string | A szoba jelenlegi állapota. Értéke csak `calibration` (kalibrálás) vagy `viewing` (közvetítés) lehet. |
+| `room:ROOM:image` | string | A szoba jelenlegi kalibrációs képének S3-beli neve, kiterjesztéssel együtt. |
+| `room:ROOM:width` | Szám | A szoba jelenlegi kalibrációs képének szélessége pixelben. |
+| `room:ROOM:height` | Szám | A szoba jelenlegi kalibrációs képének magassága pixelben. |
+
+Új szoba létrehozásakor a roomCount-ból szükséges létrehozni egy szoba kódot. Ehhez a LCG random szám algoritmus bijektív tulajdonságait használom ki. <!-- Kéne valami reliable source ezekre a tulajdonságokra. --> Ezt a következő kódrészlet implementálja a `mainservice/src/lib/utils.ts` fájlban:
+
+```typescript
+export function keyToCode(key: number, length = CODE_LENGTH) {
+  // This function uses the bijective
+  // properties of LCG random number generators
+  // to obfuscate the key
+  const a = BigInt(214013);
+  const c = BigInt(2531011);
+
+  const bigkey = BigInt(key);
+
+  // https://math.stackexchange.com/a/2115780
+  const modulo = BigInt(CODE_ALPHABET.length) ** BigInt(length);
+  const apowkey = powmod(a, bigkey, modulo);
+  let num = (apowkey + ((apowkey - 1n) / (a - 1n)) * c) % modulo;
+  let code = "";
+  for (let i = 0; i < length; i++) {
+    code += CODE_ALPHABET[Number(num) % CODE_ALPHABET.length];
+    num = num / BigInt(CODE_ALPHABET.length);
+  }
+  return code;
+}
+```
+
+#### Kijelző-szintű adatbázis elemek
+
+#### Jelenlegi közvetítéshez tartozó adatbázis elemek
+
+#### Feltöltött fényképekhez tartozó adatbázis elemek
 
 <!-- Szoba azonosító generálás -->
 
@@ -191,7 +254,7 @@ A videó médiatartalom típus elérhetővé tesz egy vezérlő gombot is: a sz�
 
 <!-- pathek -->
 
-<!-- serialization, pubsub -->
+<!-- serialization, pubsub (trpc) -->
 
 <!-- Fájlfeltöltés folyamata -->
 
