@@ -10,7 +10,70 @@ Szakdolgozatom egy interaktív webes alkalmazás, ami ezt az űrt hivatott betö
 
 # Felhasználói dokumentáció
 
-## Telepítés
+Az alkalmazás központilag kiszolgálva elérhető a https://getcrossview.com címen.
+
+## Sajátkezű kiszolgálás
+
+Ha az alkalmazást saját szerverről szeretnénk kiszolgálni, akkor a Docker Compose alapú telepítés javasolt.
+
+Az alapértelmezett konfiguráció egy szerverről szolgálja ki az összes szolgáltatást, melyeket egy proxy segítségével kapcsol össze. Ehhez szükséges, hogy a szolgáltatásoknak legyenek létrehozva a megfelelő aldomainek, amelyek mind a szerverre mutatnak.
+
+A szükséges domainek (zárójelben a központilag kiszolgált domainek)
+
+- A fő alkalmazás domainje (`getcrossview.com`/`www.getcrossview.com`)
+- A Minio (S3 tárhely) domainje (`minio.getcrossview.com`)
+- A Minio műszerfal domainje (`dashboard.getcrossview.com`)
+
+Lokális futtatás esetén elég a HOSTS fájl szerkesztése. Erről több információt a <!--TODO: Írni erről is egy fejezetet --> fejezetben találhat.
+
+1. Telepítse fel a Docker-t. Ehhez elérhető segédletet a [docker.com](https://docs.docker.com/engine/install/) oldalon találhat.
+2. Hozza létre a szükséges .env fájlokat
+
+   - `main.env`
+
+     1. Másolja le a `main.env.example` fájlt `main.env` néven
+     2. Nyissa meg szerkesztésre
+     3. Állítsa be az `S3_ENDPOINT` változót a Minio domainjére
+
+     A többi változót a Minio konfigurálása után állítjuk be
+
+   - `minio.env`
+     1. Másolja le a `minio.env.example` fájlt `minio.env` néven
+     2. Nyissa meg szerkesztésre
+     3. Hozzon létre egy biztonságos jelszót, majd állítsa be rá a `MINIO_ROOT_PASSWORD` változót
+     4. _[opcionális]_ Állítson be egy új felhasználónevet a `MINIO_ROOT_USER` változóval
+
+3. Módosítsa az nginx konfigurációt (`nginx.prod.conf`).
+   Állítsa át a `server_name` kezdetű sorokat úgy, hogy a szolgáltatások az ön által megadott domaint szolgálják ki.
+4. Indítsa el a szolgáltatásokat a `docker compose -f docker-compose.prod.yml up` paranccsal
+5. Konfigurálja a Minio-t
+   1. Menjen fel a Minio műszerfal oldalára, és lépjen be a `minio.env`-ben megadott adatokkal.
+   2. Állítsa be a régiót a Configuration->Region oldalon. Legyen `us-east-1`
+   3. A buckets oldalon hozzon létre két vödröt:
+      - `calibrations`
+      - `media`
+   4. Állítsa be a vödröknek, hogy publikosan olvashatóak legyenek
+      - Kattintson rá a vödörre
+      - A Summary aloldalon az Access Policy beállításnál válassza ki a `Custom` Access Policy-t
+      - Használja a következő irányelvet (ezzel a vödör bárki által olvasható lesz):
+        ```json
+        {
+          "Version": "2012-10-17",
+          "Statement": [
+            {
+              "Effect": "Allow",
+              "Principal": "*",
+              "Action": "s3:GetObject",
+              "Resource": "arn:aws:s3:::*"
+            }
+          ]
+        }
+        ```
+   5. Hozzon létre egy hozzáférési kulcsot az Access Keys oldalon. Mentse el biztonságos helyre az Access Key-t és a Secret Key-t is.
+6. Szerkessze a `main.env` fájl a most létrehozott hozzáférési kulccsal
+   - az `S3_ACCESS_KEY_ID` legyen az Access Key
+   - az `S3_SECRET_ACCESS_KEY_ID` legyen a Secret Key
+7. Indítsa újra a szolgáltatásokat
 
 ## Használat
 
@@ -102,4 +165,3 @@ A videó médiatartalom típus elérhetővé tesz egy vezérlő gombot is: a sz�
 # Összegzés
 
 # Irodalomjegyzék
-
