@@ -211,6 +211,8 @@ A kulcsban `NAGY BETŰVEL` vannak jelölve a dinamikusan beillesztendő tagok:
 
 Új szoba létrehozásakor a roomCount-ból szükséges létrehozni egy szoba kódot. Ehhez a LCG random szám algoritmus bijektív tulajdonságait használom ki. <!-- Kéne valami reliable source ezekre a tulajdonságokra. --> Ezt a következő kódrészlet implementálja a `mainservice/src/lib/utils.ts` fájlban:
 
+<!--TODO: Kitalálni, hogy az a függvény akkor most valójában mit is csinál manapság. Illetve esetleg matematikailag felírni.-->
+
 ```typescript
 export function keyToCode(key: number, length = CODE_LENGTH) {
   // This function uses the bijective
