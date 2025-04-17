@@ -162,6 +162,57 @@ A videó médiatartalom típus elérhetővé tesz egy vezérlő gombot is: a sz�
 
 # Fejlesztői dokumentáció
 
+<!-- Projekt szolgáltatás szintű felépítése -->
+<!-- main service, apriltag service, minio, redis -->
+
+## Quick Start
+
+<!-- Docker Compose beállítása dev env-be -->
+
+<!-- HOSTS fájl létrehozása (legyen külön fejezet, hogy lehessen rá referálni a felhasználói doksiból) -->
+
+## Adatbázis
+
+<!-- Redis ismertetése, indoklás -->
+
+<!-- séma -->
+
+<!-- Szoba azonosító generálás -->
+
+## Fájl tárolás
+
+<!-- S3, Minio -->
+
+<!-- presigned linkek -->
+
+## Main service
+
+<!-- react, t3 stack, full stack -->
+
+<!-- pathek -->
+
+<!-- serialization, pubsub -->
+
+<!-- Fájlfeltöltés folyamata -->
+
+<!-- médiatípusok ismertetése, új médiatípusok hozzáadásának folyamata -->
+
+## Kalibrálás
+
+### Kalibrálási szolgáltatás
+
+<!-- Apriltag, OpenCV, Python, FastAPI -->
+
+### Kalibrálási folyamat
+
+<!-- End to end mátrixok -->
+
+<!-- Hasznos kód részletek -->
+
+## Tesztek
+
+<!-- TODO: Tesztek -->
+
 # Összegzés
 
 # Irodalomjegyzék
