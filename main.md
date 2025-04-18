@@ -24,7 +24,7 @@ A szükséges domainek (zárójelben a központilag kiszolgált domainek)
 - A Minio (S3 tárhely) domainje (`minio.getcrossview.com`)
 - A Minio műszerfal domainje (`dashboard.getcrossview.com`)
 
-Lokális futtatás esetén elég a HOSTS fájl szerkesztése. Erről több információt a <!--TODO: Írni erről is egy fejezetet --> fejezetben találhat.
+Lokális futtatás esetén elég a HOSTS fájl szerkesztése. Erről több információt a -@sec:hosts fejezetben találhat.
 
 1. Telepítse fel a Docker-t. Ehhez elérhető segédletet a [docker.com](https://docs.docker.com/engine/install/) oldalon találhat.
 2. Hozza létre a szükséges .env fájlokat
@@ -145,6 +145,7 @@ Jelenleg két médiatartalom típus elérhető:<!--TODO: Ha lesz több médiatí
 
 - Fénykép
 - Videó
+- iFrame
 
 #### Fényképek közvetítése
 
@@ -162,9 +163,9 @@ A videó médiatartalom típus elérhetővé tesz egy vezérlő gombot is: a sz�
 
 #### iFrame közvetítés (haladó)
 
-Az alkalmazásban elérhető egy **haladóknak szánt** iFrame opció is. Ezzel egy tetszőleges weboldalt lehet megjeleníteni a virtuális kijelzőn. Fontos, hogy ez az opció nem hajt végre szinkronizálást a kliensek között <!-- Ide be kéne majd linkelni a részletes működési leírást, maybe -->, illetve csak olyan weboldalakkal működik, amelyek engedik az iFrame beágyazást. 
+Az alkalmazásban elérhető egy **haladóknak szánt** iFrame opció is. Ezzel egy tetszőleges weboldalt lehet megjeleníteni a virtuális kijelzőn. Fontos, hogy ez az opció nem hajt végre szinkronizálást a kliensek között <!-- Ide be kéne majd linkelni a részletes működési leírást, maybe -->, illetve csak olyan weboldalakkal működik, amelyek engedik az iFrame beágyazást.
 
-Egy egyszerű példa a https://vdo.ninja szolgáltatás használata, egy *kijelző képének megosztására*.
+Egy egyszerű példa a https://vdo.ninja szolgáltatás használata, egy _kijelző képének megosztására_.
 
 1. Menjünk fel a https://vdo.ninja oldalra.
 2. Válasszuk ki a "Remote Screenshare into OBS" lehetőséget
@@ -175,13 +176,13 @@ Egy egyszerű példa a https://vdo.ninja szolgáltatás használata, egy *kijelz
 7. Másoljuk be az elöbbi linket
 8. Adjuk hozzá a következő tagot: `&na` (ez kikapcsolja a hangot, ezzel engedélyezve az automatikus lejátszást)
 
-A [vdo.ninja](https://vdo.ninja) szolgáltatást több más dologra is lehet használni, például webkamerák megosztására, [Android illetve iOS eszközökről való közvetítésre](https://docs.vdo.ninja/steves-helper-apps/native-mobile-app-versions) (natív alkalmazások segítségével), vagy akár az [OBS nevű szoftverből közvetíteni](https://docs.vdo.ninja/guides/from-obs-to-vdo.ninja-using-whip)<!--reference-->. 
+A [vdo.ninja](https://vdo.ninja) szolgáltatást több más dologra is lehet használni, például webkamerák megosztására, [Android illetve iOS eszközökről való közvetítésre](https://docs.vdo.ninja/steves-helper-apps/native-mobile-app-versions) (natív alkalmazások segítségével), vagy akár az [OBS nevű szoftverből közvetíteni](https://docs.vdo.ninja/guides/from-obs-to-vdo.ninja-using-whip)<!--reference-->.
 
 A vdo.ninja további lehetőségeiről a [dokumentációjában](https://docs.vdo.ninja/) lehet olvasni.
 
 # Fejlesztői dokumentáció
 
-A projekt magja a "Main Service" nevű React alapú full-stack alkalmazás. Ez implementálja mind a backend, mind a frontend funkcionalitást. 
+A projekt magja a "Main Service" nevű React alapú full-stack alkalmazás. Ez implementálja mind a backend, mind a frontend funkcionalitást.
 
 A kalibráláshoz készült egy "Apriltag Service" nevű Pythonos komponens is, ami egy microservice-ként funkcionál, és a kalibrálási jelek felismerését, illetve egyes kalibráláshoz kapcsolódó matematikai számításokat hajt végre.
 
@@ -191,21 +192,104 @@ Külső fejlesztésű szolgáltatásként van használva a Redis mint adatbázis
 
 ## Quick Start
 
-<!-- Docker Compose beállítása dev env-be -->
+A fejlesztői környezet ugyan telepítése hasonló a prod környezetéhez. A főbb különbség, hogy a `docker-compose.prod.yml` és az `nginx.prod.conf` helyett a `docker-compose.dev.yml` és az `nginx.dev.conf` fájlokat kell módosítani.
 
-<!-- HOSTS fájl létrehozása (legyen külön fejezet, hogy lehessen rá referálni a felhasználói doksiból) -->
+1. Telepítse fel a Docker-t. Ehhez elérhető segédletet a [docker.com](https://docs.docker.com/engine/install/) oldalon találhat.
+2. Hozza létre a szükséges .env fájlokat
+
+   - `main.env`
+
+     1. Másolja le a `main.env.example` fájlt `main.env` néven
+     2. Nyissa meg szerkesztésre
+     3. Állítsa be az `S3_ENDPOINT` változót a Minio domainjére
+
+     A többi változót a Minio konfigurálása után állítjuk be
+
+   - `minio.env`
+     1. Másolja le a `minio.env.example` fájlt `minio.env` néven
+     2. Nyissa meg szerkesztésre
+     3. Hozzon létre egy biztonságos jelszót, majd állítsa be rá a `MINIO_ROOT_PASSWORD` változót
+     4. _[opcionális]_ Állítson be egy új felhasználónevet a `MINIO_ROOT_USER` változóval
+
+3. Módosítsa az nginx konfigurációt (`nginx.dev.conf`).
+   Állítsa át a `server_name` kezdetű sorokat úgy, hogy a szolgáltatások az ön által megadott domaint szolgálják ki.
+4. Indítsa el a szolgáltatásokat a `docker compose -f docker-compose.dev.yml up` paranccsal
+5. Konfigurálja a Minio-t
+   1. Menjen fel a Minio műszerfal oldalára, és lépjen be a `minio.env`-ben megadott adatokkal.
+   2. Állítsa be a régiót a Configuration->Region oldalon. Legyen `us-east-1`
+   3. A buckets oldalon hozzon létre két vödröt:
+      - `calibrations`
+      - `media`
+   4. Állítsa be a vödröknek, hogy publikosan olvashatóak legyenek
+      - Kattintson rá a vödörre
+      - A Summary aloldalon az Access Policy beállításnál válassza ki a `Custom` Access Policy-t
+      - Használja a következő irányelvet (ezzel a vödör bárki által olvasható lesz):
+        ```json
+        {
+          "Version": "2012-10-17",
+          "Statement": [
+            {
+              "Effect": "Allow",
+              "Principal": "*",
+              "Action": "s3:GetObject",
+              "Resource": "arn:aws:s3:::*"
+            }
+          ]
+        }
+        ```
+   5. Hozzon létre egy hozzáférési kulcsot az Access Keys oldalon. Mentse el biztonságos helyre az Access Key-t és a Secret Key-t is.
+6. Szerkessze a `main.env` fájl a most létrehozott hozzáférési kulccsal
+   - az `S3_ACCESS_KEY_ID` legyen az Access Key
+   - az `S3_SECRET_ACCESS_KEY_ID` legyen a Secret Key
+7. Indítsa újra a szolgáltatásokat
+
+### Lokális domain használata {#sec:hosts}
+
+Lokális tesztelés esetén hasznos lehet, ha nem kell egy kulső domaint használni. Ennek a legegyszerűbb módszere egy HOSTS fájl létrehozása.
+
+#### HOSTS fájl Windows operációs rendszeren
+
+1. Indítsa el a Jegyzettömböt rendszergazda jogosultságokkal
+2. Nyissa meg a `C:\Windows\System32\drivers\etc\hosts` fájlt (szükséges lehet kiválasztani a "Minden fájl (*.*)" opciót)
+3. Adja hozzá a következő sorokat:
+    ```
+    127.0.0.1 getcrossview.com
+    127.0.0.1 www.getcrossview.com
+    127.0.0.1 apriltag.getcrossview.com
+    127.0.0.1 minio.getcrossview.com
+    127.0.0.1 dashboard.getcrossview.com
+    ```
+4. Mentse el a fájlt
+
+#### HOSTS fájl Linux/MacOS operációs rendszeren
+
+1. Nyisson meg egy Terminált
+2. A következő paranccsal indítsa el a `nano`-t rendszergazda jogosultságokkal:
+    ```
+    sudo nano /etc/hosts
+    ```
+3. Adja hozzá a következő sorokat:
+    ```
+    127.0.0.1 getcrossview.com www.getcrossview.com
+    127.0.0.1 apriltag.getcrossview.com
+    127.0.0.1 minio.getcrossview.com
+    127.0.0.1 dashboard.getcrossview.com
+    ```
+4. Mentse el a fájlt
 
 ## Adatbázis
 
 A projekthez a Redis adatbázis szoftvert használtam. A Redis egy kulcs-érték adatbázis, ahol minden elérhető rögtön a memóriából, ezért gyakran használják például gyorsítótárakhoz.
 
 A Redis több szempontból is előnyös ehhez a projekthez:
+
 - gyors, hiszen minden memóriában van tárolva
 - mivel nincs huzamosabb ideig tárolt adat, ezért a memóriaigény alacsony
 - az adatok struktúrálatlanok, így nincs előnye az adatok táblákba rendezésének
 - beépített támogatás az alkalmazáson belüli üzenetküldésre (ezzel megkönnyítve a valós idejű adatszolgáltatást)
 
 Természetesen ez a választás hátrányokkal is járt:
+
 - a kulcs-érték felépítés miatt nincs széleskörű ORM támogatás, az adatbázishoz tartozó boilerplate kódod sajátkezűleg kell megírni
 - a JSON szerű adatbázisokhoz képest (pl. MongoDB) a Redis egy flat struktúrában tárolja az adatokat. Ennek hátránya, hogy hierarchikus adatok tárolására csak jól meggondolt kulcsokkal van lehetőség.
 
@@ -221,14 +305,14 @@ A kulcsban `NAGY BETŰVEL` vannak jelölve a dinamikusan beillesztendő tagok:
 
 #### Szoba-szintű adatbázis elemek
 
-| Kulcs | Típus | Leírás |
-| ----- | ----- | ------ |
-| `roomCount` | Szám | A létrehozott szobák számát tárolja. Értelmezhető úgy is, mint a legutoljára létrehozott szoba sorszáma. |
-| `room:ROOM` | PubSub csatorna | Ezzel a kulccsal nem létezik kulcs-érték páros. Ez a kulcs a [Pub/Sub](https://redis.io/docs/latest/develop/interact/pubsub/) üzeneteknek van fenntartva. Jelenleg csak a `ping` string küldhető el rajta. További információ: <!--TODO: ide rakni egy referenciát a Main Service-es PubSub részre --> |
-| `room:ROOM:mode` | string | A szoba jelenlegi állapota. Értéke csak `calibration` (kalibrálás) vagy `viewing` (közvetítés) lehet. |
-| `room:ROOM:image` | string | A szoba jelenlegi kalibrációs képének S3-beli neve, kiterjesztéssel együtt. |
-| `room:ROOM:width` | Szám | A szoba jelenlegi kalibrációs képének szélessége pixelben. |
-| `room:ROOM:height` | Szám | A szoba jelenlegi kalibrációs képének magassága pixelben. |
+| Kulcs              | Típus           | Leírás                                                                                                                                                                                                                                                                                                 |
+| ------------------ | --------------- | ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------ |
+| `roomCount`        | Szám            | A létrehozott szobák számát tárolja. Értelmezhető úgy is, mint a legutoljára létrehozott szoba sorszáma.                                                                                                                                                                                               |
+| `room:ROOM`        | PubSub csatorna | Ezzel a kulccsal nem létezik kulcs-érték páros. Ez a kulcs a [Pub/Sub](https://redis.io/docs/latest/develop/interact/pubsub/) üzeneteknek van fenntartva. Jelenleg csak a `ping` string küldhető el rajta. További információ: <!--TODO: ide rakni egy referenciát a Main Service-es PubSub részre --> |
+| `room:ROOM:mode`   | string          | A szoba jelenlegi állapota. Értéke csak `calibration` (kalibrálás) vagy `viewing` (közvetítés) lehet.                                                                                                                                                                                                  |
+| `room:ROOM:image`  | string          | A szoba jelenlegi kalibrációs képének S3-beli neve, kiterjesztéssel együtt.                                                                                                                                                                                                                            |
+| `room:ROOM:width`  | Szám            | A szoba jelenlegi kalibrációs képének szélessége pixelben.                                                                                                                                                                                                                                             |
+| `room:ROOM:height` | Szám            | A szoba jelenlegi kalibrációs képének magassága pixelben.                                                                                                                                                                                                                                              |
 
 Új szoba létrehozásakor a roomCount-ból szükséges létrehozni egy szoba kódot. Ehhez a LCG random szám algoritmus bijektív tulajdonságait használom ki. <!-- Kéne valami reliable source ezekre a tulajdonságokra. --> Ezt a következő kódrészlet implementálja a `mainservice/src/lib/utils.ts` fájlban:
 
