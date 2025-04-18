@@ -160,6 +160,25 @@ A cím lehet YouTube videóra mutató URL, vagy saját platformról kiszolgált 
 
 A videó médiatartalom típus elérhetővé tesz egy vezérlő gombot is: a szünet/lejátszát (pause/play) gombot.
 
+#### iFrame közvetítés (haladó)
+
+Az alkalmazásban elérhető egy **haladóknak szánt** iFrame opció is. Ezzel egy tetszőleges weboldalt lehet megjeleníteni a virtuális kijelzőn. Fontos, hogy ez az opció nem hajt végre szinkronizálást a kliensek között <!-- Ide be kéne majd linkelni a részletes működési leírást, maybe -->, illetve csak olyan weboldalakkal működik, amelyek engedik az iFrame beágyazást. 
+
+Egy egyszerű példa a https://vdo.ninja szolgáltatás használata, egy *kijelző képének megosztására*.
+
+1. Menjünk fel a https://vdo.ninja oldalra.
+2. Válasszuk ki a "Remote Screenshare into OBS" lehetőséget
+3. Válasszuk ki a megosztani kívánt kijelzőt
+4. Másoljuk ki az oldal tetején található `https://vdo.ninja/?view/??????` linket a mellette lévő 📎 gomb segítségével.
+5. Menjünk át a CrossView szobánkba, ami már be van állítva Közvetítési állapotra
+6. Válasszuk ki az iFrame médiatartalom típust
+7. Másoljuk be az elöbbi linket
+8. Adjuk hozzá a következő tagot: `&na` (ez kikapcsolja a hangot, ezzel engedélyezve az automatikus lejátszást)
+
+A [vdo.ninja](https://vdo.ninja) szolgáltatást több más dologra is lehet használni, például webkamerák megosztására, [Android illetve iOS eszközökről való közvetítésre](https://docs.vdo.ninja/steves-helper-apps/native-mobile-app-versions) (natív alkalmazások segítségével), vagy akár az [OBS nevű szoftverből közvetíteni](https://docs.vdo.ninja/guides/from-obs-to-vdo.ninja-using-whip)<!--reference-->. 
+
+A vdo.ninja további lehetőségeiről a [dokumentációjában](https://docs.vdo.ninja/) lehet olvasni.
+
 # Fejlesztői dokumentáció
 
 A projekt magja a "Main Service" nevű React alapú full-stack alkalmazás. Ez implementálja mind a backend, mind a frontend funkcionalitást. 
@@ -167,6 +186,8 @@ A projekt magja a "Main Service" nevű React alapú full-stack alkalmazás. Ez i
 A kalibráláshoz készült egy "Apriltag Service" nevű Pythonos komponens is, ami egy microservice-ként funkcionál, és a kalibrálási jelek felismerését, illetve egyes kalibráláshoz kapcsolódó matematikai számításokat hajt végre.
 
 Külső fejlesztésű szolgáltatásként van használva a Redis mint adatbázis, és a Minio mint S3 kompatibilis tárhely.
+
+<!-- High level overview, hogy a különböző szolgáltatások hogyan kapcsolódnak össze, hogyan lesz a szoba sorszámból kód, mi történik kalibráláskor, mi is jelenik meg valójában a kijelzőkön. -->
 
 ## Quick Start
 
