@@ -8,7 +8,7 @@ A mai világban körbevesznek minket a számítógépek. A zsebünkben lévő ok
 
 Szakdolgozatom egy interaktív webes alkalmazás, ami ezt az űrt hivatott betölteni<!--Ez így van elég hivatalos?-->. Segítségével bármennyi webböngészésre képes eszköz kijelzőjét fel tudjuk használni egy kijelzőként. Ezeket az egyesített kijelzőket (továbbiakban virtuális kijelzőket<!--Szójegyzék-->) használhatjuk különböző médiatartalmak megjelenítésére, például képek, videók, prezentációk.
 
-# Felhasználói dokumentáció
+# Felhasználói dokumentáció {#sec:userdocs}
 
 Az alkalmazás központilag kiszolgálva elérhető a https://getcrossview.com címen.
 
@@ -188,8 +188,6 @@ A kalibráláshoz készült egy "Apriltag Service" nevű Pythonos komponens is, 
 
 Külső fejlesztésű szolgáltatásként van használva a Redis mint adatbázis, és a Minio mint S3 kompatibilis tárhely.
 
-<!-- High level overview, hogy a különböző szolgáltatások hogyan kapcsolódnak össze, hogyan lesz a szoba sorszámból kód, mi történik kalibráláskor, mi is jelenik meg valójában a kijelzőkön. -->
-
 ## Quick Start
 
 A fejlesztői környezet ugyan telepítése hasonló a prod környezetéhez. A főbb különbség, hogy a `docker-compose.prod.yml` és az `nginx.prod.conf` helyett a `docker-compose.dev.yml` és az `nginx.dev.conf` fájlokat kell módosítani.
@@ -277,6 +275,26 @@ Lokális tesztelés esetén hasznos lehet, ha nem kell egy kulső domaint haszn�
     ```
 4. Mentse el a fájlt
 
+## Overview
+
+Ennek a fejezetnek az elolvasása előtt érdemes elolvasni a -@sec:userdocs (felhasználói dokumentáció) fejezetet.
+
+Az alkalmazás szobákra van osztva, amelyek egymástól függetlenül működnek. Minden szoba 24 óráig elérhető.
+
+A szobáknak van egy azonosítója, amely egy szekvenciális sorszámból van generálva egy determinisztikus algoritmussal (lásd: -@sec:roomcode ). Ez biztosítja, hogy egyszerre két szoba nem kaphatja meg ugyan azt a kódot.
+
+Minden szobához tartozhat egy kalibrációs kép, amely a legutóbb feltöltött kalibráció szerint készül. Kalibrációs állapotba csak akkor lehet áttérni, ha van ilyen kép. Ezen felül minden szobához tartozhatnak feltöltött fényképek, amelyeket a közvetítési állapotban lehet használni.
+
+Minden megjelenítő kliensnek van egy egyedi azonosító sorszáma. Ez a sorszám az elérésiútban tárolódik el. A megjelenített kalibráló jel (Apriltag <!--ref-->) sorszáma megegyezik a kliens sorszámával.
+
+A kalibráció során a képen az Apriltag Service megkeresi az összes kalibráló jelet, majd az azokból megtalált homográfiákból<!--ref--> és a jelek elhelyezkedéséből létrehoz egy egész kijelzős homográfiát, és egy virtuális koordinátarendszerbe helyezi őket. 
+
+Közvetítési állapotba érve a megjelenítő kliensek a hozzájuk tartozó homográfiát használva egy `div`-re CSS `transform`-ot helyez (`ScreenContent`). Ez a `transform` vetíti ki a `div` tartalmát a megjelenítő kliens kijelzőjére úgy, hogy a kijelzők egy koherens képet alkossanak.
+
+A homográfiák létrehozásáról további információ a <!--TODO: Add reference to matrices chaper--> fejezetben található.
+
+A `ScreenContent` komponens a szoba jelenlegi adatai szerint töltődik fel a megfelelő tartalommal. Mivel a vetítést a CSS `transform` végzi, ezért ennek a komponensnek nem kell foglalkoznia vele, csak a szinkronizálást kell implementálnia, ahol lehet (pl. videó jelenlegi timestampjének szinkronizálása a kliensek között).
+
 ## Adatbázis
 
 A projekthez a Redis adatbázis szoftvert használtam. A Redis egy kulcs-érték adatbázis, ahol minden elérhető rögtön a memóriából, ezért gyakran használják például gyorsítótárakhoz.
@@ -313,6 +331,8 @@ A kulcsban `NAGY BETŰVEL` vannak jelölve a dinamikusan beillesztendő tagok:
 | `room:ROOM:image`  | string          | A szoba jelenlegi kalibrációs képének S3-beli neve, kiterjesztéssel együtt.                                                                                                                                                                                                                            |
 | `room:ROOM:width`  | Szám            | A szoba jelenlegi kalibrációs képének szélessége pixelben.                                                                                                                                                                                                                                             |
 | `room:ROOM:height` | Szám            | A szoba jelenlegi kalibrációs képének magassága pixelben.                                                                                                                                                                                                                                              |
+
+##### Szoba kód generálása {#sec:roomcode}
 
 Új szoba létrehozásakor a roomCount-ból szükséges létrehozni egy szoba kódot. Ehhez a LCG random szám algoritmus bijektív tulajdonságait használom ki. <!-- Kéne valami reliable source ezekre a tulajdonságokra. --> Ezt a következő kódrészlet implementálja a `mainservice/src/lib/utils.ts` fájlban:
 
