@@ -320,6 +320,7 @@ Az alábbiakban a szoftver különböző komponenseiben használt Redis kulcsok 
 A kulcsban `NAGY BETŰVEL` vannak jelölve a dinamikusan beillesztendő tagok:
 
 - `ROOM`: a szoba kódja
+- `SCREEN`: a megjelenítő kliens sorszáma
 
 #### Szoba-szintű adatbázis elemek
 
@@ -363,11 +364,20 @@ export function keyToCode(key: number, length = CODE_LENGTH) {
 
 #### Kijelző-szintű adatbázis elemek
 
+| Kulcs | Típus | Leírás |
+| ----- | ----- | ------ |
+| `room:ROOM:screenCount` | Szám | Egy szobához tartozó megjelenítő kliensek száma |
+| `room:ROOM:available` | Szám halmaz | Egy szobához tartozó jelenleg elérhető megjelenítő kliensek sorszámának halmaza |
+| `room:ROOM:screen:SCREEN:config` | JSON string - `{width: number, height: number, x: number, y: number}` | A megjelenítő kliensek kalibráló jelének helye és mérete a kijelzőn. Jelenleg ez pontosan a képernyő jobb fele |
+| `room:ROOM:screen:SCREEN:ping` | Szám | Mindig `1`. Az [EXPIRE](https://redis.io/docs/latest/commands/expire/) értéke 2 percre van beállítva, és a kliensek 30 másodpercenként újra létrehozzák. Ezzel lehet észlelni kliens timeout-ot. Lásd: -@sec:timeout |
+| `room:ROOM:screen:SCREEN:homography` | JSON string - 3x3-as szám mátrix | Az Apriltag Service által generált homográfia. Lásd: <!--Mátrixos fejezet referencia--> |
+
+#### Megjelenítő kliens timeout {#sec:timeout}
+
 #### Jelenlegi közvetítéshez tartozó adatbázis elemek
 
 #### Feltöltött fényképekhez tartozó adatbázis elemek
 
-<!-- Szoba azonosító generálás -->
 
 ## Fájl tárolás
 
