@@ -56,6 +56,7 @@ Lokális futtatás esetén elég a HOSTS fájl szerkesztése. Erről több infor
       - Kattintson rá a vödörre
       - A Summary aloldalon az Access Policy beállításnál válassza ki a `Custom` Access Policy-t
       - Használja a következő irányelvet (ezzel a vödör bárki által olvasható lesz):
+
         ```json
         {
           "Version": "2012-10-17",
@@ -69,6 +70,7 @@ Lokális futtatás esetén elég a HOSTS fájl szerkesztése. Erről több infor
           ]
         }
         ```
+
    5. Hozzon létre egy hozzáférési kulcsot az Access Keys oldalon. Mentse el biztonságos helyre az Access Key-t és a Secret Key-t is.
 6. Szerkessze a `main.env` fájl a most létrehozott hozzáférési kulccsal
    - az `S3_ACCESS_KEY_ID` legyen az Access Key
@@ -222,6 +224,7 @@ A fejlesztői környezet ugyan telepítése hasonló a prod környezetéhez. A f
       - Kattintson rá a vödörre
       - A Summary aloldalon az Access Policy beállításnál válassza ki a `Custom` Access Policy-t
       - Használja a következő irányelvet (ezzel a vödör bárki által olvasható lesz):
+
         ```json
         {
           "Version": "2012-10-17",
@@ -235,6 +238,7 @@ A fejlesztői környezet ugyan telepítése hasonló a prod környezetéhez. A f
           ]
         }
         ```
+
    5. Hozzon létre egy hozzáférési kulcsot az Access Keys oldalon. Mentse el biztonságos helyre az Access Key-t és a Secret Key-t is.
 6. Szerkessze a `main.env` fájl a most létrehozott hozzáférési kulccsal
    - az `S3_ACCESS_KEY_ID` legyen az Access Key
@@ -248,8 +252,9 @@ Lokális tesztelés esetén hasznos lehet, ha nem kell egy kulső domaint haszn�
 #### HOSTS fájl Windows operációs rendszeren
 
 1. Indítsa el a Jegyzettömböt rendszergazda jogosultságokkal
-2. Nyissa meg a `C:\Windows\System32\drivers\etc\hosts` fájlt (szükséges lehet kiválasztani a "Minden fájl (*.*)" opciót)
+2. Nyissa meg a `C:\Windows\System32\drivers\etc\hosts` fájlt (szükséges lehet kiválasztani a "Minden fájl (\*.\*)" opciót)
 3. Adja hozzá a következő sorokat:
+
     ```
     127.0.0.1 getcrossview.com
     127.0.0.1 www.getcrossview.com
@@ -257,22 +262,27 @@ Lokális tesztelés esetén hasznos lehet, ha nem kell egy kulső domaint haszn�
     127.0.0.1 minio.getcrossview.com
     127.0.0.1 dashboard.getcrossview.com
     ```
+
 4. Mentse el a fájlt
 
 #### HOSTS fájl Linux/MacOS operációs rendszeren
 
 1. Nyisson meg egy Terminált
 2. A következő paranccsal indítsa el a `nano`-t rendszergazda jogosultságokkal:
+
     ```
     sudo nano /etc/hosts
     ```
+
 3. Adja hozzá a következő sorokat:
+
     ```
     127.0.0.1 getcrossview.com www.getcrossview.com
     127.0.0.1 apriltag.getcrossview.com
     127.0.0.1 minio.getcrossview.com
     127.0.0.1 dashboard.getcrossview.com
     ```
+
 4. Mentse el a fájlt
 
 ## Overview
@@ -287,7 +297,7 @@ Minden szobához tartozhat egy kalibrációs kép, amely a legutóbb feltöltöt
 
 Minden megjelenítő kliensnek van egy egyedi azonosító sorszáma. Ez a sorszám az elérésiútban tárolódik el. A megjelenített kalibráló jel (Apriltag <!--ref-->) sorszáma megegyezik a kliens sorszámával.
 
-A kalibráció során a képen az Apriltag Service megkeresi az összes kalibráló jelet, majd az azokból megtalált homográfiákból<!--ref--> és a jelek elhelyezkedéséből létrehoz egy egész kijelzős homográfiát, és egy virtuális koordinátarendszerbe helyezi őket. 
+A kalibráció során a képen az Apriltag Service megkeresi az összes kalibráló jelet, majd az azokból megtalált homográfiákból<!--ref--> és a jelek elhelyezkedéséből létrehoz egy egész kijelzős homográfiát, és egy virtuális koordinátarendszerbe helyezi őket.
 
 Közvetítési állapotba érve a megjelenítő kliensek a hozzájuk tartozó homográfiát használva egy `div`-re CSS `transform`-ot helyez (`ScreenContent`). Ez a `transform` vetíti ki a `div` tartalmát a megjelenítő kliens kijelzőjére úgy, hogy a kijelzők egy koherens képet alkossanak.
 
@@ -372,12 +382,11 @@ export function keyToCode(key: number, length = CODE_LENGTH) {
 | `room:ROOM:screen:SCREEN:ping` | Szám | Mindig `1`. Az [EXPIRE](https://redis.io/docs/latest/commands/expire/) értéke 2 percre van beállítva, és a kliensek 30 másodpercenként újra létrehozzák. Ezzel lehet észlelni kliens timeout-ot. Lásd: -@sec:timeout |
 | `room:ROOM:screen:SCREEN:homography` | JSON string - 3x3-as szám mátrix | Az Apriltag Service által generált homográfia. Lásd: <!--Mátrixos fejezet referencia--> |
 
-#### Megjelenítő kliens timeout {#sec:timeout}
+##### Megjelenítő kliens timeout {#sec:timeout}
 
 #### Jelenlegi közvetítéshez tartozó adatbázis elemek
 
 #### Feltöltött fényképekhez tartozó adatbázis elemek
-
 
 ## Fájl tárolás
 
