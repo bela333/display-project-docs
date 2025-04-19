@@ -384,6 +384,41 @@ export function keyToCode(key: number, length = CODE_LENGTH) {
 
 ##### Megjelenítő kliens timeout {#sec:timeout}
 
+Egyes esetekben nem lehet egyértelműen eldönteni, hogy a megjelenítő kliens mikor csatlakozott le. Ennek az észlelésére van beépítve egy pingelő rendszer az alkalmazásba. A kliens 30 másodpercenként hívja meg a `sendPing` szerveroldali függvényt, amely a `room:ROOM:screen:SCREEN:ping` kulcsó értéket `1`-re állítja, 2 perces EXPIRE értékkel. Így a kulcs nem fog eltűnni, amíg létezik a megjelenítő kliens. 
+
+A kulcs eltűnését egy [keyspace notification](https://redis.io/docs/latest/develop/use/keyspace-notifications/) segítségével vesszük észre. 
+
+```ts
+// A ping kulcs-ot matchelő regex
+const screenKeyRegex = /^room:([^:]+):screen:(\d+):ping$/;
+
+export async function setupScreenExpiry(redis: RedisClientType) {
+  // keyspace notification-ök bekapcsolása "Keyevent, expire" módban
+  await redis.configSet("notify-keyspace-events", "Ex");
+  // Új Redis kliens létrehozása, mivel subscribe mellett más művelet nem hajtható végre
+  const listener = redis.duplicate();
+  await listener.connect();
+
+  // Ez az event meghívódik bármilyen kulcs lejártakor
+  void listener.subscribe("__keyevent@0__:expired", (key) => {
+    // Ha a kulcs az egy kijelző timeouthoz tartozik, akkor hívja le a deregisterScreen függvényt az adott kijelzőn
+    const matches = key.match(screenKeyRegex);
+    if (matches === null) {
+      return;
+    }
+    const roomID = matches[1];
+    const screenID = matches[2];
+    if (!roomID || !screenID) {
+      console.error("Invalid expire packet: ", roomID, screenID);
+      return;
+    }
+    void deregisterScreen(roomID, Number(screenID));
+  });
+}
+```
+
+Jelenleg a `deregisterScreen` függvény nem csinál semmit.
+
 #### Jelenlegi közvetítéshez tartozó adatbázis elemek
 
 #### Feltöltött fényképekhez tartozó adatbázis elemek
