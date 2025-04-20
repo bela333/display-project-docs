@@ -408,10 +408,6 @@ export async function setupScreenExpiry(redis: RedisClientType) {
     }
     const roomID = matches[1];
     const screenID = matches[2];
-    if (!roomID || !screenID) {
-      console.error("Invalid expire packet: ", roomID, screenID);
-      return;
-    }
     void deregisterScreen(roomID, Number(screenID));
   });
 }
@@ -420,6 +416,14 @@ export async function setupScreenExpiry(redis: RedisClientType) {
 Jelenleg a `deregisterScreen` függvény nem csinál semmit.
 
 #### Jelenlegi közvetítéshez tartozó adatbázis elemek
+
+| Kulcs | Típus | Leírás |
+| ----- | ----- | ------ |
+| room:ROOM:content:type` | String ( `none` \| `photo` \| `video` \| `iframe` ) | A jelenlegi tartalom típusa. `none` ha nincs kiválasztva tartalom típus |
+| room:ROOM:content:url` | String | Fénykép médiatípus esetén a tartalom neve a media vödörben. Videó és iFrame esetén a tartalom teljes URL-je. |
+| room:ROOM:content:status:type` | String (`paused` \| `playing`) | Videó tartalom esetén a lejátszás jelenlegi állapota |
+| room:ROOM:content:status:timestamp` | Szám | Videó tartalom esetén a lejátszás állapotának megváltoztatási ideje, UNIX idő milliszekundumban |
+| room:ROOM:content:status:videotime` | Szám | Videó tartalom esetén használatos. A videó ideje másodpercbe, a videó lejátszási állapot megváltozásának pillanatában |
 
 #### Feltöltött fényképekhez tartozó adatbázis elemek
 
