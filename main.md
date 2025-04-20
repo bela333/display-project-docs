@@ -476,7 +476,15 @@ Pre-signed URL-ek két helyen vannak használatban az alkalmazásban:
 
 ### Kalibrálási szolgáltatás
 
-<!-- Apriltag, OpenCV, Python, FastAPI -->
+A kijelzők helyének pontos megállapításához szükséges egy kalibrálási fázis. Ehhez Apriltag<!--ref-->-eket használunk, amiknek gyorsan és pontosan <!--citation-->meg tudják határozni a sarkainak helyzetét. 
+
+Mivel a legtöbb számítógépes látás könyvtár és eszköz Python-ban érhető el, ezért ezt a lépést egy külön szolgáltatásban hajtom végre, melyet Apriltag Service-nek hívok. A következő könyvtárakat használom: 
+- Az Apriltagek feldolgozására a `pupil-apriltags` könyvtárat
+- A fényképek megnyitására, mentésére, perspektíva korrigálására az opencv könyvtárat (`opencv-python-headless`).
+- Az egyéb mátrixos számításokhoz a `numpy` könyvtárat
+- A Main Service-el való kommunikálás segítéséhez a FastAPI keretrendszert
+
+Számítógépes látásban a különböző síkok közötti perspektív transzformációkat egy homográfia mátrixal lehet jellemezni. Az Apriltag könyvtár egy ilyen homográfiát ad vissza minden kalibrációs jelhez, ami az Apriltag saját koordináta-rendszeréből képez a fénykép koordináta-rendszerébe. Ezt kombinálva egy saját homográfiával, ami a megjelenítő kliens koordináta-rendszeréből (lásd: `room:ROOM:screen:SCREEN:config` ) képez az Apriltag koordináta-rendszerébe, kapunk egy homográfiát ami a kliens kijelzőjét jellemzi a fénykép keretein belül. Ez után a kliensek közül kiválasztunk egy "fő kijelzőt" (ez a legkisebb sorszámú kliens jelenleg), és arra ortogonálisan létrehozunk egy olyan koordináta-rendszert, amelybe belefér az összes kliens kijelzője. Így jön létre a virtuális kijelző.
 
 ### Kalibrálási folyamat
 
