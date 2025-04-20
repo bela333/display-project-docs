@@ -331,6 +331,7 @@ A kulcsban `NAGY BETŰVEL` vannak jelölve a dinamikusan beillesztendő tagok:
 
 - `ROOM`: a szoba kódja
 - `SCREEN`: a megjelenítő kliens sorszáma
+- `PHOTO`: a szobába feltöltött egyik fénykép UUID-je
 
 #### Szoba-szintű adatbázis elemek
 
@@ -419,13 +420,19 @@ Jelenleg a `deregisterScreen` függvény nem csinál semmit.
 
 | Kulcs | Típus | Leírás |
 | ----- | ----- | ------ |
-| room:ROOM:content:type` | String ( `none` \| `photo` \| `video` \| `iframe` ) | A jelenlegi tartalom típusa. `none` ha nincs kiválasztva tartalom típus |
-| room:ROOM:content:url` | String | Fénykép médiatípus esetén a tartalom neve a media vödörben. Videó és iFrame esetén a tartalom teljes URL-je. |
-| room:ROOM:content:status:type` | String (`paused` \| `playing`) | Videó tartalom esetén a lejátszás jelenlegi állapota |
-| room:ROOM:content:status:timestamp` | Szám | Videó tartalom esetén a lejátszás állapotának megváltoztatási ideje, UNIX idő milliszekundumban |
-| room:ROOM:content:status:videotime` | Szám | Videó tartalom esetén használatos. A videó ideje másodpercbe, a videó lejátszási állapot megváltozásának pillanatában |
+| `room:ROOM:content:type` | String ( `none` \| `photo` \| `video` \| `iframe` ) | A jelenlegi tartalom típusa. `none` ha nincs kiválasztva tartalom típus |
+| `room:ROOM:content:url` | String | Fénykép médiatípus esetén a tartalom neve a media vödörben. Videó és iFrame esetén a tartalom teljes URL-je. |
+| `room:ROOM:content:status:type` | String (`paused` \| `playing`) | Videó tartalom esetén a lejátszás jelenlegi állapota |
+| `room:ROOM:content:status:timestamp` | Szám | Videó tartalom esetén a lejátszás állapotának megváltoztatási ideje, UNIX idő milliszekundumban |
+| `room:ROOM:content:status:videotime` | Szám | Videó tartalom esetén használatos. A videó ideje másodpercbe, a videó lejátszási állapot megváltozásának pillanatában |
 
 #### Feltöltött fényképekhez tartozó adatbázis elemek
+
+| Kulcs | Típus | Leírás |
+| ----- | ----- | ------ |
+| `room:ROOM:photos` | String halmaz | A szobába feltöltött fényképek UUID azonosítóját tartalmazó halmaz |
+| `room:ROOM:photos:PHOTO:name` | String | A UUID-hoz tartozó fénykép eredeti fájlneve |
+| `room:ROOM:photos:PHOTO:path` | String | A UUID-hoz tartozó fénykép fájlneve a media vödörben |
 
 ## Fájl tárolás
 
