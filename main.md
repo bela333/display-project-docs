@@ -441,10 +441,10 @@ A fájlok tárolására egy S3 kompatibilis tárhely szolgáltatást használok.
 Az alkalmazás két S3 bucket-et (vödröt) használ:
 - calibration
 
-    Ide kerülnek a kalibrációs képek, illetve a perspektíva korregált változataik
+  Ide kerülnek a kalibrációs képek, illetve a perspektíva korregált változataik
 - media
 
-    Ide kerülnek a megjelenítésre feltöltött fényképek
+  Ide kerülnek a megjelenítésre feltöltött fényképek
 
 A `main.env`-ben megadott S3 felhasználónak mindkét vödörhöz kell, hogy kapjon írási és olvasási jogot is.
 
@@ -455,10 +455,10 @@ Az S3 protokol engedélyez úgynevezett "pre-signed"<!--link--> URL létrehozás
 Pre-signed URL-ek két helyen vannak használatban az alkalmazásban:
 - A kalibráló kép/fénykép feltöltésekor
 
-    A szerver létrehozza a pre-signed URL-t a saját S3 felhasználójával, melyben megköti a vödröt, a fájl nevét, illetve a `Content-Length` headert. Így a kliens S3 vendégfelhasználóként is képes lesz írni a fájlt. A szerver le tudja ellenőrizni a klienstől kapott méret segítségével, hogy a fájl mérete nem halad-e meg egy limitet, majd a `Content-Length` megkötés biztosítja, hogy a kliens a megfelelő méretű adatot töltte fel.
+  A szerver létrehozza a pre-signed URL-t a saját S3 felhasználójával, melyben megköti a vödröt, a fájl nevét, illetve a `Content-Length` headert. Így a kliens S3 vendégfelhasználóként is képes lesz írni a fájlt. A szerver le tudja ellenőrizni a klienstől kapott méret segítségével, hogy a fájl mérete nem halad-e meg egy limitet, majd a `Content-Length` megkötés biztosítja, hogy a kliens a megfelelő méretű adatot töltte fel.
 - A kalibrálás utáni perspektíva korregált kalibráló kép feltöltése
 
-    A perspektíva korrekciót az Apriltag Service végzi, de nincs hozzáférése privilegizált S3 felhasználóhoz. Ahhoz, hogy mégis fel tudja tölteni a képet, kalibrálás előtt a szerver létrehoz neki egy pre-signed URL-t erre a célra.
+  A perspektíva korrekciót az Apriltag Service végzi, de nincs hozzáférése privilegizált S3 felhasználóhoz. Ahhoz, hogy mégis fel tudja tölteni a képet, kalibrálás előtt a szerver létrehoz neki egy pre-signed URL-t erre a célra.
 
 ## Main service
 
