@@ -439,6 +439,7 @@ Jelenleg a `deregisterScreen` függvény nem csinál semmit.
 A fájlok tárolására egy S3 kompatibilis tárhely szolgáltatást használok. Ez a tárhely szolgáltatás alapértelmezetten a Minio, hiszen jól támogatott és széleskörűen használt<!--citation-->. Természetesen bármilyen más S3 kompatibilis szolgáltatással le lehetne cserélni.
 
 Az alkalmazás két S3 bucket-et (vödröt) használ:
+
 - calibration
 
   Ide kerülnek a kalibrációs képek, illetve a perspektíva korregált változataik
@@ -453,6 +454,7 @@ A vödröknek olvashatónak (de nem feltétlenül listázhatónak) kell lenniük
 Az S3 protokol engedélyez úgynevezett "pre-signed"<!--link--> URL létrehozását. A pre-signed URL-t egy privilegizált felhasználó tud létrehozni, előre kitöltött adatokkal. Ekkor a URL a privilegizált felhasználó jogait veszi át.
 
 Pre-signed URL-ek két helyen vannak használatban az alkalmazásban:
+
 - A kalibráló kép/fénykép feltöltésekor
 
   A szerver létrehozza a pre-signed URL-t a saját S3 felhasználójával, melyben megköti a vödröt, a fájl nevét, illetve a `Content-Length` headert. Így a kliens S3 vendégfelhasználóként is képes lesz írni a fájlt. A szerver le tudja ellenőrizni a klienstől kapott méret segítségével, hogy a fájl mérete nem halad-e meg egy limitet, majd a `Content-Length` megkötés biztosítja, hogy a kliens a megfelelő méretű adatot töltte fel.
@@ -479,6 +481,7 @@ Pre-signed URL-ek két helyen vannak használatban az alkalmazásban:
 A kijelzők helyének pontos megállapításához szükséges egy kalibrálási fázis. Ehhez Apriltag<!--ref-->-eket használunk, amiknek gyorsan és pontosan <!--citation-->meg tudják határozni a sarkainak helyzetét. 
 
 Mivel a legtöbb számítógépes látás könyvtár és eszköz Python-ban érhető el, ezért ezt a lépést egy külön szolgáltatásban hajtom végre, melyet Apriltag Service-nek hívok. A következő könyvtárakat használom: 
+
 - Az Apriltagek feldolgozására a `pupil-apriltags` könyvtárat
 - A fényképek megnyitására, mentésére, perspektíva korrigálására az opencv könyvtárat (`opencv-python-headless`).
 - Az egyéb mátrixos számításokhoz a `numpy` könyvtárat
