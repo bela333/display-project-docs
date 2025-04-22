@@ -424,7 +424,7 @@ Jelenleg a `deregisterScreen` függvény nem csinál semmit.
 | `room:ROOM:content:url` | String | Fénykép médiatípus esetén a tartalom neve a media vödörben. Videó és iFrame esetén a tartalom teljes URL-je. |
 | `room:ROOM:content:status:type` | String (`paused` \| `playing`) | Videó tartalom esetén a lejátszás jelenlegi állapota |
 | `room:ROOM:content:status:timestamp` | Szám | Videó tartalom esetén a lejátszás állapotának megváltoztatási ideje, UNIX idő milliszekundumban |
-| `room:ROOM:content:status:videotime` | Szám | Videó tartalom esetén használatos. A videó ideje másodpercbe, a videó lejátszási állapot megváltozásának pillanatában |
+| `room:ROOM:content:status:videotime` | Szám | Videó tartalom esetén használatos. A videó ideje másodpercben, a videó lejátszási állapot megváltozásának pillanatában |
 
 #### Feltöltött fényképekhez tartozó adatbázis elemek
 
@@ -518,7 +518,101 @@ Az alkalmazás különböző komponenseinek elérési oldalai, célja és a layo
         - `/room/[room]/config/viewing/iframe` - az iFrame médiatartalomhoz tartozó elérési út
       - `/room/[room]/config/calibration` - a kalibrálási állapot oldala.
 
-<!-- serialization, pubsub (trpc) -->
+### PubSub
+
+Mivel a kijelző és a konfiguráló kliensek szoros kapcsolatban vannak, ezért szükséges egy valós idejű üzenetküldési megoldás. A megoldásom a következőképpen működik: bármilyen adat megváltoztatásakor, a megváltoztatást végző függvény egy `ping` üzenetet küld a `room:ROOM` csatornára, ezzel jelezve az új adat beérkezését. Mindegyik kliens egy tRPC subscription segítségével kapja meg a legfrissebb adatokat. A `ping` üzenetre a klienshez tartozó tRPC kiszolgáló lekéri a friss adatokat a Redis adatbázisból, serializálja őket, majd elküldi egy SSE <!--abbrev--> kapcsolaton keresztül. A serializált struktúra a következő:
+
+```ts
+{
+  // A megjelenítő kliensek legnagyobb sorszáma
+  screenCount: number,
+  // A megjelenítő kliensek adatai. A dimenzió adatok a kalibráló jelre vonatkoznak a kijelzőn belül, ami pontosan a képernyő jobb felét jelenti.
+  serializedScreens: {
+    // A kalibráló jel szélessége
+    width: number,
+    // A kalibráló jel magassága
+    height: number,
+    // A kalibráló jel kijelzőn belüli horizontális eltolása pixelben
+    x: number,
+    // A kalibráló jel kijelzőn belüli vertikális eltolása pixelben
+    y: number,
+    // A megjelenítő klienshez tartozó homográfia. Csak akkor van jelen, ha a kalibráció végbement, illetve a megjelenítő kliens jele megjelent fel lett rajta ismerve
+    homography?: number[][]
+  }[],
+  // A szoba jelenlegi állapota: kalibrálási, illetve közvetítési
+  mode: "calibration" | "viewing",
+  uploaded: {
+    // A feltöltött fényképek tömbje
+    photos: {
+      // A fénykép egyedi azonosítója
+      id: string
+      // A fényképfájl eredeti neve
+      filename: string,
+      // A fénykép neve az S3 tárhelyen
+      url: string,
+    }[]
+  },
+  // A kalibrációs kép adatai, ha végbement a kalibrálás
+  image?: {
+    // A kép neve az S3 tárhelyen
+    filename: string,
+    // A kép teljes URL-je, az S3 taggal együtt
+    url: string,
+    // A kép szélessége
+    width: number,
+    // A kép magassága
+    height: number
+  },
+  // A jelenleg kiválasztott médiatartalom típus és adatai
+  nowPlayingContent: NowPlayingContent
+}
+```
+
+A `NowPlayingContent` négy fajta lehet jelenleg:
+
+- Nincs kiválasztva médiatartalom típus:
+
+  ```ts
+  {
+    type: "none"
+  }  ```
+
+- Fénykép médiatartalom:
+
+  ```ts
+  {
+    type: "photo"
+    // A fénykép teljes URL-je, az S3 taggal együtt
+    url: string
+  }
+  ```
+- Videó médiatartalom:
+
+  ```ts
+  {
+    type: "video"
+    // A videó URL-je
+    url: string
+    // A videó státusza. 
+    status: {
+      // Megállított vagy elindított videó
+      type: "paused" | "playing",
+      // A lejátszás állapotának megváltoztatási ideje, UNIX idő milliszekundumban
+      timestamp: number,
+      // A videó ideje másodpercben, az **üzenet küldésének pillanatában** (ellenben az adatbázisban található room:ROOM:content:status:videotime kulccsal)
+      videotime: number,
+    }
+  }
+  ```
+- iFrame médiatartalom:
+
+  ```ts
+  {
+    type: "iframe"
+    // Az iFrame tartalmának URL-je
+    url: string
+  }
+  ```
 
 <!-- Fájlfeltöltés folyamata -->
 
