@@ -95,7 +95,7 @@ A szobákban lévő klienseknek két lehetséges **szerepe** van:
 
   Ezeknek a klienseknek feladata, hogy a jelenleg megjelenítendő médiatartalomnak megjelenítsék azt a részét, amit az adott klienshez rendeltünk a kalibrálás során.
 
-Egy konfiguráló kliensből megjelenítő klienst lehet csinálni a jobb felső sarokban lévő `View` gomb kattintásával.
+Egy **konfiguráló kliensből megjelenítő klienst lehet csinálni** a jobb felső sarokban lévő `View` gomb kattintásával.
 
 A szobáknak két lehetséges **állapota** van:
 
@@ -464,9 +464,59 @@ Pre-signed URL-ek két helyen vannak használatban az alkalmazásban:
 
 ## Main service
 
-<!-- react, t3 stack, full stack -->
+A projekthez a React keretrendszert használtam, mivel sokoldalú és széleskörű használata miatt jól támogatott. Manapság sokféle "ízben" lehet használni a React-et. Én a Next.js alapú `create-t3-app`-et használtam. Ennek a választásnak több oka is volt:
 
-<!-- pathek -->
+- A Next.js az egyik legelterjedtebb keretrendszer még a React-es framework-ök között is, így ennek van a legjobb támogatottsága is
+- A Next.js egy full stack rendszer, szerver komponensek és akciók segítségével egyben lehet megírni vele a frontendet és a backendet. <!--citation-->
+- A `create-t3-app` egy kezdőcsomag, amely több gyakori konfigurációt beállít, illetve sok hasznos csomagot tartalmaz:
+  - szigorú TypeScript támogatással érkezik, hogy biztosítsa minden sor kód típus helyességét
+  - a `tRPC` könyvtárral egyszerűen lehet a szerver és a kliens kód között valós idejű kommunikációt végrehajtani
+  - ezeken felül támogatja a Prisma ORM-et, a NextAuth.js autentikációs könyvtárat és a Tailwind-et, de ezekre ebben a projektben nem volt szükség
+
+Az oldal UI felépítéséhez a Mantine<!--ref--> stíluskönyvtárat használom, amely az oldal felépítését nagyban megkönnyítette, ezen kívül sok hasznos hook-ot tartalmaz.
+
+### Elérési utak
+
+Mivel a Next.js elérés alapú routing-ot használ, ezért az oldalak elérési struktúrája határozza meg a projekt mappaszerkezetében való elhelyezkedését is.
+
+Minden oldalhoz tartozik egy mappa, amelyben két fontosabb fájl található:
+
+- `page.tsx`
+
+  Ez a fájl írja le, hogy az adott elérési útnak mi legyen a tartalma
+- `layout.tsx`
+
+  Ez a fájl írja le, hogy ha az adott mappa része a teljes elérési útnak, akkor mi legyen az oldal tartalma körülötti díszítés.
+
+  Például: Legyen a`src/app/example/test/page.tsx` tartalma a `ting` feliratot kiíró komponens, míg a `src/app/example/test/layout.tsx` tartalma:
+
+  ```jsx
+  export default function TestLayout({children}){
+    return <>tes{children}</>
+  }
+  ```
+
+  Ebben az esetben a `/example/test` oldalra érkezve a `testing` felirat vár minket.
+
+A `[`szögletes zárójelben`]` lévő útrészletek dinamikus tagok, amelyek helyére bármilyen érték kerülhet
+
+A `@`kukaccal kezdődő útrészlet tagok párhuzamos utak, amelyeket a közvetlenül felette lévő elérési út layout-ja bárhova elhelyezhez navigáció nélkül. Például a megjelenítő kliensnek két párhuzamos útja van, egy a kalibrációs állapothoz és egy a közvetítési állapothoz. A megjelenítő klienseknek fenntartott útvonal ezek között tud váltani az útvonal megváltoztatása nélkül.
+
+Az alkalmazás különböző komponenseinek elérési oldalai, célja és a layout fájl hatása:
+
+- `/` - belépés, új szoba létrehozása
+  - `/api/trpc/[trpc]` - a tRPC-nek elkülönített elérési út
+  - `/room/[room]` - a layout fájl itt teszi elérhetővé a szoba kontextusát
+    - `/room/[room]/view` - generál egy új megjelenítő kliens sorszámot, majd átírányít a hozzá megfelelő oldalra
+      - `/room/[room]/view/[screen]` - a layout fájl itt teszi elérhetővé a megjelenítő kliens kontextusát
+        - `@viewing` - a közvetítési állapot esetén használt megjelenés
+        - `@calibration` - a kalibrációs állapot esetén használt megjelenés
+    - `/room/[room]/config` - a layout fájl hozzáadja a toolbart, amely kiírja a szoba kódját, a `Calibrate` és `Broadcast` gombokat, illetve a `View` gombot. Ezen felül automatikusan átirányít a szükséges aloldalra a jelenlegi állapottól függően
+      - `/room/[room]/config/viewing` - a közvetítési állapot oldala. A layout addja hozzá a jobb oldali előnézetet, illetve a bal oldali médiatartalom típus választó panelt. A tartalmat a kettő közé helyezi el.
+        - `/room/[room]/config/viewing/photo` - a fénykép médiatartalomhoz tartozó elérési út
+        - `/room/[room]/config/viewing/video` - a videó médiatartalomhoz tartozó elérési út
+        - `/room/[room]/config/viewing/iframe` - az iFrame médiatartalomhoz tartozó elérési út
+      - `/room/[room]/config/calibration` - a kalibrálási állapot oldala.
 
 <!-- serialization, pubsub (trpc) -->
 
