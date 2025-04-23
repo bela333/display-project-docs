@@ -434,7 +434,7 @@ Jelenleg a `deregisterScreen` függvény nem csinál semmit.
 | `room:ROOM:photos:PHOTO:name` | String | A UUID-hoz tartozó fénykép eredeti fájlneve |
 | `room:ROOM:photos:PHOTO:path` | String | A UUID-hoz tartozó fénykép fájlneve a media vödörben |
 
-## Fájl tárolás
+## Fájl tárolás {#sec:s3}
 
 A fájlok tárolására egy S3 kompatibilis tárhely szolgáltatást használok. Ez a tárhely szolgáltatás alapértelmezetten a Minio, hiszen jól támogatott és széleskörűen használt<!--citation-->. Természetesen bármilyen más S3 kompatibilis szolgáltatással le lehetne cserélni.
 
@@ -518,6 +518,74 @@ Az alkalmazás különböző komponenseinek elérési oldalai, célja és a layo
         - `/room/[room]/config/viewing/iframe` - az iFrame médiatartalomhoz tartozó elérési út
       - `/room/[room]/config/calibration` - a kalibrálási állapot oldala.
 
+### Adatbázis elérése
+
+Mivel a Redis nem relációs adatbázis, ezért a klasszikus értelemben vett ORM-ek itt nem használhatóak. Az adatok kinyerésének egyszerűsítéséért új adatbázis elem esetén két dolgot kell létrehozni: egy kulcs helpert, és egy adatbázis objektumot.
+
+A kulcs helper az egy függvény a `src/db/redis-keys.ts` fájlban. Itt minden adatbázis elemhez tartozik egy függvény, ami megadja az elemnek a kulcsát Redisben. Ez egy low-level absztrakció a Redishez, nem kezel se típusokat, se hibákat. A hierarchikus felépítés segítésének érdekében a hierarchia belső csúcsaihoz rendelek egy `...Root` helpert. A csúcs alatt lévő elemek ezt a root helpert használják a saját kulcsuk létrehozására.
+
+Például:
+
+```ts
+// Egy szobának megadja a rootját
+export function roomRoot(room: string) {
+  return `room:${room}`;
+}
+
+// Egy szobának megadja a módját. Az előbb létrehozott roomRoot-ot használja
+export function roomMode(room: string) {
+  return `${roomRoot(room)}:mode`; // room:ROOM:mode
+}
+
+// A szobának adja meg a kalibrációs képét
+export function roomImageRoot(room: string) {
+  return `${roomRoot(room)}:image`;
+}
+
+// A kalibrációs kép szélessége. Felhasználja a roomImageRoot-ot, és közvetetten a roomRoot-ot
+export function roomImageWidth(room: string) {
+  return `${roomImageRoot(room)}:width`;
+}
+```
+
+Ahhoz, hogy fenntartsuk az adatbázis egységes használatát, minden adatbázis elemhez létrehoztam egy adatbázis objektumot a `src/db/objects` mappában. Mindegyik fájl egy-egy nagyobb logikai egységet valósít meg. Minden fájlban vagy top-level találhatóak az adatbázist elérő függvények (pl. `get`, `set`, `rem`), vagy hierarchikusan egy alárendelt objektumban.
+
+Az adatbázis objektumok típusozottak, de nem szükséges, hogy a típust ellenőrizzék, amíg ezt a szignatúra fenntartja (feltételezve az adatbázis objektumok exklúzív használatát).
+
+A Redis adatbázis objektumot a `node-redis` könyvtár segítségével érem el. A `db/redis.ts` fájlból exportált `getRedis` aszinkron függvény teszi elérhetővé az adatbázis singleton-t.
+
+Egy pár példa:
+
+```ts
+/* roomCount.ts */
+const roomCountObject = {
+  async incr() {
+    const redis = await getRedis();
+    return await redis.incr(roomCount()); // NOTE: a roomCount az a redis-keys.ts fájlból jön
+  },
+  async get() {
+    const redis = await getRedis();
+    return Number((await redis.get(roomCount()))!);
+  },
+};
+
+export default roomCountObject;
+/* roomContent.ts */
+const roomContentObject = {
+  type: {
+    async set(room: string, type: RoomContentType) {
+      const redis = await getRedis();
+      await redis.set(roomContentType(room), type);
+    },
+    async get(room: string): Promise<RoomContentType | null> {
+      const redis = await getRedis();
+      return (await redis.get(roomContentType(room))) as RoomContentType | null;
+    },
+  },
+// [...]
+}
+```
+
 ### PubSub
 
 Mivel a kijelző és a konfiguráló kliensek szoros kapcsolatban vannak, ezért szükséges egy valós idejű üzenetküldési megoldás. A megoldásom a következőképpen működik: bármilyen adat megváltoztatásakor, a megváltoztatást végző függvény egy `ping` üzenetet küld a `room:ROOM` csatornára, ezzel jelezve az új adat beérkezését. Mindegyik kliens egy tRPC subscription segítségével kapja meg a legfrissebb adatokat. A `ping` üzenetre a klienshez tartozó tRPC kiszolgáló lekéri a friss adatokat a Redis adatbázisból, serializálja őket, majd elküldi egy SSE <!--abbrev--> kapcsolaton keresztül. A serializált struktúra a következő:
@@ -575,7 +643,8 @@ A `NowPlayingContent` négy fajta lehet jelenleg:
   ```ts
   {
     type: "none"
-  }  ```
+  }
+  ```
 
 - Fénykép médiatartalom:
 
@@ -614,7 +683,83 @@ A `NowPlayingContent` négy fajta lehet jelenleg:
   }
   ```
 
-<!-- Fájlfeltöltés folyamata -->
+### Fájlok feltöltése
+
+A -@sec:s3 . fejezet ismerteti az S3 fájltárolás alapjait. Ez a fejezet fejlesztési szempontból közelíti meg a fájlok feltöltését.
+
+Fájlok feltöltésére ajánlott használni a `RoomUploadButton` komponenst. Ez a komponens kezeli a töltési állapotot, kér egy pre-signed URL-t a szervertől, feltölti a fájlt az S3 szerverre, majd egy callbacket hív.
+
+A komponens konfigurálásához négy paraméter szükséges:
+
+- `title`
+
+  A feltöltés gombra kiírandó szöveg
+- `supportedMimeTypes`
+
+  Azoknak a MIME<!--ref--> típusoknak a tömbje, amelyeket engedünk feltölteni (ez csak frontenden van ellenőrizve)
+- `handleRequest`
+
+  Egy szerver akció, ami megkapja a feltöltendő fájl nevét, méretét és a szoba kódját. Fontos, hogy ezeket az értékeket a kliens generálja, így ellenőrizendők: a szoba kódja a `codeValidation` Zod validációval, a fájl mérete a pre-signed URL-be égetett `Content-Length` fejléccel. Visszatérési értéke generikus, de mindenképpen tartalmaznia kell a pre-signed URL-t.
+- `onUpload`
+
+  Frontend oldalon hívott callback a sikeres feltöltés esetén. Paraméterként megkapja a handleRequest eredményét.
+
+### Médiatípusok
+
+A programban jelenleg 3 médiatartalom típus érhető el:
+
+- Fénykép
+- iFrame
+- Videó
+
+#### Új médiatartalom típus hozzáadása
+
+<!--bevezetés-->
+
+Egy médiatípus négy részből áll:
+- Egy serializációból
+- Egy konfigurációs panelből
+- Egy megjelenésből
+- Opcionálisan egy vezérlő sorból
+
+##### Serializáció
+
+<!--roomContentObject bővítés, SerializedNowPlayingContent, serializeNowPlayingContent...-->
+
+##### Konfigurációs panel
+
+A konfigurációs panel az az, amit a felhasználó akkor lát, amikor rákattint a bal oldali médiatípus választó gombra. Ez next.js-ben egy külön útvonalként van definiálva. A `src/app/room/[id]/config/viewing` mappában lehet létrehozni neki új mappát, majd a `src/app/room/[id]/config/viewing/layout.tsx` fájl `routes` tömbjének kiegészítésével lehet hozzáadni a bal oldali választóhoz.
+
+A panelen kell lennie egy gombnak, amely elindítja a médiatartalmat. Ekkor a `roomContentObject` adatbázis objektum<!--ref--> `type` paraméterét a médiatípusnak megfelelő értékre kell állítani.
+
+##### Megjelenés
+
+A "megjelenés" az az a tartalom, ami a virtuális kijelzőn meg fog jelenni. Belépési pontja a `src/app/room/[id]/_screenContent/ScreenContent.tsx` komponens fájl, ami a virtuális kijelző tartalma. Ehhez a fájlhoz lehet hozzáadni az új médiatípushoz tartozó megjelenést. Célszerű ide a `_screenContent` mappába létrehozni egy új komponenst a megjelenésnek, és azt felhasználni. Fontos, hogy ez a komponens kitöltse a szülő komponenst, hiszen így lesz teljesképernyős.
+
+Például, ha a megjelenés komponens `PresentationContent` és a médiatípus type-ja `presentation`, akkor a következő sorokat kell hozzáadni a ScreenContent-hez:
+
+```tsx
+{room.lastEvent.nowPlayingContent.type === "presentation" ? (
+        <PresentationContent
+          style={{
+            width: "100%",
+            height: "100%",
+          }}
+        />
+      ) : null}
+```
+
+##### Vezérlő sor
+
+Ha a médiatípus elvárja az irányíthatóságot, akkor a `src/app/room/[id]/config/viewing/_controls/Controls.tsx` fájlban definiálható a médiatípusnak egy vezérlő komponens. Ezt a vezérlő komponenst célszerű ide az `_controls` mappába létrehozni.
+
+#### Fénykép médiatartalom típus
+
+#### iFrame médiatartalom típus
+
+#### Videó médiatartalom típus
+
+
 
 <!-- médiatípusok ismertetése, új médiatípusok hozzáadásának folyamata -->
 
