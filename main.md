@@ -810,7 +810,7 @@ Végül, adjuk hozzá ezt a függvényt a `serializeNowPlayingContent` függvén
 
 A konfigurációs panel az az, amit a felhasználó akkor lát, amikor rákattint a bal oldali médiatípus választó gombra. Ez next.js-ben egy külön útvonalként van definiálva. A `src/app/room/[id]/config/viewing` mappában lehet létrehozni neki új mappát, majd a `src/app/room/[id]/config/viewing/layout.tsx` fájl `routes` tömbjének kiegészítésével lehet hozzáadni a bal oldali választóhoz.
 
-A panelen kell lennie egy gombnak, amely elindítja a médiatartalmat. Ekkor a `roomContentObject` adatbázis objektum<!--ref--> `type` paraméterét a médiatípusnak megfelelő értékre kell állítani.
+A panelen kell lennie egy gombnak, amely elindítja a médiatartalmat. Ekkor a `roomContentObject` adatbázis objektum<!--ref--> `type` paraméterét a médiatípusnak megfelelő értékre kell állítani. Indítás után ne felejtsük el meghívni a `roomPubSubObject.ping` függvényt!
 
 ##### Megjelenés
 
@@ -833,15 +833,17 @@ Például, ha a megjelenés komponens `PresentationContent` és a médiatípus t
 
 Ha a médiatípus elvárja az irányíthatóságot, akkor a `src/app/room/[id]/config/viewing/_controls/Controls.tsx` fájlban definiálható a médiatípusnak egy vezérlő komponens. Ezt a vezérlő komponenst célszerű ide az `_controls` mappába létrehozni.
 
-#### Fénykép médiatartalom típus
-
-#### iFrame médiatartalom típus
+Az adatbázis írása után ne felejtsük el meghívni a `roomPubSubObject.ping` függvényt!
 
 #### Videó médiatartalom típus {#sec:videomedia}
 
+Ez a fejezet a jelenlegi legkomplexebb médiatartalom típus, a videó lejátszás leírására szolgál.
 
+A médiatípus komplexitása a szinkronizálásban rejlik, melynek megoldására egy egyszerű mechanizmust használok. Minden lejátszási állapot változáskor (szüneteltetés/indítás) a jelenlegi állapoton kívül elmentem azt is, hogy a szerver idejében mikor történt a változás, illetve hogy hol tartott a videó.
 
-<!-- médiatípusok ismertetése, új médiatípusok hozzáadásának folyamata -->
+Videó leállításakor az elindítás óta eltelt idő és az akkori videó idő alapján kiszámolom, hogy mi az új videó idő, és azt tárolom el. Videó indításakor, mivel előtte szünetelt volt a videó, nem szükséges ezt a számítást megtenni.
+
+Serializációkor, ha a videó szünetel, akkor az adatbázisban tárolt videó időt küldöm a kliens felé. Viszont, ha a videó lejátszás alatt van, akkor a jelenlegi idő és a lejátszás kezdete alapján kiszámolom a jelenlegi videó időt, és a kliens már azt kapja meg.
 
 ## Kalibrálás
 

@@ -14,7 +14,7 @@
 ## TODOS
 
 - [ ] Nevezd már át a projected "Create T3 App"-ról ffs
-- [ ] database objects listázás
+- [x] database objects listázás
 - [ ] room.lastEvent (`room` és `screen` contextek struktúrája)
 - [ ] Zod
 - [ ] Felhasználó dokumentációban a példák az a felhasználó E/3 / E/2 / T/1?
