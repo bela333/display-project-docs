@@ -714,6 +714,8 @@ A `NowPlayingContent` négy fajta lehet jelenleg:
   }
   ```
 
+A serializált adatot a kliens a `RoomContextProvider` komponensben veszi át, majd a `roomContext` Context <!--ref--> segítségével az egész alkalmazás számára elérhetővé teszi azt. A Context a `useContext` hookkal használható, két eleme a `lastEvent` tag, mely a legutóbb kapott serializált üzenetet tartalmazza, illetve a `roomID`, amely a szoba kódját tartalmazza.
+
 ### Fájlok feltöltése
 
 A -@sec:s3 . fejezet ismerteti az S3 fájltárolás alapjait. Ez a fejezet fejlesztési szempontból közelíti meg a fájlok feltöltését.
