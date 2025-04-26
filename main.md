@@ -586,6 +586,27 @@ const roomContentObject = {
 }
 ```
 
+#### Adatbázis objektumok listája
+
+| Adatbázis objektum név | Adatbázis kulcs | Metódusok |
+| - | - | - |
+| `roomCount` | `roomCount` | `get`, `incr` |
+| `roomContent.type` | `room:ROOM:content:type` | `set`, `get` |
+| `roomContent.url` | `room:ROOM:content:url` | `set`, `get` |
+| `roomContent.status` | `room:ROOM:content:status:type` | `set`, `get` |
+| `roomContent.timestamp` | `room:ROOM:content:status:timestamp` | `set`, `get` |
+| `roomContent.videotime` | `room:ROOM:content:status:videotime` | `set`, `get` |
+| `roomImage.name` | `room:ROOM:image` | `set`, `get`  |
+| `roomImage.width` | `room:ROOM:image:width` | `set`, `get`  |
+| `roomImage.height` | `room:ROOM:image:height` | `set`, `get`  |
+| `roomMode` | `room:ROOM:mode` | `set`, `get`  |
+| `roomPhotos.photosSet` | `room:ROOM:photos` | `get`, `member`, `add`, `remove` |
+| `roomPhotos.photoName` | `room:ROOM:photos:PHOTO:name` | `set`, `get` |
+| `roomPhotos.photoPath` | `room:ROOM:photos:PHOTO:path` | `set`, `get` |
+| `roomPubSub` | `room:ROOM` | `ping` |
+| `roomRoot` | `room:ROOM` | `ping` |
+
+
 ### PubSub
 
 Mivel a kijelző és a konfiguráló kliensek szoros kapcsolatban vannak, ezért szükséges egy valós idejű üzenetküldési megoldás. A megoldásom a következőképpen működik: bármilyen adat megváltoztatásakor, a megváltoztatást végző függvény egy `ping` üzenetet küld a `room:ROOM` csatornára, ezzel jelezve az új adat beérkezését. Mindegyik kliens egy tRPC subscription segítségével kapja meg a legfrissebb adatokat. A `ping` üzenetre a klienshez tartozó tRPC kiszolgáló lekéri a friss adatokat a Redis adatbázisból, serializálja őket, majd elküldi egy SSE <!--abbrev--> kapcsolaton keresztül. A serializált struktúra a következő:
