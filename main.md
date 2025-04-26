@@ -414,7 +414,7 @@ export async function setupScreenExpiry(redis: RedisClientType) {
 }
 ```
 
-Jelenleg a `deregisterScreen` függvény nem csinál semmit.
+Jelenleg a `deregisterScreen` függvény használaton kívül áll.
 
 #### Jelenlegi közvetítéshez tartozó adatbázis elemek
 
@@ -518,7 +518,7 @@ Az alkalmazás különböző komponenseinek elérési oldalai, célja és a layo
         - `/room/[room]/config/viewing/iframe` - az iFrame médiatartalomhoz tartozó elérési út
       - `/room/[room]/config/calibration` - a kalibrálási állapot oldala.
 
-### Adatbázis elérése
+### Adatbázis elérése {#sec:db}
 
 Mivel a Redis nem relációs adatbázis, ezért a klasszikus értelemben vett ORM-ek itt nem használhatóak. Az adatok kinyerésének egyszerűsítéséért új adatbázis elem esetén két dolgot kell létrehozni: egy kulcs helpert, és egy adatbázis objektumot.
 
@@ -604,12 +604,22 @@ const roomContentObject = {
 | `roomPhotos.photoName` | `room:ROOM:photos:PHOTO:name` | `set`, `get` |
 | `roomPhotos.photoPath` | `room:ROOM:photos:PHOTO:path` | `set`, `get` |
 | `roomPubSub` | `room:ROOM` | `ping` |
-| `roomRoot` | `room:ROOM` | `ping` |
+| `roomRoot` | `room:ROOM` | `exists`, `touch` |
+| `roomScreenAvailable` | `room:ROOM:available` | `members`, `add`, `rem` |
+| `roomScreenCount` | `room:ROOM:screenCount` | `set`, `get`, `incr` |
+| `screenConfig` | `room:ROOM:screen:SCREEN:config` | `set`, `get` |
+| `screenHomography` | `room:ROOM:screen:SCREEN:homography` | `set`, `get`, `del` |
+| `screenPing` | `room:ROOM:screen:SCREEN:ping` | `ping` |
+
 
 
 ### PubSub
 
-Mivel a kijelző és a konfiguráló kliensek szoros kapcsolatban vannak, ezért szükséges egy valós idejű üzenetküldési megoldás. A megoldásom a következőképpen működik: bármilyen adat megváltoztatásakor, a megváltoztatást végző függvény egy `ping` üzenetet küld a `room:ROOM` csatornára, ezzel jelezve az új adat beérkezését. Mindegyik kliens egy tRPC subscription segítségével kapja meg a legfrissebb adatokat. A `ping` üzenetre a klienshez tartozó tRPC kiszolgáló lekéri a friss adatokat a Redis adatbázisból, serializálja őket, majd elküldi egy SSE <!--abbrev--> kapcsolaton keresztül. A serializált struktúra a következő:
+Mivel a kijelző és a konfiguráló kliensek szoros kapcsolatban vannak, ezért szükséges egy valós idejű üzenetküldési megoldás. A megoldásom a következőképpen működik: bármilyen adat megváltoztatásakor, a megváltoztatást végző függvény egy `ping` üzenetet küld a `room:ROOM` csatornára, ezzel jelezve az új adat beérkezését. Mindegyik kliens egy tRPC subscription segítségével kapja meg a legfrissebb adatokat. A `ping` üzenetre a klienshez tartozó tRPC kiszolgáló lekéri a friss adatokat a Redis adatbázisból, serializálja őket, majd elküldi egy SSE <!--abbrev--> kapcsolaton keresztül.
+
+Az adatok kinyerése és a serializáció a `src/db/serialization.ts` fájlban történik. Itt a `serializeRoom` aszinkron függvény a teljes szoba jelenlegi adatait visszaadja, JSON kódolható módon.
+
+A serializált struktúra a következő:
 
 ```ts
 {
@@ -737,15 +747,64 @@ A programban jelenleg 3 médiatartalom típus érhető el:
 
 <!--bevezetés-->
 
-Egy médiatípus négy részből áll:
+Egy médiatípus öt részből áll:
+- Egy Adatbázis objektumból
 - Egy serializációból
 - Egy konfigurációs panelből
 - Egy megjelenésből
 - Opcionálisan egy vezérlő sorból
 
+##### Médiatípus adatbázis objektumok
+
+Első lépésként létre kell hoznunk a megfelelő adatbázis elemeket és objektumokat a médiatartalmunkhoz. Ezt a `room:ROOM:content` kulcs alatt, illetve a roomContent adatbázis objektumon belül tudjuk megtenni.
+
+
+Először adjuk hozzá a `redis-keys.ts` fájlhoz a szükséges kulcsokat, a `roomContentRoot` kulcs helper <!--ref--> segítségével. Példának okául, tegyük fel, hogy egy prezentáció médiatípust szeretnénk hozzáadni. Ekkor szükséges lesz eltárolni a prezentáció URL-jét, illetve a jelenlegi diaszámot. Mivel a URL-re már létezik egy kulcs, ezért a diaszámnak hozzunk létre egy kulcsot:
+
+```ts
+export function roomContentSlide(room: string) {
+  return `${roomContentRoot(room)}:slide`;
+}
+```
+
+Utána az `src/db/objects/roomContent.ts` fájl kell kiegészíteni a megfelelő adatbázis objektummal. Az adatbázis objektumok leírása a -@sec:db . fejezetben található.
+
+Szükséges rá odafigyelni, hogy az adatbázis sémát úgy kell létrehozni, hogy az akkor is működjön, ha egy megjelenítő kliens egy-egy parancs kiadása után csatlakozik. Tehát "eseményszerű" parancsokat nem lehet mindenképpen át kell alakítani egy "állapotváltoztatás" paranccsá. Például, egy "videó elinditása" parancs helyett a videó elindításának időpontját kell megadni. További információ a -@sec:videomedia . fejezetben található.
+
 ##### Serializáció
 
-<!--roomContentObject bővítés, SerializedNowPlayingContent, serializeNowPlayingContent...-->
+Mivel az adatbázis rendezetlenül adja vissza az adatokat, szükséges, hogy azokat egy rendezett formára alakítsuk át a kliens számára. Erre szolgál a serializáció, amely a `src/db/serialization.ts` fájlban történik. A médiatartalom serializálás a `serializeNowPlayingContent` függvény feladata.
+
+Először, hozzunk létre egy TypeScript típust a médiatartalmunknak. A neve legyen `Serialized<NÉV>Content`. Mindenképpen legyen benne egy `type` attribútum, melynek típusa a médiatípusunk neve. Például:
+
+```ts
+export type SerializedPresentationContent = {
+  type: "presentation",
+  slide: number
+}
+```
+
+Ezt a típust addjuk hozzá a `SerializedNowPlayingContent` unió lánchoz.
+
+Hozzuk létre a `serialize<NÉV>Content` aszinkron függvényt, melynek paramétere a szoba kódja, és visszatérési értéke a fent létrehozott `Serialized<NÉV>Content` típus. Ennek a függvénynek a tartalma fog a kliens számára elérhető lenni.
+
+Például:
+
+```ts
+async function serializePresentationContent(
+  room: string
+): Promise<SerializedPresentationContent> {
+  const url = await roomContentObject.url.get(room);
+  const slide = await roomContentObject.slide.get(room);
+  return {
+    type: "presentation",
+    url,
+    slide,
+  };
+}
+```
+
+Végül, adjuk hozzá ezt a függvényt a `serializeNowPlayingContent` függvényhez. Ehhez a switch-et kell kiegészíteni egy új elágazással, ami a médiatartalmunkhoz definiált `type` esetén meghívja a serializáló függvényünket.
 
 ##### Konfigurációs panel
 
@@ -778,7 +837,7 @@ Ha a médiatípus elvárja az irányíthatóságot, akkor a `src/app/room/[id]/c
 
 #### iFrame médiatartalom típus
 
-#### Videó médiatartalom típus
+#### Videó médiatartalom típus {#sec:videomedia}
 
 
 
