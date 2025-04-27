@@ -864,7 +864,84 @@ Számítógépes látásban a különböző síkok közötti perspektív transzf
 
 ### Kalibrálási folyamat
 
-<!-- End to end mátrixok -->
+Mivel a homográfiák mátrixok, egyszerűen lehet őket manipulálni az általános mátrix műveletekkel. Ezek közül a leggyakoribb a szorzás, ami két mátrix által definiált transzformációk egymás utáni alkalmazását reprezentálja egy mátrixszal.
+
+A homográfiák affin mátrixok <!--ref, cite-->, így eltolásokat is tartalmazhatnak. Általánosságban a mátrix egy $3 \times 3$-as mátrix, amelyben a jobb alsó elem pedig 1. Az utolsó oszlop első két eleme tartalmazza az eltolást, míg a bal felső $2 \times 2$-es mátrix tartalmazza a transzformáció többi részét.
+
+A kalibrálási folyamat AprilTag Service-beli része két lépésre bontható:
+- a kijelzők megkeresése
+- és a virtuális kijelző létrehozása
+
+A fejezetben a következő jelöléseket fogom használni:
+- $image\_width, image\_height$ - a kalibrációs kép szélessége és magassága
+- $H_i$ - Az $i$-edik kijelzőn lévő AprilTag homográfiája
+- $M_i$ - Az $i$-edik kijelzőhöz tartozó homográfia
+- $C$ - A kalibráló jel mérete pixelben
+- $C_x, C_y$ - A kalibráló jel x és y eltolása a kijelzőn pixelben
+
+Az AprilTag könyvtár minden megtalált kalibrációs jelhez visszaadja a hozzá tartozó homográfiát. Ez a homográfia a jel koordináta rendszeréből, ami $[-1, 1], [-1, 1]$ között van, átképez a fénykép koordináta rendszerére, ahol pixel koordinátákkal dolgozunk ($[0, image\_width], [0, image\_height]$). Ezzel két probléma van. Egyrészt, a $[0, 1], [0, 1]$ koordinátákkal lehet a legegyszerűbben dolgozni, úgyhogy mind a forrás és a cél koordináta rendszert erre át kell fordítani. Másrészt, a programban nem a kalibrációs jel homográfiájára van szükségünk, hanem a teljes kijelzőjére.
+
+Az első probléma megoldására két másik homográfiát lehet felhasználni: az egyik egy $[0, 1]$-es mátrixot alakít át $[-1, 1]$-essé (egy nagyítással és egy eltolással), a másik pedig a fénykép méretű koordinátát alakítja át $[0, 1]$ méretűvé:
+
+$$\begin{bmatrix}
+  \frac{1}{image\_width} & 0 & 0\\
+  0 & \frac{1}{image\_height} & 0\\
+  0 & 0 & 1\\
+\end{bmatrix}
+H_i
+\begin{bmatrix}
+  2 & 0 & -1\\
+  0 & 2 & -1\\
+  0 & 0 & 1\\
+\end{bmatrix}$$
+
+A másik problémát egy olyan homográfiával lehet megoldani, ami egy kijelzőbeli koordinátát alakít át egy kalibráló jelen belüli koordinátává. Ezt akkor lehetséges, ha tudjuk, hogy hol van a kijelzőn a jel, és hogy mekkora a mérete. Ezeket az adatokat szerencsére meg tudjuk szerezni a klienstől. Mivel egyszerűbb volt elképzelni, hogy egy kijelzőn belül hogyan lehet elhelyezni egy jelet, ezért arra hoztam létre homográfiát, majd azt invertáltam.
+
+$$M_i \coloneqq \begin{bmatrix}
+  \frac{1}{image\_width} & 0 & 0\\
+  0 & \frac{1}{image\_height} & 0\\
+  0 & 0 & 1\\
+\end{bmatrix}
+H_i
+\begin{bmatrix}
+  2 & 0 & -1\\
+  0 & 2 & -1\\
+  0 & 0 & 1\\
+\end{bmatrix}
+\begin{bmatrix}
+  \frac{C}{W} & 0 & \frac{C_x}{W}\\
+  0 & \frac{C}{H} & \frac{C_y}{H}\\
+  0 & 0 & 1\\
+\end{bmatrix}^{-1}$$
+
+Most, hogy a kijelzőkhöz tartozó homográfiák megvannak, létre kell hozni a virtuális kijelző koordináta rendszerét. Ehhez kiválasztok egy "sablon" kijelzőt, amire az új rendszer ortogonális lesz. Ennek a kijelzőnek a homográfiája legyen $M_0$. $M_0$ egy kijelzőn belüli pontot helyez el a kalibráló képen, tehát $M_0^{-1}$ egy kalibráló képen lévő pontot helyez el a kijelzőn belül.
+
+Az algoritmus a következő:
+
+1. Minden kijelzőnek megkeresem a sarkait a kalibráló képen
+2. A sarkokat a sablon kijelzőn elhelyezem a $M_0^{-1}$ mátrix segítségével.
+3. A szélsőséges pontok megkeresésével megkapom a legkisebb téglalapot, amelybe az összes sarok beletartozik. Ez lesz a virtuális kijelző. 
+
+  A kapott X és Y szélsőséges értékeknek nevet adok: $R, L$ a jobb és bal X koordináta, $T, B$ pedig a tetejének és az aljának az Y koordinátája (ezek a sablon kijelző koordináta rendszerében vannak)
+4. Létrehozok egy homográfiát, ami a $[0, 1], [0, 1]$ intervallumot a téglalapra képezi.
+
+  $$\begin{bmatrix}
+    R-L & 0 & L \\
+    0 & B-T & T \\
+    0 & 0 & 1 \\
+  \end{bmatrix}$$
+5. Mivel a téglalap a sablon kijelző koordináta rendszerében van, a most létrehozott homográfiára alkalmazom a sablon kijelző homográfiáját is. Így egy olyan homográfiát kapok, ami a virtuális kijelző egy pontjából egy kalibráló képbeli pontot hoz létre. Ez a homográfia legyen $V$.
+
+  $$V \coloneqq M_0\begin{bmatrix}
+    R-L & 0 & L \\
+    0 & B-T & T \\
+    0 & 0 & 1 \\
+  \end{bmatrix}$$
+6. A kijelző homográfiákat átfordítom, hogy a virtuális kijelzőn legyenek.
+
+  $$M_i' \coloneqq V^{-1}M_i$$
+
+Az így kapott $M_i'$ mátrixok lesznek a kész homográfiák.
 
 <!-- Hasznos kód részletek -->
 
