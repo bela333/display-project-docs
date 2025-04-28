@@ -1,0 +1,10 @@
+{
+	"LCG": {
+		"shortform": "LCG",
+		"longform": "Linear congruential generator"
+	},
+	"SSE": {
+		"shortform": "SSE",
+		"longform": "Server-Sent Events"
+	}
+}

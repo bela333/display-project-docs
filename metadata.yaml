@@ -5,8 +5,13 @@ title: Kijelzők egyesítése gépi látás segítségével
 date: 2025
 author: Marton Zoltán
 toc: true
-biblatex: main.bib
+bibliography: main.bib
+cite-method: biblatex
+biblio-style: numberic
+citation-style: ieee.csl
 header-includes: |
+  \usepackage{mathtools}
+  \usepackage{twemojis}
   \usepackage[newfloat]{minted}
   \removefromtoclist[float]{lol}
   \degree{programtervező informatikus BSc}
