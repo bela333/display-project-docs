@@ -874,6 +874,8 @@ A kalibrálási folyamat AprilTag Service-beli része két lépésre bontható:
 
 A fejezetben a következő jelöléseket fogom használni:
 - $image\_width, image\_height$ - a kalibrációs kép szélessége és magassága
+- $virtual\_width, virtual\_height$ - a kalibrációs kép szélessége és magassága
+- ${screen\_width}_i, {screen\_height}_i$ - az $i$-edik kijelző szélessége és magassága pixelben
 - $H_i$ - Az $i$-edik kijelzőn lévő AprilTag homográfiája
 - $M_i$ - Az $i$-edik kijelzőhöz tartozó homográfia
 - $C$ - A kalibráló jel mérete pixelben
@@ -941,9 +943,33 @@ Az algoritmus a következő:
 
   $$M_i' \coloneqq V^{-1}M_i$$
 
-Az így kapott $M_i'$ mátrixok lesznek a kész homográfiák.
+Az így kapott $M_i'$ mátrixok lesznek a kész homográfiák, amelyek a kliensek kijelzőinek pontjait a virtuális kijelző pontjaihoz rendeli.
 
-<!-- Hasznos kód részletek -->
+A sablon kijelző felbontásából és a virtuális kijelzőn felvett méretéből ki tudunk számolni a virtuális kijelzőnek is egy felbontást: $virtual\_width$ és $virtual\_height$
+
+Megjelenítéskor a frontenden még szükség van egy átalakításra, hiszen a CSS `matrix3d` transzformáció pixel egységekben dolgozik. A transformáció a virtuális kijelzőt reprezentáló `div`-re lesz alkalmazva, ezért a bemeneten annak a koordináta rendszeréből kell egység méretű koordináta rendszerbe hozni az értékeket. Viszont a kimeneten a transzformáció már a kliens kijelző méreteivel dolgozik, úgyhogy ott az egység méretű értékeket kell felnagyítani a kijelző méretére. Ezt a következő mátrixszal lehet megtenni:
+
+$$T_i \coloneqq
+\begin{bmatrix}
+  {screen\_width}_i & 0 & 0 \\
+  0 & {screen\_height}_i & 0 \\
+  0 & 0 & 1 \\
+\end{bmatrix}
+{M_i'}^{-1}
+\begin{bmatrix}
+  virtual\_width & 0 & 0 \\
+  0 & virtual\_height & 0 \\
+  0 & 0 & 1 \\
+\end{bmatrix}^{-1}$$
+
+Végül, mivel a `matrix3d` transzformáció egy $4 \times 4$-es mátrixot vár, a fenti $3 \times 3$-as mátrixokat a megfelelő formára kell hozni. Ezt, egy általános $M$ mátrixszal a következő módon lehet megtenni:
+
+$$M_{4 \times 4}\begin{bmatrix}
+  M_{1, 1} & M_{1, 2} & 0 & M_{1, 3} \\
+  M_{2, 1} & M_{2, 2} & 0 & M_{2, 3} \\
+  0 & 0 & M_{3, 3} & 0 \\
+  M_{3, 1} & M_{3, 2} & 0 & M_{3, 3} \\
+\end{bmatrix}$$
 
 ## Tesztek
 
