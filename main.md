@@ -143,7 +143,7 @@ Bal oldalon található a típus kiválasztó **(1)**, tőle jobbra az adott tí
 
 ![A konfiguráló kliens nézete a közvetítési állapotban](images/broadcast.png){width=50%}
 
-Jelenleg két médiatartalom típus elérhető:<!--TODO: Ha lesz több médiatípus, ezt kibővíteni-->
+Jelenleg két médiatartalom típus elérhető:
 
 - Fénykép
 - Videó
