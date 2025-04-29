@@ -16,7 +16,7 @@ Az alkalmazás központilag kiszolgálva elérhető a https://getcrossview.com c
 
 ## Sajátkezű kiszolgálás
 
-Ha az alkalmazást saját szerverről szeretnénk kiszolgálni, akkor a Docker Compose alapú telepítés javasolt.
+Ha az alkalmazást saját szerverről szeretnénk kiszolgálni, akkor a Docker Compose[@docker-compose] alapú telepítés javasolt.
 
 Az alapértelmezett konfiguráció egy szerverről szolgálja ki az összes szolgáltatást, melyeket egy proxy segítségével kapcsol össze. Ehhez szükséges, hogy a szolgáltatásoknak legyenek létrehozva a megfelelő aldomainek, amelyek mind a szerverre mutatnak.
 
@@ -28,7 +28,7 @@ A szükséges domainek (zárójelben a központilag kiszolgált domainek)
 
 Lokális futtatás esetén elég a HOSTS fájl szerkesztése. Erről több információt a -@sec:hosts fejezetben találhat.
 
-1. Telepítse fel a Docker-t. Ehhez elérhető segédletet a [docker.com](https://docs.docker.com/engine/install/)^[https://docs.docker.com/engine/install/] oldalon találhat.
+1. Telepítse fel a Docker[@docker]-t. Ehhez elérhető segédletet a [docker.com](https://docs.docker.com/engine/install/)^[https://docs.docker.com/engine/install/] oldalon találhat.
 2. Hozza létre a szükséges .env fájlokat
 
    - `main.env`
@@ -81,7 +81,7 @@ Lokális futtatás esetén elég a HOSTS fájl szerkesztése. Erről több infor
 
 ## Használat
 
-Az alkalmazást megnyitva a főoldalt láthatjuk (-@fig:main). Ezen az oldalon tudunk új **szobát** létrehozni, vagy egy már létező szobához csatlakozni. Minden szobához tartozik egy 8 karakter hosszú kód, ami azt a szobát egyedileg azonosítja. Ez a kód a szobák bal felső sarkában látható.
+Az alkalmazást megnyitva a főoldalt láthatjuk (-@fig:main. ábra). Ezen az oldalon tudunk új **szobát** létrehozni, vagy egy már létező szobához csatlakozni. Minden szobához tartozik egy 8 karakter hosszú kód, ami azt a szobát egyedileg azonosítja. Ez a kód a szobák bal felső sarkában látható.
 
 ![A főoldal](images/main.png){#fig:main}
 
@@ -117,17 +117,17 @@ Ahhoz, hogy minden kijelző síkbeli elhelyezkedését tudjuk, szükséges egy k
 
 A kalibrálás során a felhasználó előkészítheti a megjelenítő klienseket. A legjobb eredmény elérésének érdekében próbáljuk meg az összes kijelzőt egy síkba helyezni.
 
-A megjelenítő klienseken egy kalibráló kód jelenik meg a jobb oldalon, illetve a bal oldalon a szoba kódja és a kliens egyedi sorszáma (-@fig:apriltag).
+A megjelenítő klienseken egy kalibráló kód jelenik meg a jobb oldalon, illetve a bal oldalon a szoba kódja és a kliens egyedi sorszáma (-@fig:apriltag. ábra).
 
 ![Megjelenítő kliens a kalibrálási állapotban.](images/apriltag.png){#fig:apriltag width=50%}
 
-A konfigurációs kliens ebben az állapotban egy `Upload calibration image` (`Kalibrációs kép feltöltése`) gombot lát és a legutóbb feltöltött kalibrációs képet (-@fig:calibrationbefore).
+A konfigurációs kliens ebben az állapotban egy `Upload calibration image` (`Kalibrációs kép feltöltése`) gombot lát és a legutóbb feltöltött kalibrációs képet (-@fig:calibrationbefore. ábra).
 
 ![Konfiguráló kliens a kalibrálási állapotban.](images/calibration-before.png){#fig:calibrationbefore width=50%}
 
 A felhasználónak egy fényképet kell készítenie a megjelenítő kliensekről. Ez lesz a **kalibrációs kép**. A kalibrációs kép kiterjesztése a következők egyike legyen: `.png, .jfif, .jpeg, .jpg, .webp, .avif, .heic, .heif`. Fontos, hogy a kalibrációs képen mindegyik klienshez tartozó kalibráló jel teljesen látszódjon, ugyanakkor a kijelzők többi része elhagyható a fényképről. A legjobb eredmény elérésének érdekében a fényképet nagyjából abból a szemszögből készítsük, ahonnan a virtuális kijelzőt nézni szeretnénk.
 
-A fénykép feltöltése és a sikeres kalibrálás után megjelenik a kalibrációs kép, méretre vágva. A fénykép szürkeárnyalatosan jelenik meg, viszont a felismert kijelzők a hozzájuk tartozó színnel lesznek kiemelve (-@fig:calibrationafter).
+A fénykép feltöltése és a sikeres kalibrálás után megjelenik a kalibrációs kép, méretre vágva. A fénykép szürkeárnyalatosan jelenik meg, viszont a felismert kijelzők a hozzájuk tartozó színnel lesznek kiemelve (-@fig:calibrationafter. ábra).
 
 ![Konfiguráló kliens a kalibrálási állapotban, sikeres kalibrálás után.](images/calibration-after.png){#fig:calibrationafter width=50%}
 
@@ -289,11 +289,11 @@ Lokális tesztelés esetén hasznos lehet, ha nem kell egy kulső domaint haszn�
 
 ## Overview
 
-Ennek a fejezetnek az elolvasása előtt érdemes elolvasni a -@sec:userdocs . (felhasználói dokumentáció) fejezetet.
+Ennek a fejezetnek az elolvasása előtt érdemes elolvasni a -@sec:userdocs. (felhasználói dokumentáció) fejezetet.
 
 Az alkalmazás szobákra van osztva, amelyek egymástól függetlenül működnek. Minden szoba 24 óráig elérhető.
 
-A szobáknak van egy azonosítója, amely egy szekvenciális sorszámból van generálva egy determinisztikus algoritmussal (lásd: -@sec:roomcode ). Ez biztosítja, hogy egyszerre két szoba nem kaphatja meg ugyan azt a kódot.
+A szobáknak van egy azonosítója, amely egy szekvenciális sorszámból van generálva egy determinisztikus algoritmussal (lásd: -@sec:roomcode. fejezet ). Ez biztosítja, hogy egyszerre két szoba nem kaphatja meg ugyan azt a kódot.
 
 Minden szobához tartozhat egy kalibrációs kép, amely a legutóbb feltöltött kalibráció szerint készül. Kalibrálási állapotba csak akkor lehet áttérni, ha van ilyen kép. Ezen felül minden szobához tartozhatnak feltöltött fényképek, amelyeket a közvetítési állapotban lehet használni.
 
@@ -321,7 +321,7 @@ A Redis több szempontból is előnyös ehhez a projekthez:
 Természetesen ez a választás hátrányokkal is járt:
 
 - a kulcs-érték felépítés miatt nincs széleskörű ORM támogatás, az adatbázishoz tartozó boilerplate kódod sajátkezűleg kell megírni
-- a JSON szerű adatbázisokhoz képest (pl. MongoDB) a Redis egy flat struktúrában tárolja az adatokat. Ennek hátránya, hogy hierarchikus adatok tárolására csak jól meggondolt kulcsokkal van lehetőség (Például: `room:ROOM:photos:PHOTOUUID:path`).
+- a JSON szerű adatbázisokhoz képest (pl. MongoDB) a Redis egy flat struktúrában tárolja az adatokat. Ennek hátránya, hogy hierarchikus adatok tárolására csak jól meggondolt kulcsokkal van lehetőség (Például: `room:ROOM:photos:PHOTO:path`).
 
   Természetesen azért, hogy az SQL injection-re hajazó problémákat elkerüljük, szükséges, hogy a kulcs dinamikusan megadható tagjai validálva legyenek. Egy `:`-ot tartalmazó ROOM könnyen problémákat okozhat a kódban.
 
@@ -337,18 +337,18 @@ A kulcsban `NAGY BETŰVEL` vannak jelölve a dinamikusan beillesztendő tagok:
 
 #### Szoba-szintű adatbázis elemek
 
-| Kulcs              | Típus           | Leírás                                                                                                                                                                                                                                                                                                 |
-| ------------------ | --------------- | ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------ |
-| `roomCount`        | Szám            | A létrehozott szobák számát tárolja. Értelmezhető úgy is, mint a legutoljára létrehozott szoba sorszáma.                                                                                                                                                                                               |
-| `room:ROOM`        | PubSub csatorna | Ezzel a kulccsal nem létezik kulcs-érték páros. Ez a kulcs a [Pub/Sub](https://redis.io/docs/latest/develop/interact/pubsub/)^[https://redis.io/docs/latest/develop/interact/pubsub/] üzeneteknek van fenntartva. Jelenleg csak a `ping` string küldhető el rajta. További információ: -@sec:pubsub |
-| `room:ROOM:mode`   | string          | A szoba jelenlegi állapota. Értéke csak `calibration` (kalibrálás) vagy `viewing` (közvetítés) lehet.                                                                                                                                                                                                  |
-| `room:ROOM:image`  | string          | A szoba jelenlegi kalibrációs képének S3-beli neve, kiterjesztéssel együtt.                                                                                                                                                                                                                            |
-| `room:ROOM:width`  | Szám            | A szoba jelenlegi kalibrációs képének szélessége pixelben.                                                                                                                                                                                                                                             |
-| `room:ROOM:height` | Szám            | A szoba jelenlegi kalibrációs képének magassága pixelben.                                                                                                                                                                                                                                              |
+| Kulcs | Típus | Leírás |
+| ---- | --- | --------- |
+| roomCount | Szám | A létrehozott szobák számát tárolja. Értelmezhető úgy is, mint a legutoljára létrehozott szoba sorszáma. |
+| `room:ROOM` | PubSub csatorna | Ezzel a kulccsal nem létezik kulcs-érték páros. Ez a kulcs a [Pub/Sub](https://redis.io/docs/latest/develop/interact/pubsub/)^[https://redis.io/docs/latest/develop/interact/pubsub/] üzeneteknek van fenntartva. Jelenleg csak a `ping` string küldhető el rajta. További információ: -@sec:pubsub. fejezet |
+| `room:ROOM:mode` | string | A szoba jelenlegi állapota. Értéke csak `calibration` (kalibrálás) vagy `viewing` (közvetítés) lehet. |
+| `room:ROOM:image` | string | A szoba jelenlegi kalibrációs képének S3-beli neve, kiterjesztéssel együtt. |
+| `room:ROOM:width` | Szám | A szoba jelenlegi kalibrációs képének szélessége pixelben. |
+| `room:ROOM:height` | Szám | A szoba jelenlegi kalibrációs képének magassága pixelben. |
 
 ##### Szoba kód generálása {#sec:roomcode}
 
-Új szoba létrehozásakor a roomCount-ból szükséges létrehozni egy szoba kódot. Ehhez a [!LCG] random szám algoritmus indexelhetőségét^[2. egyenlete [@rotenberg1960pseudo]-nek] használom ki. Ezt a következő kódrészlet implementálja a `mainservice/src/lib/utils.ts` fájlban^[Az `a` és `c` változók a Microsoft `rand` függvénye szerint lettek kiválasztva [@lomont2008random]]:
+Új szoba létrehozásakor a roomCount-ból szükséges létrehozni egy szoba kódot. Ehhez a [!LCG] random szám algoritmus indexelhetőségét^[[@rotenberg1960pseudo], 2. egyenlete] használom ki. Ezt a következő kódrészlet implementálja a `mainservice/src/lib/utils.ts` fájlban^[Az `a` és `c` változók a Microsoft `rand` függvénye szerint lettek kiválasztva [@lomont2008random]]:
 
 
 ```typescript
@@ -360,6 +360,7 @@ export function keyToCode(key: number, length = CODE_LENGTH) {
 
   // Megkeresem a key-edik értéket a random szám sorozatban
   // https://math.stackexchange.com/a/2115780
+  // Megegyezik Rotenberg1960 2. egyenletével, ha az ott lévő (2^a + 1)-et a-ra cseréljük
   const modulo = BigInt(CODE_ALPHABET.length) ** BigInt(length);
   const apowkey = powmod(a, bigkey, modulo);
   let num = (apowkey + ((apowkey - 1n) / (a - 1n)) * c) % modulo;
@@ -377,16 +378,16 @@ export function keyToCode(key: number, length = CODE_LENGTH) {
 #### Kijelző-szintű adatbázis elemek
 
 | Kulcs | Típus | Leírás |
-| ----- | ----- | ------ |
+| ----- | -- | --- |
 | `room:ROOM:screenCount` | Szám | Egy szobához tartozó megjelenítő kliensek száma |
 | `room:ROOM:available` | Szám halmaz | Egy szobához tartozó jelenleg elérhető megjelenítő kliensek sorszámának halmaza |
-| `room:ROOM:screen:SCREEN:config` | JSON string - `{width: number, height: number, x: number, y: number}` | A megjelenítő kliensek kalibráló jelének helye és mérete a kijelzőn. Jelenleg ez pontosan a képernyő jobb fele |
-| `room:ROOM:screen:SCREEN:ping` | Szám | Mindig `1`. Az [EXPIRE](https://redis.io/docs/latest/commands/expire/)^[https://redis.io/docs/latest/commands/expire/] értéke 2 percre van beállítva, és a kliensek 30 másodpercenként újra létrehozzák. Ezzel lehet észlelni kliens timeout-ot. Lásd: -@sec:timeout |
-| `room:ROOM:screen:SCREEN:homography` | JSON string - 3x3-as szám mátrix | Az Apriltag Service által generált homográfia. Lásd: -@sec:matrices |
+| `room:ROOM:screen:SCREEN:config` | JSON string - { width: number, height: number, x: number, y: number } | A megjelenítő kliensek kalibráló jelének helye és mérete a kijelzőn. Jelenleg ez pontosan a képernyő jobb fele |
+| `room:ROOM:screen:SCREEN:ping` | Szám | Mindig `1`. Az [EXPIRE](https://redis.io/docs/latest/commands/expire/)^[https://redis.io/docs/latest/commands/expire/] értéke 2 percre van beállítva, és a kliensek 30 másodpercenként újra létrehozzák. Ezzel lehet észlelni kliens timeout-ot. Lásd: -@sec:timeout. fejezet |
+| `room:ROOM:screen:SCREEN:homography` | JSON string - 3x3-as szám mátrix | Az Apriltag Service által generált homográfia. Lásd: -@sec:matrices. fejezet |
 
 ##### Megjelenítő kliens timeout {#sec:timeout}
 
-Egyes esetekben nem lehet egyértelműen eldönteni, hogy a megjelenítő kliens mikor csatlakozott le. Ennek az észlelésére van beépítve egy pingelő rendszer az alkalmazásba. A kliens 30 másodpercenként hívja meg a `sendPing` szerveroldali függvényt, amely a `room:ROOM:screen:SCREEN:ping` kulcsó értéket `1`-re állítja, 2 perces EXPIRE értékkel. Így a kulcs nem fog eltűnni, amíg létezik a megjelenítő kliens. 
+Egyes esetekben nem lehet egyértelműen eldönteni, hogy a megjelenítő kliens mikor csatlakozott le. Ennek az észlelésére van beépítve egy pingelő rendszer az alkalmazásba. A kliens 30 másodpercenként hívja meg a `sendPing` szerveroldali függvényt, amely a `room:ROOM:screen:SCREEN:ping` kulcsú értéket `1`-re állítja, 2 perces EXPIRE értékkel. Így a kulcs nem fog eltűnni, amíg létezik a megjelenítő kliens. 
 
 A kulcs eltűnését egy [keyspace notification](https://redis.io/docs/latest/develop/use/keyspace-notifications/)^[https://redis.io/docs/latest/develop/use/keyspace-notifications/] segítségével vesszük észre. 
 
@@ -420,7 +421,7 @@ Jelenleg a `deregisterScreen` függvény használaton kívül áll.
 #### Jelenlegi közvetítéshez tartozó adatbázis elemek
 
 | Kulcs | Típus | Leírás |
-| ----- | ----- | ------ |
+| ----- | -- | --- |
 | `room:ROOM:content:type` | String ( `none` \| `photo` \| `video` \| `iframe` ) | A jelenlegi tartalom típusa. `none` ha nincs kiválasztva tartalom típus |
 | `room:ROOM:content:url` | String | Fénykép médiatípus esetén a tartalom neve a media vödörben. Videó és iFrame esetén a tartalom teljes URL-je. |
 | `room:ROOM:content:status:type` | String (`paused` \| `playing`) | Videó tartalom esetén a lejátszás jelenlegi állapota |
@@ -430,16 +431,16 @@ Jelenleg a `deregisterScreen` függvény használaton kívül áll.
 #### Feltöltött fényképekhez tartozó adatbázis elemek
 
 | Kulcs | Típus | Leírás |
-| ----- | ----- | ------ |
+| ---- | -- | ---- |
 | `room:ROOM:photos` | String halmaz | A szobába feltöltött fényképek UUID azonosítóját tartalmazó halmaz |
 | `room:ROOM:photos:PHOTO:name` | String | A UUID-hoz tartozó fénykép eredeti fájlneve |
 | `room:ROOM:photos:PHOTO:path` | String | A UUID-hoz tartozó fénykép fájlneve a media vödörben |
 
 ## Fájl tárolás {#sec:s3}
 
-A fájlok tárolására egy S3 kompatibilis tárhely szolgáltatást használok. Ennek oka, hogy ez a de-facto szabvány, és nagyban megkönnyíti a fájlok le- és feltöltését.
+A fájlok tárolására egy S3[@s3] kompatibilis tárhely szolgáltatást használok. Ennek oka, hogy ez a de-facto szabvány, és nagyban megkönnyíti a fájlok le- és feltöltését.
 
-A tárhely szolgáltatás amit használok, alapértelmezetten a Minio, hiszen jól támogatott és széleskörűen használt (a TheirStack^[https://theirstack.com/en/technology/minio - 2025. április 28-i adat] szerint több mint 1000 cég használja). Természetesen bármilyen más S3 kompatibilis szolgáltatást le lehetne cserélni.
+A tárhely szolgáltatás amit használok, alapértelmezetten a Minio[@minio], hiszen jól támogatott és széleskörűen használt ^[a TheirStack[@theirstack] szerint több mint 1000 cég használja]. Természetesen bármilyen más S3 kompatibilis szolgáltatást le lehetne cserélni.
 
 Az alkalmazás két S3 bucket-et (vödröt) használ:
 
@@ -454,29 +455,29 @@ A `main.env`-ben megadott S3 felhasználónak mindkét vödörhöz kell, hogy ka
 
 A vödröknek olvashatónak (de nem feltétlenül listázhatónak) kell lenniük vendégfelhasználók által is. A telepítési útmutatóban található policy ezt állítja be.
 
-Az S3 protokol engedélyez úgynevezett ["pre-signed"](https://docs.aws.amazon.com/AmazonS3/latest/userguide/ShareObjectPreSignedURL.html)^[https://docs.aws.amazon.com/AmazonS3/latest/userguide/ShareObjectPreSignedURL.html] URL létrehozását. A pre-signed URL-t egy privilegizált felhasználó tud létrehozni, előre kitöltött adatokkal. Ekkor a URL-t használó vendég a privilegizált felhasználó jogait veszi át.
+Az S3 protokol engedélyez úgynevezett pre-signed URL[@s3-presigned] létrehozását. Egy pre-signed URL-t egy privilegizált felhasználó tud létrehozni, előre kitöltött adatokkal. Ekkor az URL-t használó vendég a privilegizált felhasználó jogait veszi át.
 
 Pre-signed URL-ek két helyen vannak használatban az alkalmazásban:
 
 - A kalibrációs kép/fénykép feltöltésekor
 
-  A szerver létrehozza a pre-signed URL-t a saját S3 felhasználójával, melyben megköti a vödröt, a fájl nevét, illetve a `Content-Length` headert. Így a kliens S3 vendégfelhasználóként is képes lesz írni a fájlt. A szerver le tudja ellenőrizni a klienstől kapott méret segítségével, hogy a fájl mérete nem halad-e meg egy limitet, majd a `Content-Length` megkötés biztosítja, hogy a kliens a megfelelő méretű adatot töltte fel.
+  A szerver létrehoz egy pre-signed URL-t a saját S3 felhasználójával, melyben megköti a vödröt, a fájl nevét, illetve a `Content-Length` headert. Így a kliens S3 vendégfelhasználóként is képes lesz írni a fájlt. A szerver le tudja ellenőrizni a klienstől kapott méret segítségével, hogy a fájl mérete nem halad-e meg egy limitet, majd a `Content-Length` megkötés biztosítja, hogy a kliens a megfelelő méretű adatot töltte fel.
 - A kalibrálás utáni perspektíva korregált kalibrációs kép feltöltése
 
   A perspektíva korrekciót az Apriltag Service végzi, de nincs hozzáférése privilegizált S3 felhasználóhoz. Ahhoz, hogy mégis fel tudja tölteni a képet, kalibrálás előtt a szerver létrehoz neki egy pre-signed URL-t erre a célra.
 
 ## Main service
 
-A projekthez a React keretrendszert használtam, mivel sokoldalú és széleskörű használata miatt jól támogatott. Manapság sokféle "ízben" lehet használni a React-et. Én a Next.js alapú `create-t3-app`-et használtam. Ennek a választásnak több oka is volt:
+A projekthez a React keretrendszert használtam, mivel sokoldalú és széleskörű használata miatt jól támogatott. Manapság sokféle "ízben" lehet használni a React-et. Én a Next.js[@nextjs] alapú `create-t3-app`-et[@t3] használtam. Ennek a választásnak több oka is volt:
 
 - A Next.js az egyik legelterjedtebb keretrendszer még a React-es framework-ök között is, így ennek van a legjobb támogatottsága is
-- A Next.js egy full stack rendszer, szerver komponensek és akciók segítségével egyben lehet megírni vele a frontendet és a backendet^[https://nextjs.org/docs#what-is-nextjs].
+- A Next.js egy full stack rendszer. Szerver komponensek és akciók segítségével egyben lehet megírni vele a frontendet és a backendet^[https://nextjs.org/docs#what-is-nextjs].
 - A `create-t3-app` egy kezdőcsomag, amely több gyakori konfigurációt beállít, illetve sok hasznos csomagot tartalmaz:
-  - szigorú TypeScript támogatással érkezik, hogy biztosítsa minden sor kód típus helyességét
-  - a `tRPC` könyvtárral egyszerűen lehet a szerver és a kliens kód között valós idejű kommunikációt végrehajtani
+  - szigorú TypeScript[@typescript] támogatással érkezik, hogy biztosítsa minden sor kód típus helyességét
+  - a `tRPC`[@trpc] könyvtárral egyszerűen lehet a szerver és a kliens kód között valós idejű kommunikációt végrehajtani
   - ezeken felül támogatja a Prisma ORM-et, a NextAuth.js autentikációs könyvtárat és a Tailwind-et, de ezekre ebben a projektben nem volt szükség
 
-Az oldal UI felépítéséhez a Mantine[@mantine] stíluskönyvtárat használom, amely az oldal felépítését nagyban megkönnyítette, ezen kívül sok hasznos hook-ot tartalmaz.
+Az oldal UI felépítéséhez a Mantine[@mantine] stíluskönyvtárat használtam, amely az oldal felépítését nagyban megkönnyítette, ezen kívül sok hasznos hook-ot tartalmaz.
 
 ### Elérési utak
 
@@ -491,7 +492,7 @@ Minden oldalhoz tartozik egy mappa, amelyben két fontosabb fájl található:
 
   Ez a fájl írja le, hogy ha az adott mappa része a teljes elérési útnak, akkor mi legyen az oldal tartalma körülötti díszítés.
 
-  Például: Legyen a`src/app/example/test/page.tsx` tartalma a `ting` feliratot kiíró komponens, míg a `src/app/example/test/layout.tsx` tartalma:
+  Például: Legyen a `src/app/example/test/page.tsx` tartalma a `ting` feliratot kiíró komponens, míg a `src/app/example/test/layout.tsx` tartalma:
 
   ```jsx
   export default function TestLayout({children}){
@@ -516,9 +517,9 @@ Az alkalmazás különböző komponenseinek elérési oldalai, célja és a layo
         - `@calibration` - a kalibrálási állapot esetén használt megjelenés
     - `/room/[room]/config` - a layout fájl hozzáadja a toolbart, amely kiírja a szoba kódját, a `Calibrate` és `Broadcast` gombokat, illetve a `View` gombot. Ezen felül automatikusan átirányít a szükséges aloldalra a jelenlegi állapottól függően
       - `/room/[room]/config/viewing` - a közvetítési állapot oldala. A layout addja hozzá a jobb oldali előnézetet, illetve a bal oldali médiatartalom típus választó panelt. A tartalmat a kettő közé helyezi el.
-        - `/room/[room]/config/viewing/photo` - a fénykép médiatartalomhoz tartozó elérési út
-        - `/room/[room]/config/viewing/video` - a videó médiatartalomhoz tartozó elérési út
-        - `/room/[room]/config/viewing/iframe` - az iFrame médiatartalomhoz tartozó elérési út
+        - `/room/[room]/config/viewing/photo` - a fénykép médiatartalom konfigurálására szolgáló út
+        - `/room/[room]/config/viewing/video` - a videó médiatartalom konfigurálására szolgáló út
+        - `/room/[room]/config/viewing/iframe` - az iFrame médiatartalom konfigurálására szolgáló út
       - `/room/[room]/config/calibration` - a kalibrálási állapot oldala.
 
 ### Adatbázis elérése {#sec:db}
@@ -589,10 +590,10 @@ const roomContentObject = {
 }
 ```
 
-#### Adatbázis objektumok listája {@sec:db-object}
+#### Adatbázis objektumok listája {#sec:db-object}
 
 | Adatbázis objektum név | Adatbázis kulcs | Metódusok |
-| - | - | - |
+| ---- | ------ | -- |
 | `roomCount` | `roomCount` | `get`, `incr` |
 | `roomContent.type` | `room:ROOM:content:type` | `set`, `get` |
 | `roomContent.url` | `room:ROOM:content:url` | `set`, `get` |
@@ -618,7 +619,7 @@ const roomContentObject = {
 
 ### PubSub {#sec:pubsub}
 
-Mivel a kijelző és a konfiguráló kliensek szoros kapcsolatban vannak, ezért szükséges egy valós idejű üzenetküldési megoldás. A megoldásom a következőképpen működik: bármilyen adat megváltoztatásakor, a megváltoztatást végző függvény egy `ping` üzenetet küld a `room:ROOM` csatornára, ezzel jelezve az új adat beérkezését. Mindegyik kliens egy tRPC subscription segítségével kapja meg a legfrissebb adatokat. A `ping` üzenetre a klienshez tartozó tRPC kiszolgáló lekéri a friss adatokat a Redis adatbázisból, serializálja őket, majd elküldi egy [!SSE] kapcsolaton keresztül.
+Mivel a kijelző és a konfiguráló kliensek szoros kapcsolatban vannak, ezért szükséges egy valós idejű üzenetküldési megoldás. A megoldásom a következőképpen működik: bármilyen adat megváltoztatásakor, a megváltoztatást végző függvény egy `ping` üzenetet küld a `room:ROOM` csatornára, ezzel jelezve az új adat beérkezését. Mindegyik kliens egy tRPC[@trpc] subscription segítségével kapja meg a legfrissebb adatokat. A `ping` üzenetre a klienshez tartozó tRPC kiszolgáló lekéri a friss adatokat a Redis adatbázisból, serializálja őket, majd elküldi egy [!SSE] kapcsolaton keresztül.
 
 Az adatok kinyerése és a serializáció a `src/db/serialization.ts` fájlban történik. Itt a `serializeRoom` aszinkron függvény a teljes szoba jelenlegi adatait visszaadja, JSON kódolható módon.
 
@@ -665,7 +666,7 @@ A serializált struktúra a következő:
     // A kép magassága
     height: number
   },
-  // A jelenleg kiválasztott médiatartalom típus és adatai
+  // A jelenleg kiválasztott médiatartalom típusa és adatai
   nowPlayingContent: NowPlayingContent
 }
 ```
@@ -721,7 +722,7 @@ A serializált adatot a kliens a `RoomContextProvider` komponensben veszi át, m
 
 ### Fájlok feltöltése
 
-A -@sec:s3 . fejezet ismerteti az S3 fájltárolás alapjait. Ez a fejezet fejlesztési szempontból közelíti meg a fájlok feltöltését.
+A -@sec:s3. fejezet ismerteti az S3 fájltárolás alapjait. Ez a fejezet fejlesztési szempontból közelíti meg a fájlok feltöltését.
 
 Fájlok feltöltésére ajánlott használni a `RoomUploadButton` komponenst. Ez a komponens kezeli a töltési állapotot, kér egy pre-signed URL-t a szervertől, feltölti a fájlt az S3 szerverre, majd egy callbacket hív.
 
@@ -753,6 +754,7 @@ A programban jelenleg 3 médiatartalom típus érhető el:
 A projekt felépítéséből adódóan könnyen lehet új médiatípusokat létrehozni a már létező rendszerek kihasználásával. Ennek fontos szerepe van a program bővíthetőségében, hiszen itt van a legtöbb lehetőség új funkciók beépítésére (például egy prezentáció mód, szinkronizált internet böngésző stb.)
 
 Egy médiatípus öt részből áll:
+
 - Egy Adatbázis objektumból
 - Egy serializációból
 - Egy konfigurációs panelből
@@ -764,7 +766,7 @@ Egy médiatípus öt részből áll:
 Első lépésként létre kell hoznunk a megfelelő adatbázis elemeket és objektumokat a médiatartalmunkhoz. Ezt a `room:ROOM:content` kulcs alatt, illetve a roomContent adatbázis objektumon belül tudjuk megtenni.
 
 
-Először adjuk hozzá a `redis-keys.ts` fájlhoz a szükséges kulcsokat, a `roomContentRoot` kulcs helper (-@sec:db) segítségével. Példának okául, tegyük fel, hogy egy prezentáció médiatípust szeretnénk hozzáadni. Ekkor szükséges lesz eltárolni a prezentáció URL-jét, illetve a jelenlegi diaszámot. Mivel a URL-re már létezik egy kulcs, ezért a diaszámnak hozzunk létre egy kulcsot:
+Először adjuk hozzá a `redis-keys.ts` fájlhoz a szükséges kulcsokat, a `roomContentRoot` kulcs helper (-@sec:db. fejezet) segítségével. Példának okául, tegyük fel, hogy egy prezentáció médiatípust szeretnénk hozzáadni. Ekkor szükséges lesz eltárolni a prezentáció URL-jét, illetve a jelenlegi diaszámot. Mivel az URL-re már létezik egy kulcs, ezért a diaszámnak hozzunk létre egy kulcsot:
 
 ```ts
 export function roomContentSlide(room: string) {
@@ -772,7 +774,7 @@ export function roomContentSlide(room: string) {
 }
 ```
 
-Utána az `src/db/objects/roomContent.ts` fájl kell kiegészíteni a megfelelő adatbázis objektummal. Az adatbázis objektumok leírása a -@sec:db . fejezetben található.
+Utána az `src/db/objects/roomContent.ts` fájl kell kiegészíteni a megfelelő adatbázis objektummal. Az adatbázis objektumok leírása a -@sec:db. fejezetben található.
 
 Szükséges rá odafigyelni, hogy az adatbázis sémát úgy kell létrehozni, hogy az akkor is működjön, ha egy megjelenítő kliens egy-egy parancs kiadása után csatlakozik. Tehát "eseményszerű" parancsokat mindenképpen át kell alakítani egy "állapotváltoztatás" paranccsá. Például, egy "videó elinditása" parancs helyett a videó elindításának időpontját kell megadni. A videó médiatípus implementálásáról további információ a -@sec:videomedia. fejezetben található.
 
@@ -813,13 +815,13 @@ Végül, adjuk hozzá ezt a függvényt a `serializeNowPlayingContent` függvén
 
 ##### Konfigurációs panel
 
-A konfigurációs panel az az, amit a felhasználó akkor lát, amikor rákattint a bal oldali médiatípus választó gombra. Ez next.js-ben egy külön útvonalként van definiálva. A `src/app/room/[id]/config/viewing` mappában lehet létrehozni neki új mappát, majd a `src/app/room/[id]/config/viewing/layout.tsx` fájl `routes` tömbjének kiegészítésével lehet hozzáadni a bal oldali választóhoz.
+A konfigurációs panel az az, amit a felhasználó akkor lát, amikor rákattint a bal oldali médiatípus választó gombra. Ez Next.js-ben egy külön útvonalként van definiálva. A `src/app/room/[id]/config/viewing` mappában lehet létrehozni neki új mappát, majd a `src/app/room/[id]/config/viewing/layout.tsx` fájl `routes` tömbjének kiegészítésével lehet hozzáadni a bal oldali választóhoz.
 
-A panelen kell lennie egy gombnak, amely elindítja a médiatartalmat. Ekkor a `roomContentObject` adatbázis objektum (-@sec:db-object) `type` paraméterét a médiatípusnak megfelelő értékre kell állítani. Indítás után ne felejtsük el meghívni a `roomPubSubObject.ping` függvényt!
+A panelen kell lennie egy gombnak, amely elindítja a médiatartalmat. Ekkor a `roomContentObject` adatbázis objektum (-@sec:db-object. fejezet) `type` paraméterét a médiatípusnak megfelelő értékre kell állítani. Indítás után ne felejtsük el meghívni a `roomPubSubObject.ping` függvényt!
 
 ##### Megjelenés
 
-A "megjelenés" az az a tartalom, ami a virtuális kijelzőn meg fog jelenni. Belépési pontja a `src/app/room/[id]/_screenContent/ScreenContent.tsx` komponens fájl, ami a virtuális kijelző tartalma. Ehhez a fájlhoz lehet hozzáadni az új médiatípushoz tartozó megjelenést. Célszerű ide a `_screenContent` mappába létrehozni egy új komponenst a megjelenésnek, és azt felhasználni. Fontos, hogy ez a komponens kitöltse a szülő komponenst, hiszen így lesz teljesképernyős.
+A "megjelenés" az az a tartalom, ami a virtuális kijelzőn meg fog jelenni. Belépési pontja a `src/app/room/[id]/_screenContent/ScreenContent.tsx` komponens fájl, ami a virtuális kijelző tartalma. Ehhez a fájlhoz lehet hozzáadni az új médiatípushoz tartozó megjelenést. Célszerű ide a `_screenContent` mappába létrehozni egy új komponenst a megjelenésnek, és azt felhasználni. Fontos, hogy ez a komponens kitöltse a szülő komponenst, hiszen így lesz teljesképernyős a tartalom.
 
 Például, ha a megjelenés komponens `PresentationContent` és a médiatípus type-ja `presentation`, akkor a következő sorokat kell hozzáadni a ScreenContent-hez:
 
@@ -859,11 +861,11 @@ A kijelzők helyének pontos megállapításához szükséges egy kalibrálási 
 Mivel a legtöbb számítógépes látás könyvtár és eszköz Python-ban érhető el, ezért ezt a lépést egy külön szolgáltatásban hajtom végre, melyet Apriltag Service-nek hívok. A következő könyvtárakat használom: 
 
 - Az Apriltagek feldolgozására a `pupil-apriltags` könyvtárat
-- A fényképek megnyitására, mentésére, perspektíva korrigálására az opencv könyvtárat (`opencv-python-headless`).
+- A fényképek megnyitására, mentésére, perspektíva korrigálására az OpenCV könyvtárat (`opencv-python-headless`).
 - Az egyéb mátrixos számításokhoz a `numpy` könyvtárat
 - A Main Service-el való kommunikálás segítéséhez a FastAPI keretrendszert
 
-Számítógépes látásban a különböző síkok közötti perspektív transzformációkat egy homográfia mátrixal lehet jellemezni. Az Apriltag könyvtár egy ilyen homográfiát ad vissza minden kalibráló jelhez, ami az Apriltag saját koordináta-rendszeréből képez a fénykép koordináta-rendszerébe. Ezt kombinálva egy saját homográfiával, ami a megjelenítő kliens koordináta-rendszeréből (lásd: `room:ROOM:screen:SCREEN:config` ) képez az Apriltag koordináta-rendszerébe, kapunk egy homográfiát ami a kliens kijelzőjét jellemzi a fénykép keretein belül. Ez után a kliensek közül kiválasztunk egy "fő kijelzőt" (ez a legkisebb sorszámú kliens jelenleg), és arra ortogonálisan létrehozunk egy olyan koordináta-rendszert, amelybe belefér az összes kliens kijelzője. Így jön létre a virtuális kijelző.
+Számítógépes látásban a különböző síkok közötti perspektív transzformációkat egy homográfia mátrixal lehet jellemezni[@opencv-homography]. Az Apriltag könyvtár egy ilyen homográfiát ad vissza minden kalibráló jelhez, ami az Apriltag saját koordináta-rendszeréből képez a fénykép koordináta-rendszerébe. Ezt kombinálva egy saját homográfiával, ami a megjelenítő kliens koordináta-rendszeréből (lásd: `room:ROOM:screen:SCREEN:config` ) képez az Apriltag koordináta-rendszerébe, kapunk egy homográfiát ami a kliens kijelzőjét jellemzi a fénykép keretein belül. Ez után a kliensek közül kiválasztunk egy "sablon kijelzőt" (ez a legkisebb sorszámú kliens jelenleg), és arra ortogonálisan létrehozunk egy olyan koordináta-rendszert, amelybe belefér az összes kliens kijelzője. Így jön létre a virtuális kijelző.
 
 ### Kalibrálási folyamat {#sec:matrices}
 
@@ -871,7 +873,7 @@ Mivel a homográfiák[@opencv-homography] mátrixok, egyszerűen lehet őket man
 
 A homográfiák eltolásokat is tartalmazhatnak. Általánosságban a mátrix egy $3 \times 3$-as mátrix, amelyben a jobb alsó elem pedig 1. Az utolsó oszlop első két eleme tartalmazza az eltolást, míg a bal felső $2 \times 2$-es mátrix tartalmazza a transzformáció többi részét.
 
-A kalibrálási folyamat AprilTag Service-beli része két lépésre bontható:
+A kalibrálási folyamat Apriltag Service-beli része két lépésre bontható:
 
 - a kijelzők megkeresése
 - és a virtuális kijelző létrehozása
@@ -881,12 +883,12 @@ A fejezetben a következő jelöléseket fogom használni:
 - $image\_width, image\_height$ - a kalibrációs kép szélessége és magassága
 - $virtual\_width, virtual\_height$ - a kalibrációs kép szélessége és magassága
 - ${screen\_width}_i, {screen\_height}_i$ - az $i$-edik kijelző szélessége és magassága pixelben
-- $H_i$ - Az $i$-edik kijelzőn lévő AprilTag homográfiája
+- $H_i$ - Az $i$-edik kijelzőn lévő Apriltag homográfiája
 - $M_i$ - Az $i$-edik kijelzőhöz tartozó homográfia
 - $C$ - A kalibráló jel mérete pixelben
 - $C_x, C_y$ - A kalibráló jel x és y eltolása a kijelzőn pixelben
 
-Az AprilTag könyvtár minden megtalált kalibráló jelhez visszaadja a hozzá tartozó homográfiát. Ez a homográfia a jel koordináta rendszeréből, ami $[-1, 1], [-1, 1]$ között van, átképez a fénykép koordináta rendszerére, ahol pixel koordinátákkal dolgozunk ($[0, image\_width], [0, image\_height]$). Ezzel két probléma van. Egyrészt, a $[0, 1], [0, 1]$ koordinátákkal lehet a legegyszerűbben dolgozni, úgyhogy mind a forrás és a cél koordináta rendszert erre át kell fordítani. Másrészt, a programban nem a kalibráló jel homográfiájára van szükségünk, hanem a teljes kijelzőjére.
+Az Apriltag könyvtár minden megtalált kalibráló jelhez visszaadja a hozzá tartozó homográfiát. Ez a homográfia a jel koordináta rendszeréből, ami $[-1, 1], [-1, 1]$ között van, átképez a fénykép koordináta rendszerére, ahol pixel koordinátákkal dolgozunk ($[0, image\_width], [0, image\_height]$). Ezzel két probléma van. Egyrészt, a $[0, 1], [0, 1]$ koordinátákkal lehet a legegyszerűbben dolgozni, úgyhogy mind a forrás és a cél koordináta rendszert erre át kell fordítani. Másrészt, a programban nem a kalibráló jel homográfiájára van szükségünk, hanem a teljes kijelzőjére.
 
 Az első probléma megoldására két másik homográfiát lehet felhasználni: az egyik egy $[0, 1]$-es mátrixot alakít át $[-1, 1]$-essé (egy nagyítással és egy eltolással), a másik pedig a fénykép méretű koordinátát alakítja át $[0, 1]$ méretűvé:
 
@@ -902,7 +904,7 @@ H_i
   0 & 0 & 1\\
 \end{bmatrix}$$
 
-A másik problémát egy olyan homográfiával lehet megoldani, ami egy kijelzőbeli koordinátát alakít át egy kalibráló jelen belüli koordinátává. Ezt akkor lehetséges, ha tudjuk, hogy hol van a kijelzőn a jel, és hogy mekkora a mérete. Ezeket az adatokat szerencsére meg tudjuk szerezni a klienstől. Mivel egyszerűbb volt elképzelni, hogy egy kijelzőn belül hogyan lehet elhelyezni egy jelet, ezért arra hoztam létre homográfiát, majd azt invertáltam.
+A másik problémát egy olyan homográfiával lehet megoldani, ami egy kijelzőbeli koordinátát alakít át egy kalibráló jelen belüli koordinátává. Ezt akkor lehetséges, ha tudjuk, hogy hol van a kijelzőn a jel, és hogy mekkora a mérete. Ezeket az adatokat szerencsére meg tudjuk szerezni a klienstől. Mivel egyszerűbb elképzelni, hogy egy kijelzőn belül hogyan lehet elhelyezni egy jelet, ezért arra hoztam létre homográfiát, majd azt invertáltam.
 
 $$M_i \coloneqq \begin{bmatrix}
   \frac{1}{image\_width} & 0 & 0\\
@@ -927,7 +929,7 @@ Az algoritmus a következő:
 
 1. Minden kijelzőnek megkeresem a sarkait a kalibrációs képen
 2. A sarkokat a sablon kijelzőn elhelyezem a $M_0^{-1}$ mátrix segítségével.
-3. A szélsőséges pontok megkeresésével megkapom a legkisebb téglalapot, amelybe az összes sarok beletartozik. Ez lesz a virtuális kijelző. 
+3. A szélsőséges pontok megkeresésével megkapom a legkisebb téglalapot, amelybe az összes Apriltag beletartozik. Ez lesz a virtuális kijelző. 
 
    A kapott X és Y szélsőséges értékeknek nevet adok: $R, L$ a jobb és bal X koordináta, $T, B$ pedig a tetejének és az aljának az Y koordinátája (ezek a sablon kijelző koordináta rendszerében vannak)
 
