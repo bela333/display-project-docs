@@ -982,6 +982,36 @@ $$M_{4 \times 4} \coloneqq \begin{bmatrix}
 
 ## Tesztek
 
-<!-- TODO: Tesztek -->
+### Apriltag service tesztelése
+
+A teszteléshez a FastAPI  saját teszt rendszerét használtam <!--cite-->, ami pytest-re <!--cite--> alapszik. Az S3 fel- és letöltés tesztelésére a `requests_mock` <!--cite--> könyvtárat használtam.
+
+A `mock_minio` pytest fixture <!--cite--> létrehozza a megfelelő requests mockokat, hogy minden fájl elérhető legyen úgy, mintha fent lenne az S3 tárhelyen.
+
+A teszteléshez használt képek a `apriltagservice/test` mappában találhatóak.
+
+#### Felállítás
+
+A tesztek futtatásához szükséges egy Python környezet, amelynek verziószáma legalább 3.12. Ajánlott verzió: `3.12.9`. Ajánlott Linux-ot használni, vagy vagy Windows rendszereken WSL-t<!--cite-->.
+
+1. Lépjen be az `apriltagservice` mappába
+2. Hozzon létre új virtualenv-et <!--cite-->: `python3.12 venv venv`
+3. Lépjen be a virtualenv-be: `source venc/bin/activate`
+4. Telepítse fel a projekt követelményeit: `pip install -r requirements.txt`
+5. Telepítse fel a tesztelés követelményeit: `pip install pytest httpx requests-mock`
+6. Futtassa a teszteket: `pytest`
+
+#### Apriltag tesztek listája
+
+| Teszt neve | Leírása | Kimenet |
+| - | --- | -- |
+| `test_no_tag_no_screen` | Egy tesztkártya <!--cite https://en.wikipedia.org/wiki/Philips_circle_pattern--> annak az esetnek a tesztelésére, ha nincs a képen Apriltag, és a Mainservice sem adott át kijelző méret adatokat. | `No tags have been found` hiba |
+| `test_no_tag` | Egy tesztkártya <!--cite https://en.wikipedia.org/wiki/Philips_circle_pattern--> annak az esetnek a tesztelésére, ha nincs a képen Apriltag. Egy kijelző dimenzió meg vannak adva. | `No tags have been found` hiba, mivel a kijelzők mérete nem ismert. |
+| `test_one_tag_no_screen` | Egy Apriltagről készült kép, de kijelző dimenziók nélkül. | `No tags have been found` hiba, mivel a kijelzők mérete nem ismert. |
+| `test_one_tag` | Egy teljesképernyős kép a megjelenítő kliens kalibrációs oldaláról. A dimenziók helyesen meg vannak adva. | Sikeres visszatérés, eredetivel megegyező felbontás, egy kijelző felismerve, amely az egész virtuális kijelzőt kitölti. |
+| `test_one_tag_perspective` | Egy teljesképernyős kép a megjelenítő kliens kalibrációs oldaláról. A dimenziók helyesen meg vannak adva. A kép oldalasan készült. | Sikeres visszatérés, eredetivel megegyező felbontás, egy kijelző felismerve, amely az egész virtuális kijelzőt kitölti. |
+| `test_one_tag_perspective_result` | Egy teljesképernyős kép a megjelenítő kliens kalibrációs oldaláról. A dimenziók helyesen meg vannak adva. A kép oldalasan készült. Meg van adva `upload_url`. | Sikeres visszatérés, `upload_url` meghívva, feltöltött bájtok megegyeznek a sablonnal (`image_one_perspective_warped.png`) |
+| `test_two_tag` | Egy kép melyen két megjelenítő kliens található egymás mellett. A tetején egy fejléc található. A dimenziók helyesen meg vannak adva. | Sikeres visszatérés, két kijelző felismerve, homográiák szerint a kijelzők a virtuális kijelző két felét veszik fel |
+| `test_two_tag_perspective` | Egy kép melyen két megjelenítő kliens található egymás mellett. A tetején egy fejléc található. A dimenziók helyesen meg vannak adva. A kép oldalasan készült. | Sikeres visszatérés, két kijelző felismerve, homográiák szerint a kijelzők a virtuális kijelző két felét veszik fel |
 
 # Irodalomjegyzék
