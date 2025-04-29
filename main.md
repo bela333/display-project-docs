@@ -984,18 +984,18 @@ $$M_{4 \times 4} \coloneqq \begin{bmatrix}
 
 ### Apriltag service tesztelése
 
-A teszteléshez a FastAPI  saját teszt rendszerét használtam <!--cite-->, ami pytest-re <!--cite--> alapszik. Az S3 fel- és letöltés tesztelésére a `requests_mock` <!--cite--> könyvtárat használtam.
+A teszteléshez a FastAPI saját teszt rendszerét használtam[@fastapi-testing], ami pytest-re[@pytest] alapszik. Az S3 fel- és letöltés tesztelésére a `requests_mock`[@requests-mock] könyvtárat használtam.
 
-A `mock_minio` pytest fixture <!--cite--> létrehozza a megfelelő requests mock-okat, hogy minden fájl elérhető legyen úgy, mintha fent lenne az S3 tárhelyen.
+A `mock_minio` pytest fixture[@requests-mock-pytest] létrehozza a megfelelő requests mock-okat, hogy minden fájl elérhető legyen úgy, mintha fent lenne az S3 tárhelyen.
 
 A teszteléshez használt képek a `apriltagservice/test` mappában találhatóak.
 
 #### Felállítás
 
-A tesztek futtatásához szükséges egy Python környezet, amelynek verziószáma legalább 3.12. Ajánlott verzió: `3.12.9`. Ajánlott Linux-ot használni, vagy vagy Windows rendszereken WSL-t<!--cite-->.
+A tesztek futtatásához szükséges egy Python környezet, amelynek verziószáma legalább 3.12. Ajánlott verzió: `3.12.9`. Ajánlott Linux-ot használni, vagy vagy Windows rendszereken WSL-t[@wsl].
 
 1. Lépjen be az `apriltagservice` mappába
-2. Hozzon létre új virtualenv-et <!--cite-->: `python3.12 venv venv`
+2. Hozzon létre új venv-et[@venv]: `python3.12 venv venv`
 3. Lépjen be a virtualenv-be: `source venc/bin/activate`
 4. Telepítse fel a projekt követelményeit: `pip install -r requirements.txt`
 5. Telepítse fel a tesztelés követelményeit: `pip install pytest httpx requests-mock`
@@ -1005,8 +1005,8 @@ A tesztek futtatásához szükséges egy Python környezet, amelynek verziószá
 
 | Teszt neve | Leírása | Kimenet |
 | ----- | ---- | --- |
-| `test_no_tag_no_screen` | Egy tesztkártya <!--cite https://en.wikipedia.org/wiki/Philips_circle_pattern--> annak az esetnek a tesztelésére, ha nincs a képen Apriltag, és a Mainservice sem adott át kijelző méret adatokat. | `No tags have been found` hiba |
-| `test_no_tag` | Egy tesztkártya <!--cite https://en.wikipedia.org/wiki/Philips_circle_pattern--> annak az esetnek a tesztelésére, ha nincs a képen Apriltag. Egy kijelző dimenzió meg vannak adva. | `No tags have been found` hiba, mivel a kijelzők mérete nem ismert. |
+| `test_no_tag_no_screen` | Egy tesztkártya[@testcard] annak az esetnek a tesztelésére, ha nincs a képen Apriltag, és a Mainservice sem adott át kijelző méret adatokat. | `No tags have been found` hiba |
+| `test_no_tag` | Egy tesztkártya[@testcard] annak az esetnek a tesztelésére, ha nincs a képen Apriltag. Egy kijelző dimenzió meg vannak adva. | `No tags have been found` hiba, mivel a kijelzők mérete nem ismert. |
 | `test_one_tag_no_screen` | Egy Apriltag-ről készült kép, de kijelző dimenziók nélkül. | `No tags have been found` hiba, mivel a kijelzők mérete nem ismert. |
 | `test_one_tag` | Egy teljes képernyős kép a megjelenítő kliens kalibrációs oldaláról. A dimenziók helyesen meg vannak adva. | Sikeres visszatérés, eredetivel megegyező felbontás, egy kijelző felismerve, amely az egész virtuális kijelzőt kitölti. |
 | `test_one_tag_perspective` | Egy teljes képernyős kép a megjelenítő kliens kalibrációs oldaláról. A dimenziók helyesen meg vannak adva. A kép oldalasan készült. | Sikeres visszatérés, eredetivel megegyező felbontás, egy kijelző felismerve, amely az egész virtuális kijelzőt kitölti. |
