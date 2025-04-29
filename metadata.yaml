@@ -9,9 +9,12 @@ bibliography: main.bib
 cite-method: biblatex
 biblio-style: numberic
 citation-style: ieee.csl
+include-before: |
+  \includepdf[pages=-]{bejelento.pdf}
 header-includes: |
   \usepackage{mathtools}
   \usepackage{twemojis}
+  \usepackage{pdfpages}
   \usepackage[newfloat]{minted}
   \removefromtoclist[float]{lol}
   \degree{programtervező informatikus BSc}
