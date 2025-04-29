@@ -4,7 +4,7 @@ numbersections: true
 
 # Bevezetés
 
-A mai világban körbevesznek minket a számítógépek. A zsebünkben lévő okostelefontól kezdve, a nappalinkban lévő televízión és számítógépen át, egészen a bolti vásárlásainkat segítő kioszkokig. Egyes kutatások szerint, egy személynek átlagosan **3,6**[@cisco] okos eszköze van. Ezeknek az eszközönek viszont a lehetőségeit korlátozza, hogy eredendően számítási és I/O kapacitása megoszlik. Ezekkel a problémákkal többen is foglalkoznak, mind számítási^[például Slurm, Spark és egyéb HPC szoftverek], mind bemeneti oldalról^[KVM-ek, a Synergy nevű program], de a kimeneti kérdésre kevesebb megoldás létezik, és azok vagy komplexek és nehezen kezelhetőek, vagy elavultak.
+A mai világban körbevesznek minket a számítógépek. A zsebünkben lévő okostelefontól kezdve, a nappalinkban lévő televízión és számítógépen át, egészen a bolti vásárlásainkat segítő kioszkokig. Egyes kutatások szerint, egy személynek átlagosan **3,6**[@cisco] okos eszköze van. Ezeknek az eszközöknek viszont a lehetőségeit korlátozza, hogy eredendően számítási és I/O kapacitása megoszlik. Ezekkel a problémákkal többen is foglalkoznak, mind számítási^[például Slurm, Spark és egyéb HPC szoftverek], mind bemeneti oldalról^[KVM-ek, a Synergy nevű program], de a kimeneti kérdésre kevesebb megoldás létezik, és azok vagy komplexek és nehezen kezelhetőek, vagy elavultak.
 
 Szakdolgozatom egy interaktív webes alkalmazás, ami ezt az űrt hivatott betölteni. Segítségével több webböngészésre képes eszköz kijelzőjét fel tudjuk használni egy kijelzőként. Ezeket az egyesített kijelzőket (továbbiakban virtuális kijelzőket) használhatjuk különböző médiatartalmak megjelenítésére, például képek, videók, prezentációk.
 
@@ -14,7 +14,7 @@ Szakdolgozatomnak inspirációul a Junkyard Jumbotron[@jumbotron] projekt szolg�
 
 Az alkalmazás központilag kiszolgálva elérhető a https://getcrossview.com címen.
 
-## Sajátkezű kiszolgálás
+## Saját kezű kiszolgálás
 
 Ha az alkalmazást saját szerverről szeretnénk kiszolgálni, akkor a Docker Compose[@docker-compose] alapú telepítés javasolt.
 
@@ -45,7 +45,7 @@ Lokális futtatás esetén elég a HOSTS fájl szerkesztése. Erről több infor
      3. Hozzon létre egy biztonságos jelszót, majd állítsa be rá a `MINIO_ROOT_PASSWORD` változót
      4. _[opcionális]_ Állítson be egy új felhasználónevet a `MINIO_ROOT_USER` változóval
 
-3. Módosítsa az nginx konfigurációt (`nginx.prod.conf`).
+3. Módosítsa az Nginx konfigurációt (`nginx.prod.conf`).
    Állítsa át a `server_name` kezdetű sorokat úgy, hogy a szolgáltatások az ön által megadott domaint szolgálják ki.
 4. Indítsa el a szolgáltatásokat a `docker compose -f docker-compose.prod.yml up` paranccsal
 5. Konfigurálja a Minio-t
@@ -163,7 +163,7 @@ A bal sávon válasszuk ki a "Videos" lehetőséget. Ezzel láthatóvá válik a
 
 A cím jelenleg csak YouTube videóra mutató URL lehet.
 
-A videó médiatartalom típus elérhetővé tesz egy vezérlő gombot is: a szünet/lejátszát (pause/play) gombot.
+A videó médiatartalom típus elérhetővé tesz egy vezérlő gombot is: a szünet/lejátszás (pause/play) gombot.
 
 #### iFrame közvetítés (haladó)
 
@@ -177,7 +177,7 @@ Egy egyszerű példa a VDO.ninja[@video-ninja] szolgáltatás használata, egy k
 4. Másoljuk ki az oldal tetején található `https://vdo.ninja/?view/??????` linket a mellette lévő \twemoji{paperclip} gomb segítségével.
 5. Menjünk át a CrossView szobánkba, ami már be van állítva Közvetítési állapotra
 6. Válasszuk ki az iFrame médiatartalom típust
-7. Másoljuk be az elöbbi linket
+7. Másoljuk be az előbbi linket
 8. Adjuk hozzá a következő tagot: `&na` (ez kikapcsolja a hangot, ezzel engedélyezve az automatikus lejátszást)
 
 A [vdo.ninja](https://vdo.ninja) szolgáltatást több más dologra is lehet használni, például webkamerák megosztására, [Android illetve iOS eszközökről való közvetítésre](https://docs.vdo.ninja/steves-helper-apps/native-mobile-app-versions)^[https://docs.vdo.ninja/steves-helper-apps/native-mobile-app-versions] (natív alkalmazások segítségével), vagy akár az [OBS nevű szoftverből közvetíteni](https://docs.vdo.ninja/guides/from-obs-to-vdo.ninja-using-whip)^[https://docs.vdo.ninja/guides/from-obs-to-vdo.ninja-using-whip].
@@ -213,7 +213,7 @@ A fejlesztői környezet telepítése hasonló a prod környezetéhez. A főbb k
      3. Hozzon létre egy biztonságos jelszót, majd állítsa be rá a `MINIO_ROOT_PASSWORD` változót
      4. _[opcionális]_ Állítson be egy új felhasználónevet a `MINIO_ROOT_USER` változóval
 
-3. Módosítsa az nginx konfigurációt (`nginx.dev.conf`).
+3. Módosítsa az Nginx konfigurációt (`nginx.dev.conf`).
    Állítsa át a `server_name` kezdetű sorokat úgy, hogy a szolgáltatások az ön által megadott domaint szolgálják ki.
 4. Indítsa el a szolgáltatásokat a `docker compose -f docker-compose.dev.yml up` paranccsal
 5. Konfigurálja a Minio-t
@@ -249,7 +249,7 @@ A fejlesztői környezet telepítése hasonló a prod környezetéhez. A főbb k
 
 ### Lokális domain használata {#sec:hosts}
 
-Lokális tesztelés esetén hasznos lehet, ha nem kell egy kulső domaint használni. Ennek a legegyszerűbb módszere egy HOSTS fájl létrehozása.
+Lokális tesztelés esetén hasznos lehet, ha nem kell egy külső domaint használni. Ennek a legegyszerűbb módszere egy HOSTS fájl létrehozása.
 
 #### HOSTS fájl Windows operációs rendszeren
 
@@ -297,9 +297,9 @@ A szobáknak van egy azonosítója, amely egy szekvenciális sorszámból van ge
 
 Minden szobához tartozhat egy kalibrációs kép, amely a legutóbb feltöltött kalibráció szerint készül. Kalibrálási állapotba csak akkor lehet áttérni, ha van ilyen kép. Ezen felül minden szobához tartozhatnak feltöltött fényképek, amelyeket a közvetítési állapotban lehet használni.
 
-Minden megjelenítő kliensnek van egy egyedi azonosító sorszáma. Ez a sorszám az elérésiútban tárolódik el. A megjelenített kalibráló jel (Apriltag[@wang2016iros]) sorszáma megegyezik a kliens sorszámával.
+Minden megjelenítő kliensnek van egy egyedi azonosító sorszáma. Ez a sorszám az elérési útban tárolódik el. A megjelenített kalibráló jel (Apriltag[@wang2016iros]) sorszáma megegyezik a kliens sorszámával.
 
-A kalibráció során a képen az Apriltag Service megkeresi az összes kalibráló jelet, majd az azokból megtalált homográfiákból[@opencv-homography] és a jelek elhelyezkedéséből létrehoz egy egész kijelzős homográfiát, és egy virtuális koordinátarendszerbe helyezi őket.
+A kalibráció során a képen az Apriltag Service megkeresi az összes kalibráló jelet, majd az azokból megtalált homográfiákból[@opencv-homography] és a jelek elhelyezkedéséből létrehoz egy egész kijelzős homográfiát, és egy virtuális koordináta-rendszerbe helyezi őket.
 
 Közvetítési állapotba érve a megjelenítő kliensek a hozzájuk tartozó homográfiát használva egy `div`-re CSS `transform`-ot helyez (`ScreenContent`). Ez a `transform` vetíti ki a `div` tartalmát a megjelenítő kliens kijelzőjére úgy, hogy a kijelzők egy koherens képet alkossanak.
 
@@ -315,12 +315,12 @@ A Redis több szempontból is előnyös ehhez a projekthez:
 
 - gyors, hiszen minden memóriában van tárolva
 - mivel nincs huzamosabb ideig tárolt adat, ezért a memóriaigény alacsony
-- az adatok struktúrálatlanok, így nincs előnye az adatok táblákba rendezésének
+- az adatok strukturálatlanok, így nincs előnye az adatok táblákba rendezésének
 - beépített támogatás az alkalmazáson belüli üzenetküldésre (ezzel megkönnyítve a valós idejű adatszolgáltatást)
 
 Természetesen ez a választás hátrányokkal is járt:
 
-- a kulcs-érték felépítés miatt nincs széleskörű ORM támogatás, az adatbázishoz tartozó boilerplate kódod sajátkezűleg kell megírni
+- a kulcs-érték felépítés miatt nincs széles körű ORM támogatás, az adatbázishoz tartozó boilerplate kódod sajátkezűleg kell megírni
 - a JSON szerű adatbázisokhoz képest (pl. MongoDB) a Redis egy flat struktúrában tárolja az adatokat. Ennek hátránya, hogy hierarchikus adatok tárolására csak jól meggondolt kulcsokkal van lehetőség (Például: `room:ROOM:photos:PHOTO:path`).
 
   Természetesen azért, hogy az SQL injection-re hajazó problémákat elkerüljük, szükséges, hogy a kulcs dinamikusan megadható tagjai validálva legyenek. Egy `:`-ot tartalmazó ROOM könnyen problémákat okozhat a kódban.
@@ -392,7 +392,7 @@ Egyes esetekben nem lehet egyértelműen eldönteni, hogy a megjelenítő kliens
 A kulcs eltűnését egy [keyspace notification](https://redis.io/docs/latest/develop/use/keyspace-notifications/)^[https://redis.io/docs/latest/develop/use/keyspace-notifications/] segítségével vesszük észre. 
 
 ```ts
-// A ping kulcs-ot matchelő regex
+// A ping kulcsot match-elő regex
 const screenKeyRegex = /^room:([^:]+):screen:(\d+):ping$/;
 
 export async function setupScreenExpiry(redis: RedisClientType) {
@@ -404,7 +404,7 @@ export async function setupScreenExpiry(redis: RedisClientType) {
 
   // Ez az event meghívódik bármilyen kulcs lejártakor
   void listener.subscribe("__keyevent@0__:expired", (key) => {
-    // Ha a kulcs az egy kijelző timeouthoz tartozik, akkor hívja le a deregisterScreen függvényt az adott kijelzőn
+    // Ha a kulcs az egy kijelző timeout-hoz tartozik, akkor hívja le a deregisterScreen függvényt az adott kijelzőn
     const matches = key.match(screenKeyRegex);
     if (matches === null) {
       return;
@@ -446,7 +446,7 @@ Az alkalmazás két S3 bucket-et (vödröt) használ:
 
 - calibration
 
-  Ide kerülnek a kalibrációs képek, illetve a perspektíva korregált változataik
+  Ide kerülnek a kalibrációs képek, illetve a perspektíva korrigált változataik
 - media
 
   Ide kerülnek a megjelenítésre feltöltött fényképek
@@ -455,23 +455,23 @@ A `main.env`-ben megadott S3 felhasználónak mindkét vödörhöz kell, hogy ka
 
 A vödröknek olvashatónak (de nem feltétlenül listázhatónak) kell lenniük vendégfelhasználók által is. A telepítési útmutatóban található policy ezt állítja be.
 
-Az S3 protokol engedélyez úgynevezett pre-signed URL[@s3-presigned] létrehozását. Egy pre-signed URL-t egy privilegizált felhasználó tud létrehozni, előre kitöltött adatokkal. Ekkor az URL-t használó vendég a privilegizált felhasználó jogait veszi át.
+Az S3 protokoll engedélyez úgynevezett pre-signed URL[@s3-presigned] létrehozását. Egy pre-signed URL-t egy privilegizált felhasználó tud létrehozni, előre kitöltött adatokkal. Ekkor az URL-t használó vendég a privilegizált felhasználó jogait veszi át.
 
 Pre-signed URL-ek két helyen vannak használatban az alkalmazásban:
 
 - A kalibrációs kép/fénykép feltöltésekor
 
-  A szerver létrehoz egy pre-signed URL-t a saját S3 felhasználójával, melyben megköti a vödröt, a fájl nevét, illetve a `Content-Length` headert. Így a kliens S3 vendégfelhasználóként is képes lesz írni a fájlt. A szerver le tudja ellenőrizni a klienstől kapott méret segítségével, hogy a fájl mérete nem halad-e meg egy limitet, majd a `Content-Length` megkötés biztosítja, hogy a kliens a megfelelő méretű adatot töltte fel.
-- A kalibrálás utáni perspektíva korregált kalibrációs kép feltöltése
+  A szerver létrehoz egy pre-signed URL-t a saját S3 felhasználójával, melyben megköti a vödröt, a fájl nevét, illetve a `Content-Length` header-t Így a kliens S3 vendégfelhasználóként is képes lesz írni a fájlt. A szerver le tudja ellenőrizni a klienstől kapott méret segítségével, hogy a fájl mérete nem halad-e meg egy limitet, majd a `Content-Length` megkötés biztosítja, hogy a kliens a megfelelő méretű adatot töltötte fel.
+- A kalibrálás utáni perspektíva korrigált kalibrációs kép feltöltése
 
   A perspektíva korrekciót az Apriltag Service végzi, de nincs hozzáférése privilegizált S3 felhasználóhoz. Ahhoz, hogy mégis fel tudja tölteni a képet, kalibrálás előtt a szerver létrehoz neki egy pre-signed URL-t erre a célra.
 
 ## Main service
 
-A projekthez a React keretrendszert használtam, mivel sokoldalú és széleskörű használata miatt jól támogatott. Manapság sokféle "ízben" lehet használni a React-et. Én a Next.js[@nextjs] alapú `create-t3-app`-et[@t3] használtam. Ennek a választásnak több oka is volt:
+A projekthez a React keretrendszert használtam, mivel sokoldalú és széles körű használata miatt jól támogatott. Manapság sokféle "ízben" lehet használni a React-et. Én a Next.js[@nextjs] alapú `create-t3-app`-et[@t3] használtam. Ennek a választásnak több oka is volt:
 
 - A Next.js az egyik legelterjedtebb keretrendszer még a React-es framework-ök között is, így ennek van a legjobb támogatottsága is
-- A Next.js egy full stack rendszer. Szerver komponensek és akciók segítségével egyben lehet megírni vele a frontendet és a backendet^[https://nextjs.org/docs#what-is-nextjs].
+- A Next.js egy full stack rendszer. Szerver komponensek és akciók segítségével egyben lehet megírni vele a frontend-et és a backend-et^[https://nextjs.org/docs#what-is-nextjs].
 - A `create-t3-app` egy kezdőcsomag, amely több gyakori konfigurációt beállít, illetve sok hasznos csomagot tartalmaz:
   - szigorú TypeScript[@typescript] támogatással érkezik, hogy biztosítsa minden sor kód típus helyességét
   - a `tRPC`[@trpc] könyvtárral egyszerűen lehet a szerver és a kliens kód között valós idejű kommunikációt végrehajtani
@@ -511,12 +511,12 @@ Az alkalmazás különböző komponenseinek elérési oldalai, célja és a layo
 - `/` - belépés, új szoba létrehozása
   - `/api/trpc/[trpc]` - a tRPC-nek elkülönített elérési út
   - `/room/[room]` - a layout fájl itt teszi elérhetővé a szoba kontextusát
-    - `/room/[room]/view` - generál egy új megjelenítő kliens sorszámot, majd átírányít a hozzá megfelelő oldalra
+    - `/room/[room]/view` - generál egy új megjelenítő kliens sorszámot, majd átirányít a hozzá megfelelő oldalra
       - `/room/[room]/view/[screen]` - a layout fájl itt teszi elérhetővé a megjelenítő kliens kontextusát
         - `@viewing` - a közvetítési állapot esetén használt megjelenés
         - `@calibration` - a kalibrálási állapot esetén használt megjelenés
-    - `/room/[room]/config` - a layout fájl hozzáadja a toolbart, amely kiírja a szoba kódját, a `Calibrate` és `Broadcast` gombokat, illetve a `View` gombot. Ezen felül automatikusan átirányít a szükséges aloldalra a jelenlegi állapottól függően
-      - `/room/[room]/config/viewing` - a közvetítési állapot oldala. A layout addja hozzá a jobb oldali előnézetet, illetve a bal oldali médiatartalom típus választó panelt. A tartalmat a kettő közé helyezi el.
+    - `/room/[room]/config` - a layout fájl hozzáadja a toolbar-t, amely kiírja a szoba kódját, a `Calibrate` és `Broadcast` gombokat, illetve a `View` gombot. Ezen felül automatikusan átirányít a szükséges aloldalra a jelenlegi állapottól függően
+      - `/room/[room]/config/viewing` - a közvetítési állapot oldala. A layout adja hozzá a jobb oldali előnézetet, illetve a bal oldali médiatartalom típus választó panelt. A tartalmat a kettő közé helyezi el.
         - `/room/[room]/config/viewing/photo` - a fénykép médiatartalom konfigurálására szolgáló út
         - `/room/[room]/config/viewing/video` - a videó médiatartalom konfigurálására szolgáló út
         - `/room/[room]/config/viewing/iframe` - az iFrame médiatartalom konfigurálására szolgáló út
@@ -524,14 +524,14 @@ Az alkalmazás különböző komponenseinek elérési oldalai, célja és a layo
 
 ### Adatbázis elérése {#sec:db}
 
-Mivel a Redis nem relációs adatbázis, ezért a klasszikus értelemben vett ORM-ek itt nem használhatóak. Az adatok kinyerésének egyszerűsítéséért új adatbázis elem esetén két dolgot kell létrehozni: egy kulcs helpert, és egy adatbázis objektumot.
+Mivel a Redis nem relációs adatbázis, ezért a klasszikus értelemben vett ORM-ek itt nem használhatóak. Az adatok kinyerésének egyszerűsítéséért új adatbázis elem esetén két dolgot kell létrehozni: egy kulcs helper-t, és egy adatbázis objektumot.
 
-A kulcs helper az egy függvény a `src/db/redis-keys.ts` fájlban. Itt minden adatbázis elemhez tartozik egy függvény, ami megadja az elemnek a kulcsát Redisben. Ez egy low-level absztrakció a Redishez, nem kezel se típusokat, se hibákat. A hierarchikus felépítés segítésének érdekében a hierarchia belső csúcsaihoz rendelek egy `...Root` helpert. A csúcs alatt lévő elemek ezt a root helpert használják a saját kulcsuk létrehozására.
+A kulcs helper az egy függvény a `src/db/redis-keys.ts` fájlban. Itt minden adatbázis elemhez tartozik egy függvény, ami megadja az elemnek a kulcsát Redis-ben Ez egy low-level absztrakció a Redis-hez, nem kezel se típusokat, se hibákat. A hierarchikus felépítés segítésének érdekében a hierarchia belső csúcsaihoz rendelek egy `...Root` helper-t A csúcs alatt lévő elemek ezt a root helper-t használják a saját kulcsuk létrehozására.
 
 Például:
 
 ```ts
-// Egy szobának megadja a rootját
+// Egy szobának megadja a root-ját
 export function roomRoot(room: string) {
   return `room:${room}`;
 }
@@ -554,7 +554,7 @@ export function roomImageWidth(room: string) {
 
 Ahhoz, hogy fenntartsuk az adatbázis egységes használatát, minden adatbázis elemhez létrehoztam egy adatbázis objektumot a `src/db/objects` mappában. Mindegyik fájl egy-egy nagyobb logikai egységet valósít meg. Minden fájlban vagy top-level találhatóak az adatbázist elérő függvények (pl. `get`, `set`, `rem`), vagy hierarchikusan egy alárendelt objektumban.
 
-Az adatbázis objektumok típusozottak, de nem szükséges, hogy a típust ellenőrizzék, amíg ezt a szignatúra fenntartja (feltételezve az adatbázis objektumok exklúzív használatát).
+Az adatbázis objektumok típusozottak, de nem szükséges, hogy a típust ellenőrizzék, amíg ezt a szignatúra fenntartja (feltételezve az adatbázis objektumok exkluzív használatát).
 
 A Redis adatbázis objektumot a `node-redis` könyvtár segítségével érem el. A `db/redis.ts` fájlból exportált `getRedis` aszinkron függvény teszi elérhetővé az adatbázis singleton-t.
 
@@ -619,11 +619,11 @@ const roomContentObject = {
 
 ### PubSub {#sec:pubsub}
 
-Mivel a kijelző és a konfiguráló kliensek szoros kapcsolatban vannak, ezért szükséges egy valós idejű üzenetküldési megoldás. A megoldásom a következőképpen működik: bármilyen adat megváltoztatásakor, a megváltoztatást végző függvény egy `ping` üzenetet küld a `room:ROOM` csatornára, ezzel jelezve az új adat beérkezését. Mindegyik kliens egy tRPC[@trpc] subscription segítségével kapja meg a legfrissebb adatokat. A `ping` üzenetre a klienshez tartozó tRPC kiszolgáló lekéri a friss adatokat a Redis adatbázisból, serializálja őket, majd elküldi egy [!SSE] kapcsolaton keresztül.
+Mivel a kijelző és a konfiguráló kliensek szoros kapcsolatban vannak, ezért szükséges egy valós idejű üzenetküldési megoldás. A megoldásom a következőképpen működik: bármilyen adat megváltoztatásakor, a megváltoztatást végző függvény egy `ping` üzenetet küld a `room:ROOM` csatornára, ezzel jelezve az új adat beérkezését. Mindegyik kliens egy tRPC[@trpc] subscription segítségével kapja meg a legfrissebb adatokat. A `ping` üzenetre a klienshez tartozó tRPC kiszolgáló lekéri a friss adatokat a Redis adatbázisból, szerializálja őket, majd elküldi egy [!SSE] kapcsolaton keresztül.
 
-Az adatok kinyerése és a serializáció a `src/db/serialization.ts` fájlban történik. Itt a `serializeRoom` aszinkron függvény a teljes szoba jelenlegi adatait visszaadja, JSON kódolható módon.
+Az adatok kinyerése és a szerializáció a `src/db/serialization.ts` fájlban történik. Itt a `serializeRoom` aszinkron függvény a teljes szoba jelenlegi adatait visszaadja, JSON kódolható módon.
 
-A serializált struktúra a következő:
+A szerializált struktúra a következő:
 
 ```ts
 {
@@ -718,13 +718,13 @@ A `NowPlayingContent` négy fajta lehet jelenleg:
   }
   ```
 
-A serializált adatot a kliens a `RoomContextProvider` komponensben veszi át, majd a `roomContext` Context[@react-context] segítségével az egész alkalmazás számára elérhetővé teszi azt. A Context a `useContext` hookkal használható, két eleme a `lastEvent` tag, mely a legutóbb kapott serializált üzenetet tartalmazza, illetve a `roomID`, amely a szoba kódját tartalmazza.
+A szerializált adatot a kliens a `RoomContextProvider` komponensben veszi át, majd a `roomContext` Context[@react-context] segítségével az egész alkalmazás számára elérhetővé teszi azt. A Context a `useContext` hook-kal használható, két eleme a `lastEvent` tag, mely a legutóbb kapott szerializált üzenetet tartalmazza, illetve a `roomID`, amely a szoba kódját tartalmazza.
 
 ### Fájlok feltöltése
 
 A -@sec:s3. fejezet ismerteti az S3 fájltárolás alapjait. Ez a fejezet fejlesztési szempontból közelíti meg a fájlok feltöltését.
 
-Fájlok feltöltésére ajánlott használni a `RoomUploadButton` komponenst. Ez a komponens kezeli a töltési állapotot, kér egy pre-signed URL-t a szervertől, feltölti a fájlt az S3 szerverre, majd egy callbacket hív.
+Fájlok feltöltésére ajánlott használni a `RoomUploadButton` komponenst. Ez a komponens kezeli a töltési állapotot, kér egy pre-signed URL-t a szervertől, feltölti a fájlt az S3 szerverre, majd egy callback-et hív.
 
 A komponens konfigurálásához négy paraméter szükséges:
 
@@ -733,7 +733,7 @@ A komponens konfigurálásához négy paraméter szükséges:
   A feltöltés gombra kiírandó szöveg
 - `supportedMimeTypes`
 
-  Azoknak a MIME[@rfc2046] típusoknak a tömbje, amelyeket engedünk feltölteni (ez csak frontenden van ellenőrizve)
+  Azoknak a MIME[@rfc2046] típusoknak a tömbje, amelyeket engedünk feltölteni (ez csak frontend-en van ellenőrizve)
 - `handleRequest`
 
   Egy szerver akció, ami megkapja a feltöltendő fájl nevét, méretét és a szoba kódját. Fontos, hogy ezeket az értékeket a kliens generálja, így ellenőrizendők: a szoba kódja a `codeValidation` Zod validációval, a fájl mérete a pre-signed URL-be égetett `Content-Length` fejléccel. Visszatérési értéke generikus, de mindenképpen tartalmaznia kell a pre-signed URL-t.
@@ -756,7 +756,7 @@ A projekt felépítéséből adódóan könnyen lehet új médiatípusokat létr
 Egy médiatípus öt részből áll:
 
 - Egy Adatbázis objektumból
-- Egy serializációból
+- Egy szerializációból
 - Egy konfigurációs panelből
 - Egy megjelenésből
 - Opcionálisan egy vezérlő sorból
@@ -776,11 +776,11 @@ export function roomContentSlide(room: string) {
 
 Utána az `src/db/objects/roomContent.ts` fájl kell kiegészíteni a megfelelő adatbázis objektummal. Az adatbázis objektumok leírása a -@sec:db. fejezetben található.
 
-Szükséges rá odafigyelni, hogy az adatbázis sémát úgy kell létrehozni, hogy az akkor is működjön, ha egy megjelenítő kliens egy-egy parancs kiadása után csatlakozik. Tehát "eseményszerű" parancsokat mindenképpen át kell alakítani egy "állapotváltoztatás" paranccsá. Például, egy "videó elinditása" parancs helyett a videó elindításának időpontját kell megadni. A videó médiatípus implementálásáról további információ a -@sec:videomedia. fejezetben található.
+Szükséges rá odafigyelni, hogy az adatbázis sémát úgy kell létrehozni, hogy az akkor is működjön, ha egy megjelenítő kliens egy-egy parancs kiadása után csatlakozik. Tehát "eseményszerű" parancsokat mindenképpen át kell alakítani egy "állapotváltoztatás" paranccsá. Például, egy "videó elindítása" parancs helyett a videó elindításának időpontját kell megadni. A videó médiatípus implementálásáról további információ a -@sec:videomedia. fejezetben található.
 
-##### Serializáció
+##### Szerializáció
 
-Mivel az adatbázis rendezetlenül adja vissza az adatokat, szükséges, hogy azokat egy rendezett formára alakítsuk át a kliens számára. Erre szolgál a serializáció, amely a `src/db/serialization.ts` fájlban történik. A médiatartalom serializálás a `serializeNowPlayingContent` függvény feladata.
+Mivel az adatbázis rendezetlenül adja vissza az adatokat, szükséges, hogy azokat egy rendezett formára alakítsuk át a kliens számára. Erre szolgál a szerializáció, amely a `src/db/serialization.ts` fájlban történik. A médiatartalom szerializálás a `serializeNowPlayingContent` függvény feladata.
 
 Először, hozzunk létre egy TypeScript típust a médiatartalmunknak. A neve legyen `Serialized<NÉV>Content`. Mindenképpen legyen benne egy `type` attribútum, melynek típusa a médiatípusunk neve. Például:
 
@@ -791,7 +791,7 @@ export type SerializedPresentationContent = {
 }
 ```
 
-Ezt a típust addjuk hozzá a `SerializedNowPlayingContent` unió lánchoz.
+Ezt a típust adjuk hozzá a `SerializedNowPlayingContent` unió lánchoz.
 
 Hozzuk létre a `serialize<NÉV>Content` aszinkron függvényt, melynek paramétere a szoba kódja, és visszatérési értéke a fent létrehozott `Serialized<NÉV>Content` típus. Ennek a függvénynek a tartalma fog a kliens számára elérhető lenni.
 
@@ -811,7 +811,7 @@ async function serializePresentationContent(
 }
 ```
 
-Végül, adjuk hozzá ezt a függvényt a `serializeNowPlayingContent` függvényhez. Ehhez a switch-et kell kiegészíteni egy új elágazással, ami a médiatartalmunkhoz definiált `type` esetén meghívja a serializáló függvényünket.
+Végül, adjuk hozzá ezt a függvényt a `serializeNowPlayingContent` függvényhez. Ehhez a switch-et kell kiegészíteni egy új elágazással, ami a médiatartalmunkhoz definiált `type` esetén meghívja a szerializáló függvényünket.
 
 ##### Konfigurációs panel
 
@@ -821,7 +821,7 @@ A panelen kell lennie egy gombnak, amely elindítja a médiatartalmat. Ekkor a `
 
 ##### Megjelenés
 
-A "megjelenés" az az a tartalom, ami a virtuális kijelzőn meg fog jelenni. Belépési pontja a `src/app/room/[id]/_screenContent/ScreenContent.tsx` komponens fájl, ami a virtuális kijelző tartalma. Ehhez a fájlhoz lehet hozzáadni az új médiatípushoz tartozó megjelenést. Célszerű ide a `_screenContent` mappába létrehozni egy új komponenst a megjelenésnek, és azt felhasználni. Fontos, hogy ez a komponens kitöltse a szülő komponenst, hiszen így lesz teljesképernyős a tartalom.
+A "megjelenés" az az a tartalom, ami a virtuális kijelzőn meg fog jelenni. Belépési pontja a `src/app/room/[id]/_screenContent/ScreenContent.tsx` komponens fájl, ami a virtuális kijelző tartalma. Ehhez a fájlhoz lehet hozzáadni az új médiatípushoz tartozó megjelenést. Célszerű ide a `_screenContent` mappába létrehozni egy új komponenst a megjelenésnek, és azt felhasználni. Fontos, hogy ez a komponens kitöltse a szülő komponenst, hiszen így lesz teljes képernyős a tartalom.
 
 Például, ha a megjelenés komponens `PresentationContent` és a médiatípus type-ja `presentation`, akkor a következő sorokat kell hozzáadni a ScreenContent-hez:
 
@@ -850,7 +850,7 @@ A médiatípus komplexitása a szinkronizálásban rejlik, melynek megoldására
 
 Videó leállításakor az elindítás óta eltelt idő és az akkori videó idő alapján kiszámolom, hogy mi az új videó idő, és azt tárolom el. Videó indításakor, mivel előtte szünetelt volt a videó, nem szükséges ezt a számítást megtenni.
 
-Serializációkor, ha a videó szünetel, akkor az adatbázisban tárolt videó időt küldöm a kliens felé. Viszont, ha a videó lejátszás alatt van, akkor a jelenlegi idő és a lejátszás kezdete alapján kiszámolom a jelenlegi videó időt, és a kliens már azt kapja meg.
+Szerializációkor, ha a videó szünetel, akkor az adatbázisban tárolt videó időt küldöm a kliens felé. Viszont, ha a videó lejátszás alatt van, akkor a jelenlegi idő és a lejátszás kezdete alapján kiszámolom a jelenlegi videó időt, és a kliens már azt kapja meg.
 
 ## Kalibrálás
 
@@ -860,12 +860,12 @@ A kijelzők helyének pontos megállapításához szükséges egy kalibrálási 
 
 Mivel a legtöbb számítógépes látás könyvtár és eszköz Python-ban érhető el, ezért ezt a lépést egy külön szolgáltatásban hajtom végre, melyet Apriltag Service-nek hívok. A következő könyvtárakat használom: 
 
-- Az Apriltagek feldolgozására a `pupil-apriltags` könyvtárat
+- Az Apriltag-ek feldolgozására a `pupil-apriltags` könyvtárat
 - A fényképek megnyitására, mentésére, perspektíva korrigálására az OpenCV könyvtárat (`opencv-python-headless`).
 - Az egyéb mátrixos számításokhoz a `numpy` könyvtárat
 - A Main Service-el való kommunikálás segítéséhez a FastAPI keretrendszert
 
-Számítógépes látásban a különböző síkok közötti perspektív transzformációkat egy homográfia mátrixal lehet jellemezni[@opencv-homography]. Az Apriltag könyvtár egy ilyen homográfiát ad vissza minden kalibráló jelhez, ami az Apriltag saját koordináta-rendszeréből képez a fénykép koordináta-rendszerébe. Ezt kombinálva egy saját homográfiával, ami a megjelenítő kliens koordináta-rendszeréből (lásd: `room:ROOM:screen:SCREEN:config` ) képez az Apriltag koordináta-rendszerébe, kapunk egy homográfiát ami a kliens kijelzőjét jellemzi a fénykép keretein belül. Ez után a kliensek közül kiválasztunk egy "sablon kijelzőt" (ez a legkisebb sorszámú kliens jelenleg), és arra ortogonálisan létrehozunk egy olyan koordináta-rendszert, amelybe belefér az összes kliens kijelzője. Így jön létre a virtuális kijelző.
+Számítógépes látásban a különböző síkok közötti perspektíva transzformációkat egy homográfia mátrixszal lehet jellemezni[@opencv-homography]. Az Apriltag könyvtár egy ilyen homográfiát ad vissza minden kalibráló jelhez, ami az Apriltag saját koordináta-rendszeréből képez a fénykép koordináta-rendszerébe. Ezt kombinálva egy saját homográfiával, ami a megjelenítő kliens koordináta-rendszeréből (lásd: `room:ROOM:screen:SCREEN:config` ) képez az Apriltag koordináta-rendszerébe, kapunk egy homográfiát ami a kliens kijelzőjét jellemzi a fénykép keretein belül. Ez után a kliensek közül kiválasztunk egy "sablon kijelzőt" (ez a legkisebb sorszámú kliens jelenleg), és arra ortogonálisan létrehozunk egy olyan koordináta-rendszert, amelybe belefér az összes kliens kijelzője. Így jön létre a virtuális kijelző.
 
 ### Kalibrálási folyamat {#sec:matrices}
 
@@ -888,7 +888,7 @@ A fejezetben a következő jelöléseket fogom használni:
 - $C$ - A kalibráló jel mérete pixelben
 - $C_x, C_y$ - A kalibráló jel x és y eltolása a kijelzőn pixelben
 
-Az Apriltag könyvtár minden megtalált kalibráló jelhez visszaadja a hozzá tartozó homográfiát. Ez a homográfia a jel koordináta rendszeréből, ami $[-1, 1], [-1, 1]$ között van, átképez a fénykép koordináta rendszerére, ahol pixel koordinátákkal dolgozunk ($[0, image\_width], [0, image\_height]$). Ezzel két probléma van. Egyrészt, a $[0, 1], [0, 1]$ koordinátákkal lehet a legegyszerűbben dolgozni, úgyhogy mind a forrás és a cél koordináta rendszert erre át kell fordítani. Másrészt, a programban nem a kalibráló jel homográfiájára van szükségünk, hanem a teljes kijelzőjére.
+Az Apriltag könyvtár minden megtalált kalibráló jelhez visszaadja a hozzá tartozó homográfiát. Ez a homográfia a jel koordináta-rendszeréből, ami $[-1, 1], [-1, 1]$ között van, átképez a fénykép koordináta-rendszerére, ahol pixel koordinátákkal dolgozunk ($[0, image\_width], [0, image\_height]$). Ezzel két probléma van. Egyrészt, a $[0, 1], [0, 1]$ koordinátákkal lehet a legegyszerűbben dolgozni, úgyhogy mind a forrás és a cél koordináta-rendszert erre át kell fordítani. Másrészt, a programban nem a kalibráló jel homográfiájára van szükségünk, hanem a teljes kijelzőjére.
 
 Az első probléma megoldására két másik homográfiát lehet felhasználni: az egyik egy $[0, 1]$-es mátrixot alakít át $[-1, 1]$-essé (egy nagyítással és egy eltolással), a másik pedig a fénykép méretű koordinátát alakítja át $[0, 1]$ méretűvé:
 
@@ -923,7 +923,7 @@ H_i
   0 & 0 & 1\\
 \end{bmatrix}^{-1}$$
 
-Most, hogy a kijelzőkhöz tartozó homográfiák megvannak, létre kell hozni a virtuális kijelző koordináta rendszerét. Ehhez kiválasztok egy "sablon" kijelzőt, amire az új rendszer ortogonális lesz. Ennek a kijelzőnek a homográfiája legyen $M_0$. $M_0$ egy kijelzőn belüli pontot helyez el a kalibrációs képen, tehát $M_0^{-1}$ egy kalibrációs képen lévő pontot helyez el a kijelzőn belül.
+Most, hogy a kijelzőkhöz tartozó homográfiák megvannak, létre kell hozni a virtuális kijelző koordináta-rendszerét. Ehhez kiválasztok egy "sablon" kijelzőt, amire az új rendszer ortogonális lesz. Ennek a kijelzőnek a homográfiája legyen $M_0$. $M_0$ egy kijelzőn belüli pontot helyez el a kalibrációs képen, tehát $M_0^{-1}$ egy kalibrációs képen lévő pontot helyez el a kijelzőn belül.
 
 Az algoritmus a következő:
 
@@ -931,9 +931,9 @@ Az algoritmus a következő:
 2. A sarkokat a sablon kijelzőn elhelyezem a $M_0^{-1}$ mátrix segítségével.
 3. A szélsőséges pontok megkeresésével megkapom a legkisebb téglalapot, amelybe az összes Apriltag beletartozik. Ez lesz a virtuális kijelző. 
 
-   A kapott X és Y szélsőséges értékeknek nevet adok: $R, L$ a jobb és bal X koordináta, $T, B$ pedig a tetejének és az aljának az Y koordinátája (ezek a sablon kijelző koordináta rendszerében vannak)
+   A kapott X és Y szélsőséges értékeknek nevet adok: $R, L$ a jobb és bal X koordináta, $T, B$ pedig a tetejének és az aljának az Y koordinátája (ezek a sablon kijelző koordináta-rendszerében vannak)
 
-4. Létrehozok egy homográfiát, ami a $[0, 1], [0, 1]$ intervallumot a téglalapra képzi, a sablon kijelző koordináta rendszerében.
+4. Létrehozok egy homográfiát, ami a $[0, 1], [0, 1]$ intervallumot a téglalapra képzi, a sablon kijelző koordináta-rendszerében.
 
     $$\begin{bmatrix}
     R-L & 0 & L \\
@@ -941,7 +941,7 @@ Az algoritmus a következő:
     0 & 0 & 1 \\
     \end{bmatrix}^{-1}$$
 
-5. Mivel a téglalap a sablon kijelző koordináta rendszerében van, a most létrehozott homográfiára alkalmazom a sablon kijelző homográfiáját is. Így egy olyan homográfiát kapok, ami a virtuális kijelző egy pontjából egy kalibrációs képbeli pontot hoz létre. Ez a homográfia legyen $V$.
+5. Mivel a téglalap a sablon kijelző koordináta-rendszerében van, a most létrehozott homográfiára alkalmazom a sablon kijelző homográfiáját is. Így egy olyan homográfiát kapok, ami a virtuális kijelző egy pontjából egy kalibrációs képbeli pontot hoz létre. Ez a homográfia legyen $V$.
 
     $$V \coloneqq M_0\begin{bmatrix}
     R-L & 0 & L \\
@@ -956,7 +956,7 @@ Az így kapott $M_i'$ mátrixok lesznek a kész homográfiák, amelyek a kliense
 
 A sablon kijelző felbontásából és a virtuális kijelzőn felvett méretéből ki tudunk számolni a virtuális kijelzőnek is egy felbontást: $virtual\_width$ és $virtual\_height$
 
-Megjelenítéskor a frontenden még szükség van egy átalakításra, hiszen a CSS `matrix3d` transzformáció pixel egységekben dolgozik. A transformáció a virtuális kijelzőt reprezentáló `div`-re lesz alkalmazva, ezért a bemeneten annak a koordináta rendszeréből kell egység méretű koordináta rendszerbe hozni az értékeket. Viszont a kimeneten a transzformáció már a kliens kijelző méreteivel dolgozik, úgyhogy ott az egység méretű értékeket kell felnagyítani a kijelző méretére. Ezt a következő mátrixszal lehet megtenni:
+Megjelenítéskor a frontend-en még szükség van egy átalakításra, hiszen a CSS `matrix3d` transzformáció pixel egységekben dolgozik. A transzformáció a virtuális kijelzőt reprezentáló `div`-re lesz alkalmazva, ezért a bemeneten annak a koordináta-rendszeréből kell egység méretű koordináta-rendszerbe hozni az értékeket. Viszont a kimeneten a transzformáció már a kliens kijelző méreteivel dolgozik, úgyhogy ott az egység méretű értékeket kell felnagyítani a kijelző méretére. Ezt a következő mátrixszal lehet megtenni:
 
 $$T_i \coloneqq
 \begin{bmatrix}
@@ -986,7 +986,7 @@ $$M_{4 \times 4} \coloneqq \begin{bmatrix}
 
 A teszteléshez a FastAPI  saját teszt rendszerét használtam <!--cite-->, ami pytest-re <!--cite--> alapszik. Az S3 fel- és letöltés tesztelésére a `requests_mock` <!--cite--> könyvtárat használtam.
 
-A `mock_minio` pytest fixture <!--cite--> létrehozza a megfelelő requests mockokat, hogy minden fájl elérhető legyen úgy, mintha fent lenne az S3 tárhelyen.
+A `mock_minio` pytest fixture <!--cite--> létrehozza a megfelelő requests mock-okat, hogy minden fájl elérhető legyen úgy, mintha fent lenne az S3 tárhelyen.
 
 A teszteléshez használt képek a `apriltagservice/test` mappában találhatóak.
 
@@ -1007,11 +1007,11 @@ A tesztek futtatásához szükséges egy Python környezet, amelynek verziószá
 | - | --- | -- |
 | `test_no_tag_no_screen` | Egy tesztkártya <!--cite https://en.wikipedia.org/wiki/Philips_circle_pattern--> annak az esetnek a tesztelésére, ha nincs a képen Apriltag, és a Mainservice sem adott át kijelző méret adatokat. | `No tags have been found` hiba |
 | `test_no_tag` | Egy tesztkártya <!--cite https://en.wikipedia.org/wiki/Philips_circle_pattern--> annak az esetnek a tesztelésére, ha nincs a képen Apriltag. Egy kijelző dimenzió meg vannak adva. | `No tags have been found` hiba, mivel a kijelzők mérete nem ismert. |
-| `test_one_tag_no_screen` | Egy Apriltagről készült kép, de kijelző dimenziók nélkül. | `No tags have been found` hiba, mivel a kijelzők mérete nem ismert. |
-| `test_one_tag` | Egy teljesképernyős kép a megjelenítő kliens kalibrációs oldaláról. A dimenziók helyesen meg vannak adva. | Sikeres visszatérés, eredetivel megegyező felbontás, egy kijelző felismerve, amely az egész virtuális kijelzőt kitölti. |
-| `test_one_tag_perspective` | Egy teljesképernyős kép a megjelenítő kliens kalibrációs oldaláról. A dimenziók helyesen meg vannak adva. A kép oldalasan készült. | Sikeres visszatérés, eredetivel megegyező felbontás, egy kijelző felismerve, amely az egész virtuális kijelzőt kitölti. |
-| `test_one_tag_perspective_result` | Egy teljesképernyős kép a megjelenítő kliens kalibrációs oldaláról. A dimenziók helyesen meg vannak adva. A kép oldalasan készült. Meg van adva `upload_url`. | Sikeres visszatérés, `upload_url` meghívva, feltöltött bájtok megegyeznek a sablonnal (`image_one_perspective_warped.png`) |
-| `test_two_tag` | Egy kép melyen két megjelenítő kliens található egymás mellett. A tetején egy fejléc található. A dimenziók helyesen meg vannak adva. | Sikeres visszatérés, két kijelző felismerve, homográiák szerint a kijelzők a virtuális kijelző két felét veszik fel |
-| `test_two_tag_perspective` | Egy kép melyen két megjelenítő kliens található egymás mellett. A tetején egy fejléc található. A dimenziók helyesen meg vannak adva. A kép oldalasan készült. | Sikeres visszatérés, két kijelző felismerve, homográiák szerint a kijelzők a virtuális kijelző két felét veszik fel |
+| `test_one_tag_no_screen` | Egy Apriltag-ről készült kép, de kijelző dimenziók nélkül. | `No tags have been found` hiba, mivel a kijelzők mérete nem ismert. |
+| `test_one_tag` | Egy teljes képernyős kép a megjelenítő kliens kalibrációs oldaláról. A dimenziók helyesen meg vannak adva. | Sikeres visszatérés, eredetivel megegyező felbontás, egy kijelző felismerve, amely az egész virtuális kijelzőt kitölti. |
+| `test_one_tag_perspective` | Egy teljes képernyős kép a megjelenítő kliens kalibrációs oldaláról. A dimenziók helyesen meg vannak adva. A kép oldalasan készült. | Sikeres visszatérés, eredetivel megegyező felbontás, egy kijelző felismerve, amely az egész virtuális kijelzőt kitölti. |
+| `test_one_tag_perspective_result` | Egy teljes képernyős kép a megjelenítő kliens kalibrációs oldaláról. A dimenziók helyesen meg vannak adva. A kép oldalasan készült. Meg van adva `upload_url`. | Sikeres visszatérés, `upload_url` meghívva, feltöltött bájtok megegyeznek a sablonnal (`image_one_perspective_warped.png`) |
+| `test_two_tag` | Egy kép melyen két megjelenítő kliens található egymás mellett. A tetején egy fejléc található. A dimenziók helyesen meg vannak adva. | Sikeres visszatérés, két kijelző felismerve, homográfiák szerint a kijelzők a virtuális kijelző két felét veszik fel |
+| `test_two_tag_perspective` | Egy kép melyen két megjelenítő kliens található egymás mellett. A tetején egy fejléc található. A dimenziók helyesen meg vannak adva. A kép oldalasan készült. | Sikeres visszatérés, két kijelző felismerve, homográfiák szerint a kijelzők a virtuális kijelző két felét veszik fel |
 
 # Irodalomjegyzék
