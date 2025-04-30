@@ -725,7 +725,7 @@ A `NowPlayingContent` négy fajta lehet jelenleg:
 
 A szerializált adatot a kliens a `RoomContextProvider` komponensben veszi át, majd a `roomContext` Context[@react-context] segítségével az egész alkalmazás számára elérhetővé teszi azt. A Context a `useContext` hook-kal használható, két eleme a `lastEvent` tag, mely a legutóbb kapott szerializált üzenetet tartalmazza, illetve a `roomID`, amely a szoba kódját tartalmazza.
 
-### Fájlok feltöltése
+### Fájlok feltöltése {#sec:roomuploadbutton}
 
 A -@sec:s3. fejezet ismerteti az S3 fájltárolás alapjait. Ez a fejezet fejlesztési szempontból közelíti meg a fájlok feltöltését.
 
@@ -847,15 +847,27 @@ Ha a médiatípus elvárja az irányíthatóságot, akkor a `src/app/room/[id]/c
 
 Az adatbázis írása után ne felejtsük el meghívni a `roomPubSubObject.ping` függvényt!
 
+#### Fénykép médiatartalom típus
+
+A fénykép médiatípus különös figyelmet igényel, hiszen ez a jelenlegi egyetlen médiatartalom típus, amelyhez tartozik fájlfeltöltés is.
+
+A fájlok feltöltése a RoomUploadButton (-@sec:roomuploadbutton. fejezet) komponenssel történik. A backenden futó `handleRequest` akció ellenőrzi a fájl méretét, kiterjesztését, majd a fájlnak létrehoz egy egyedi azonosítót. Ez arra szolgál, hogy a frontend tudja azonosítani a fájlt a sikeres feltöltés után. A backend eltárolja a fájl eredeti nevét (`room:ROOM:photos:PHOTO:name`), és az S3-as fájlnevét (`room:ROOM:photos:PHOTO:path`), ami az egyedi azonosító és a kiterjesztés alapján jön létre.
+
+Miután a RoomUploadButton feltöltötte az S3 szolgáltatásra a képet, az `onUpload` függvény meghív egy szerver akciót a kép fent létrehozott azonosítójával. Itt az azonosító hozzáadódik egy Redis halmazhoz (`room:ROOM:photos`), ezzel jelezve a feltöltés elkészültét. A szerializáció ezt a tömböt használja alapul a feltöltött képek kilistázására.
+
+Egy fénykép kiválasztásakor a médiatartalom `type` átáll `photo`-ra és az `url` paraméter pedig az S3-beli fájlnévre.
+
 #### Videó médiatartalom típus {#sec:videomedia}
 
 Ez a fejezet a jelenlegi legkomplexebb médiatartalom típus, a videó lejátszás leírására szolgál.
 
-A médiatípus komplexitása a szinkronizálásban rejlik, melynek megoldására egy egyszerű mechanizmust használok. Minden lejátszási állapot változáskor (szüneteltetés/indítás) a jelenlegi állapoton kívül elmentem azt is, hogy a szerver idejében mikor történt a változás, illetve hogy hol tartott a videó.
+A médiatípus komplexitása a szinkronizálásban rejlik, melynek megoldására egy egyszerű mechanizmust használok. Minden lejátszási állapot változáskor (szüneteltetés/indítás) a jelenlegi állapoton (`room:ROOM:content:status:type`) kívül elmentem azt is, hogy a szerver idejében mikor történt a változás (`room:ROOM:content:status:timestamp`), illetve hogy hol tartott a videó (`room:ROOM:content:status:videotime`).
 
 Videó leállításakor az elindítás óta eltelt idő és az akkori videó idő alapján kiszámolom, hogy mi az új videó idő, és azt tárolom el. Videó indításakor, mivel előtte szünetelt volt a videó, nem szükséges ezt a számítást megtenni.
 
 Szerializációkor, ha a videó szünetel, akkor az adatbázisban tárolt videó időt küldöm a kliens felé. Viszont, ha a videó lejátszás alatt van, akkor a jelenlegi idő és a lejátszás kezdete alapján kiszámolom a jelenlegi videó időt, és a kliens már azt kapja meg.
+
+#### iFrame médiatartalom típus
 
 ## NGINX
 
