@@ -1016,8 +1016,6 @@ A tesztek futtatásához szükséges egy Python környezet, amelynek verziószá
 
 ## Mainservice tesztelése
 
-<!--TODO: Introduction-->
-
 ![A Mainservice használati eset diagramja](images/usecases.svg)
 
 | Leírás | Előkövetelmények | Teszt lépései | Várt eredmény |
