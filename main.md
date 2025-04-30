@@ -192,6 +192,10 @@ A kalibráláshoz készült egy "Apriltag Service" nevű Pythonos komponens is, 
 
 Külső fejlesztésű szolgáltatásként van használva a Redis mint adatbázis, és a Minio mint S3 kompatibilis tárhely.
 
+A komponensek külső elérésnek segítésében egy Nginx reverse proxy
+
+![A projekt felépítése komponensek szerint. (világoskék: saját komponensek, piros: átjáró)](https://kroki.io/blockdiag/svg/eNqlj8EKwjAMhu8-RahXfYIywQeYF48iUruuBkszYqcO2bvbtU6G6Mmeknzp__85OtLnCpWFxwzAVNYcnOqoDVBA7eimT4pDJGLdMLoQ97aGr6iNgOUKSoX-knsZlybtQDcW_X0BJXok-VtjxKl4_5OzOLJMbTMEA9DkiGMoMa_TEzKNidH4oAKSj7AhDqwwZPbFb5dkCt0pv89L08yftP8nQ1Yfj4N81WjBpno59E9Ga3k1)
+
 ## Quick Start
 
 A fejlesztői környezet telepítése hasonló a prod környezetéhez. A főbb különbség, hogy a `docker-compose.prod.yml` és az `nginx.prod.conf` helyett a `docker-compose.dev.yml` és az `nginx.dev.conf` fájlokat kell módosítani.
