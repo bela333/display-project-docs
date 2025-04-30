@@ -1075,7 +1075,11 @@ A tesztek futtatásához szükséges egy Python környezet, amelynek verziószá
 
 ## Mainservice tesztelése
 
+Mivel a Mainservice több különböző komponensre hagyatkozik, amelyeket nem lehet leválasztani róla, ezért itt manuális tesztelést alkalmazok.
+
 ![A Mainservice használati eset diagramja](images/usecases.svg){width=50%}
+
+Tesztesetek listája:
 
 | Leírás | Előkövetelmények | Teszt lépései | Várt eredmény |
 | --- | ----- | ---- | ---- |
