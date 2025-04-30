@@ -194,7 +194,8 @@ Külső fejlesztésű szolgáltatásként van használva a Redis mint adatbázis
 
 A komponensek külső elérésnek segítésében egy Nginx reverse proxy
 
-![A projekt felépítése komponensek szerint. (világoskék: saját komponensek, piros: átjáró)](https://kroki.io/blockdiag/svg/eNqlj8EKwjAMhu8-RahXfYIywQeYF48iUruuBkszYqcO2bvbtU6G6Mmeknzp__85OtLnCpWFxwzAVNYcnOqoDVBA7eimT4pDJGLdMLoQ97aGr6iNgOUKSoX-knsZlybtQDcW_X0BJXok-VtjxKl4_5OzOLJMbTMEA9DkiGMoMa_TEzKNidH4oAKSj7AhDqwwZPbFb5dkCt0pv89L08yftP8nQ1Yfj4N81WjBpno59E9Ga3k1)
+<!-- https://kroki.io/blockdiag/svg/eNqlj8EKwjAMhu8-RahXfYIywQeYF48iUruuBkszYqcO2bvbtU6G6Mmeknzp__85OtLnCpWFxwzAVNYcnOqoDVBA7eimT4pDJGLdMLoQ97aGr6iNgOUKSoX-knsZlybtQDcW_X0BJXok-VtjxKl4_5OzOLJMbTMEA9DkiGMoMa_TEzKNidH4oAKSj7AhDqwwZPbFb5dkCt0pv89L08yftP8nQ1Yfj4N81WjBpno59E9Ga3k1 -->
+![A projekt felépítése komponensek szerint. (világoskék: saját komponensek, piros: átjáró)](images/components.svg)
 
 ## Quick Start
 
@@ -1020,7 +1021,7 @@ A tesztek futtatásához szükséges egy Python környezet, amelynek verziószá
 
 ## Mainservice tesztelése
 
-![A Mainservice használati eset diagramja](images/usecases.svg)
+![A Mainservice használati eset diagramja](images/usecases.svg){width=50%}
 
 | Leírás | Előkövetelmények | Teszt lépései | Várt eredmény |
 | --- | ----- | ---- | ---- |
