@@ -192,7 +192,7 @@ A kalibráláshoz készült egy "Apriltag Service" nevű Pythonos komponens is, 
 
 Külső fejlesztésű szolgáltatásként van használva a Redis mint adatbázis, és a Minio mint S3 kompatibilis tárhely.
 
-A komponensek külső elérésnek segítésében egy Nginx reverse proxy
+A komponensek külső elérését egy Nginx proxy segíti.
 
 <!-- https://kroki.io/blockdiag/svg/eNqlj8EKwjAMhu8-RahXfYIywQeYF48iUruuBkszYqcO2bvbtU6G6Mmeknzp__85OtLnCpWFxwzAVNYcnOqoDVBA7eimT4pDJGLdMLoQ97aGr6iNgOUKSoX-knsZlybtQDcW_X0BJXok-VtjxKl4_5OzOLJMbTMEA9DkiGMoMa_TEzKNidH4oAKSj7AhDqwwZPbFb5dkCt0pv89L08yftP8nQ1Yfj4N81WjBpno59E9Ga3k1 -->
 ![A projekt felépítése komponensek szerint. (világoskék: saját komponensek, piros: átjáró)](images/components.svg)
@@ -856,6 +856,44 @@ A médiatípus komplexitása a szinkronizálásban rejlik, melynek megoldására
 Videó leállításakor az elindítás óta eltelt idő és az akkori videó idő alapján kiszámolom, hogy mi az új videó idő, és azt tárolom el. Videó indításakor, mivel előtte szünetelt volt a videó, nem szükséges ezt a számítást megtenni.
 
 Szerializációkor, ha a videó szünetel, akkor az adatbázisban tárolt videó időt küldöm a kliens felé. Viszont, ha a videó lejátszás alatt van, akkor a jelenlegi idő és a lejátszás kezdete alapján kiszámolom a jelenlegi videó időt, és a kliens már azt kapja meg.
+
+## Nginx
+
+Ahhoz, hogy mindegyik komponenst egy címről elérhetővé tegyünk szükséges egy reverse proxy. Ehhez az Nginx<!--cite--> nevű szoftvert használom, hiszen az egyik leghasználtabb HTTP kiszolgáló a világon <!--cite-->, és egy konfigurációs fájllal könnyen személyre lehet szabni.
+
+A komponensek, mivel mind Docker-ben vannak futtatva, szolgáltatásaikat csak egy Docker-en belüli hálózaton teszik elérhetővé. A reverse proxy elérhető a belső hálózaton kívülről is, és a használt domain alapján irányítja át a forgalmat megadott szolgáltatásokhoz.
+
+A projektben két Nginx konfigurációs fájl érhető el: egy a fejlesztői környezetnek és egy a kitelepített környezetnek.
+
+A fejlesztői környezet Nginx konfigurációja a következő domaineket irányítja át:
+
+- `getcrossview.com`, `www.getcrossview.com`
+  - A Mainservice 3000-es portjára irányít
+- `apriltag.getcrossview.com`
+  - Az Apriltag Service 8000-es portjára irányít
+  - Normál működés esetén az Apriltag Service-t csak a Mainservice éri el, de debug-olás szempontjából hasznos, ha fejlesztői környezetben elérhető
+- `dashboard.getcrossview.com`
+  - A Minio 9001-es portjára irányít
+  - Ez a Minio műszerfala
+- `minio.getcrossview.com`
+  - A Minio 9000-es portjára irányít
+  - Ez az S3 API-t implementáló végpont
+
+A kitelepített környezet Nginx konfigurációja a következő domaineket irányítja át:
+
+- `getcrossview.com`, `www.getcrossview.com`
+  - A Mainservice 3000-es portjára irányít
+- `apriltag.getcrossview.com`
+  - Az Apriltag Service 8000-es portjára irányít
+  - Normál működés esetén az Apriltag Service-t csak a Mainservice éri el, de debug-olás szempontjából hasznos, ha fejlesztői környezetben elérhető
+- `dashboard.getcrossview.com`
+  - A Minio 9001-es portjára irányít
+  - Ez a Minio műszerfala
+- `minio.getcrossview.com`
+  - A Minio 9000-es portjára irányít
+  - Ez az S3 API-t implementáló végpont
+
+A különböző futási környezetekre tekintettel egyik konfiguráció sem érkezik HTTPS<!--cite--> támogatással.
 
 ## Kalibrálás
 
