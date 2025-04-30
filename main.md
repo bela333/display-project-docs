@@ -292,7 +292,7 @@ Lokális tesztelés esetén hasznos lehet, ha nem kell egy külső domaint haszn
 
 4. Mentse el a fájlt
 
-## Overview
+## Áttekintés
 
 Ennek a fejezetnek az elolvasása előtt érdemes elolvasni a -@sec:userdocs. (felhasználói dokumentáció) fejezetet.
 
