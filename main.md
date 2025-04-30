@@ -256,7 +256,7 @@ A fejlesztői környezet telepítése hasonló a prod környezetéhez. A főbb k
 
 Lokális tesztelés esetén hasznos lehet, ha nem kell egy külső domaint használni. Ennek a legegyszerűbb módszere egy HOSTS fájl létrehozása.
 
-#### HOSTS fájl Windows operációs rendszeren
+#### HOSTS fájl Windows[@windows] operációs rendszeren
 
 1. Indítsa el a Jegyzettömböt rendszergazda jogosultságokkal
 2. Nyissa meg a `C:\Windows\System32\drivers\etc\hosts` fájlt (szükséges lehet kiválasztani a "Minden fájl (\*.\*)" opciót)
@@ -272,7 +272,7 @@ Lokális tesztelés esetén hasznos lehet, ha nem kell egy külső domaint haszn
 
 4. Mentse el a fájlt
 
-#### HOSTS fájl Linux/MacOS operációs rendszeren
+#### HOSTS fájl Linux[@linux]/macOS[@macos] operációs rendszeren
 
 1. Nyisson meg egy Terminált
 2. A következő paranccsal indítsa el a `nano`-t rendszergazda jogosultságokkal:
@@ -1048,7 +1048,7 @@ A teszteléshez használt képek a `apriltagservice/test` mappában találhatóa
 
 #### Felállítás
 
-A tesztek futtatásához szükséges egy Python környezet, amelynek verziószáma legalább 3.12. Ajánlott verzió: `3.12.9`. Ajánlott Linux-ot használni, vagy vagy Windows rendszereken WSL-t[@wsl].
+A tesztek futtatásához szükséges egy Python környezet, amelynek verziószáma legalább 3.12. Ajánlott verzió: `3.12.9`. Ajánlott Linux[@linux]-ot használni, vagy vagy Windows[@windows] rendszereken WSL-t[@wsl].
 
 1. Lépjen be az `apriltagservice` mappába
 2. Hozzon létre új venv-et[@venv]: `python3.12 venv venv`
@@ -1111,7 +1111,7 @@ Tesztesetek listája:
 
 ### Nagy fájlok létrehozása {#sec:large-file}
 
-Linuxon a következő paranccsal hozhat létre egy 32 MiB fájlt:
+Linuxon[@linux] a következő paranccsal hozhat létre egy 32 MiB fájlt:
 
 ```sh
 dd if=/dev/urandom of=large.png bs=32MiB count=1
