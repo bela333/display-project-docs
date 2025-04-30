@@ -1018,6 +1018,8 @@ A tesztek futtatásához szükséges egy Python környezet, amelynek verziószá
 
 <!--TODO: Introduction-->
 
+![A Mainservice használati eset diagramja](images/usecases.svg)
+
 | Leírás | Előkövetelmények | Teszt lépései | Várt eredmény |
 | --- | ----- | ---- | ---- |
 | Szoba létrehozás | Kezdőoldal megnyitva | Nyomja meg a "New room" gombot | Kis várakozás után létrejön egy szoba, és megnyílik kalibrálási állapotban |
