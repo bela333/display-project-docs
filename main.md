@@ -45,7 +45,7 @@ Lokális futtatás esetén elég a HOSTS fájl szerkesztése. Erről több infor
      3. Hozzon létre egy biztonságos jelszót, majd állítsa be rá a `MINIO_ROOT_PASSWORD` változót
      4. _[opcionális]_ Állítson be egy új felhasználónevet a `MINIO_ROOT_USER` változóval
 
-3. Módosítsa az NGINX konfigurációt (`nginx.prod.conf`).
+3. Módosítsa az NGINX[@nginx] konfigurációt (`nginx.prod.conf`).
    Állítsa át a `server_name` kezdetű sorokat úgy, hogy a szolgáltatások az ön által megadott domaint szolgálják ki.
 4. Indítsa el a szolgáltatásokat a `docker compose -f docker-compose.prod.yml up` paranccsal
 5. Konfigurálja a Minio-t
@@ -192,7 +192,7 @@ A kalibráláshoz készült egy "Apriltag Service" nevű Pythonos komponens is, 
 
 Külső fejlesztésű szolgáltatásként van használva a Redis mint adatbázis, és a Minio mint S3 kompatibilis tárhely.
 
-A komponensek külső elérését egy NGINX proxy segíti.
+A komponensek külső elérését egy NGINX[@nginx] proxy segíti.
 
 <!-- https://kroki.io/blockdiag/svg/eNqlj8EKwjAMhu8-RahXfYIywQeYF48iUruuBkszYqcO2bvbtU6G6Mmeknzp__85OtLnCpWFxwzAVNYcnOqoDVBA7eimT4pDJGLdMLoQ97aGr6iNgOUKSoX-knsZlybtQDcW_X0BJXok-VtjxKl4_5OzOLJMbTMEA9DkiGMoMa_TEzKNidH4oAKSj7AhDqwwZPbFb5dkCt0pv89L08yftP8nQ1Yfj4N81WjBpno59E9Ga3k1 -->
 ![A projekt felépítése komponensek szerint. (világoskék: saját komponensek, piros: átjáró)](images/components.svg)
@@ -218,7 +218,7 @@ A fejlesztői környezet telepítése hasonló a prod környezetéhez. A főbb k
      3. Hozzon létre egy biztonságos jelszót, majd állítsa be rá a `MINIO_ROOT_PASSWORD` változót
      4. _[opcionális]_ Állítson be egy új felhasználónevet a `MINIO_ROOT_USER` változóval
 
-3. Módosítsa az NGINX konfigurációt (`nginx.dev.conf`).
+3. Módosítsa az NGINX[@nginx] konfigurációt (`nginx.dev.conf`).
    Állítsa át a `server_name` kezdetű sorokat úgy, hogy a szolgáltatások az ön által megadott domaint szolgálják ki.
 4. Indítsa el a szolgáltatásokat a `docker compose -f docker-compose.dev.yml up` paranccsal
 5. Konfigurálja a Minio-t
@@ -877,7 +877,7 @@ A "Play" gomb megnyomása után a médiatartalom `type` átáll `iframe`-re, és
 
 Ahhoz, hogy mindegyik komponenst egy címről elérhetővé tegyünk szükséges egy reverse proxy. Ehhez az NGINX[@nginx] nevű szoftvert használom, hiszen az egyik leghasználtabb HTTP[@rfc2616] kiszolgáló a világon[@netcraft], és egy konfigurációs fájllal könnyen személyre lehet szabni.
 
-A komponensek, mivel mind Docker-ben vannak futtatva, szolgáltatásaikat csak egy Docker-en belüli hálózaton teszik elérhetővé. A reverse proxy elérhető a belső hálózaton kívülről is, és a használt domain alapján irányítja át a forgalmat megadott szolgáltatásokhoz.
+A komponensek, mivel mind Docker-ben vannak futtatva, szolgáltatásaikat csak egy Docker-en belüli hálózaton teszik elérhetővé. A reverse proxy elérhető a belső hálózaton kívülről is, és a használt domain alapján irányítja át a forgalmat a megadott szolgáltatásokhoz.
 
 A projektben két NGINX konfigurációs fájl érhető el: egy a fejlesztői környezetnek és egy a kitelepített környezetnek.
 
@@ -899,9 +899,6 @@ A kitelepített környezet NGINX konfigurációja a következő domaineket irán
 
 - `getcrossview.com`, `www.getcrossview.com`
   - A Mainservice 3000-es portjára irányít
-- `apriltag.getcrossview.com`
-  - Az Apriltag Service 8000-es portjára irányít
-  - Normál működés esetén az Apriltag Service-t csak a Mainservice éri el, de debug-olás szempontjából hasznos, ha fejlesztői környezetben elérhető
 - `dashboard.getcrossview.com`
   - A Minio 9001-es portjára irányít
   - Ez a Minio műszerfala
@@ -1093,7 +1090,7 @@ Tesztesetek listája:
 | Kalibrációs kép, kalibráló jel nélkül | Szoba megnyitva, kalibrálási állapotban | Kattintson az "Upload calibration image" gombra, majd töltse fel a projekt mappából az apriltagservice/\hspace{0pt}test/\hspace{0pt}image_\hspace{0pt}no_tag.png fájlt. | A bal alsó sarokban megjelenik egy "No tags have been found" hiba, a kalibrációs kép nem változik meg. |
 | Túl nagy kalibrációs kép | Szoba megnyitva, kalibrálási állapotban | Kattintson az "Upload calibration image" gombra, majd töltsön fel egy 16 MiB-nál nagyobb fájlt (lásd: -@sec:large-file. fejezet) | A bal alsó sarokban megjelenik egy "File too large" hiba, a kalibrációs kép nem változik meg |
 | Sikeres kalibrálás | Szoba megnyitva, kalibrálási állapotban, kalibrációs kép nélkül. Másik eszközön szoba megnyitva, megjelenítő módban | Készítsen egy képet, ahol a megjelenítő kliens kalibráló jele jól látszik. Kattintson az "Upload calibration image" gombra, majd töltse fel ezt a képet. | A kalibrálási kép megjelenik, rajta csak és kizárólag a megjelenítő kliens kijelzője látszik. |
-| Sikeres kalibrálás, kalibrációs kép megváltoztatásával | Szoba megnyitva, kalibrálási állapotban, fel van töltve kalibrációs kép. Másik eszközön szoba megnyitva, megjelenítő módban | Lépjen be egy új eszközön a szobába, megjelenítéső módban. Készítsen egy képet, ahol az új megjelenítő kliens kalibráló jele jól látszik. Kattintson az "Upload calibration image" gombra, majd töltse fel ezt a képet. | A kalibrálási kép megváltozik, rajta csak és kizárólag az új megjelenítő kliens kijelzője látszik. |
+| Sikeres kalibrálás, kalibrációs kép megváltoztatásával | Szoba megnyitva, kalibrálási állapotban, fel van töltve kalibrációs kép. Másik eszközön szoba megnyitva, megjelenítő módban | Lépjen be egy új eszközön a szobába, megjelenítő módban. Készítsen egy képet, ahol az új megjelenítő kliens kalibráló jele jól látszik. Kattintson az "Upload calibration image" gombra, majd töltse fel ezt a képet. | A kalibrálási kép megváltozik, rajta csak és kizárólag az új megjelenítő kliens kijelzője látszik. |
 | Kalibrációs kép szinkronizálás | Egyes eszközön szoba megnyitva, kalibrálási állapotban, nincs feltöltve kalibrációs kép. Kettes eszközön szoba megnyitva, konfiguráló módban. Hármas eszközön szoba megnyitva, megjelenítő módban. | Készítsen egy képet, ahol az hármas kliens kalibráló jele jól látszik. Az egyes kliensen kattintson az "Upload calibration image" gombra, majd töltse fel az előbb készített képet. | A kép sikeresen feltöltődik, és megjelenik a kettes eszközön is. |
 | Közvetítés, kalibrációs képpel | Szoba megnyitva, kalibrálási állapotban, kalibrációs kép fel van töltve | Kattintson a "Broadcast" gombra | Megjelenik a közvetítési oldal |
 | Közvetítés állapotváltozás szinkronizálás | Szoba megnyitva, kalibrálási állapotban, kalibrációs kép fel van töltve. Másik eszközön szoba megnyitva, konfiguráló módban. | Kattintson a "Broadcast" gombra | Megjelenik a közvetítési oldal a másik eszközön is |
@@ -1103,10 +1100,10 @@ Tesztesetek listája:
 | Hibás kiterjesztésű fénykép feltöltés | Szoba megnyitva, közvetítési állapotban, konfiguráló módban. "Photos" médiatartalom típus kiválasztva. | Kattintson az "Upload photo" gombra és töltse fel a `README.md` fájlt. | A bal alsó sarokban megjelenik egy "Invalid extension" hiba, a lista nem változik meg. |
 | Túl nagy fénykép feltöltés | Szoba megnyitva, közvetítési állapotban, konfiguráló módban. "Photos" médiatartalom típus kiválasztva. | Kattintson az "Upload photo" gombra és töltsön fel egy 16 MiB-nál nagyobb fájlt (lásd: -@sec:large-file. fejezet) | A bal alsó sarokban megjelenik egy "File too large." hiba, a lista nem változik meg. |
 | Fénykép kiválasztása | Szoba megnyitva, közvetítési állapotban, konfiguráló módban. "Photos" médiatartalom típus kiválasztva, legalább egy kép feltöltve. Másik eszközön szoba megnyitva, megjelenítő módban. | Kattintson az egyik feltöltött képre. | A bal oldali előnézeten megjelenik a kiválasztott kép. A kép szintén megjelenik a megjelenítő kliensen. |
-| iFrame hibásan formázott URL-el | Szoba megnyitva, közvetítési állapotban, konfiguráló modban. "IFrame" médiatartalom típus kiválasztva. | Írja be az "Embed url" mezőbe a következő karakterláncot: "Lorem ipsum dolor sit amet". Kattintson a "Play" gombra. | Nem történik semmi. |
-| iFrame helyes URL-el | Szoba megnyitva, közvetítési állapotban, konfiguráló modban. "IFrame" médiatartalom típus kiválasztva. Másik eszközön szoba megnyitva, megjelenítő módban. | Írja be az "Embed url" mezőbe egy beágyazható oldal URL-jét^[Például: https://www.youtube.com/embed/dQw4w9WgXcQ]. Kattintson a "Play" gombra. | A jobb oldali előnézeten megjelenik a beágyazás. A beágyazás szintén megjelenik a megjelenítő kliensen. |
-| Videó hibásan formázott URL-el | Szoba megnyitva, közvetítési állapotban, konfiguráló modban. "Video" médiatartalom típus kiválasztva. | Írja be az "Embed url" mezőbe a következő karakterláncot: "Lorem ipsum dolor sit amet". Kattintson a "Play" gombra. | "Invalid url" hiba. A megjelenített tartalom nem változik. |
-| Videó nem engedélyezett URL-el | Szoba megnyitva, közvetítési állapotban, konfiguráló modban. "Video" médiatartalom típus kiválasztva. | Írja be az "Embed url" mezőbe a következő karakterláncot: "http://google.com". Kattintson a "Play" gombra. | "Unsupported URL" hiba. A megjelenített tartalom nem változik. |
+| iFrame hibásan formázott URL-el | Szoba megnyitva, közvetítési állapotban, konfiguráló módban. "IFrame" médiatartalom típus kiválasztva. | Írja be az "Embed url" mezőbe a következő karakterláncot: "Lorem ipsum dolor sit amet". Kattintson a "Play" gombra. | Nem történik semmi. |
+| iFrame helyes URL-el | Szoba megnyitva, közvetítési állapotban, konfiguráló módban. "IFrame" médiatartalom típus kiválasztva. Másik eszközön szoba megnyitva, megjelenítő módban. | Írja be az "Embed url" mezőbe egy beágyazható oldal URL-jét^[Például: https://www.youtube.com/embed/dQw4w9WgXcQ]. Kattintson a "Play" gombra. | A jobb oldali előnézeten megjelenik a beágyazás. A beágyazás szintén megjelenik a megjelenítő kliensen. |
+| Videó hibásan formázott URL-el | Szoba megnyitva, közvetítési állapotban, konfiguráló módban. "Video" médiatartalom típus kiválasztva. | Írja be az "Embed url" mezőbe a következő karakterláncot: "Lorem ipsum dolor sit amet". Kattintson a "Play" gombra. | "Invalid url" hiba. A megjelenített tartalom nem változik. |
+| Videó nem engedélyezett URL-el | Szoba megnyitva, közvetítési állapotban, konfiguráló módban. "Video" médiatartalom típus kiválasztva. | Írja be az "Embed url" mezőbe a következő karakterláncot: "http://google.com". Kattintson a "Play" gombra. | "Unsupported URL" hiba. A megjelenített tartalom nem változik. |
 | Videó sikeres betöltése | Szoba megnyitva, közvetítési állapotban, konfiguráló módban. Másik eszközön szoba megnyitva, megjelenítő módban. "Video" médiatartalom típus kiválasztva. | Írjon be az "Embed url" mezőbe egy helyes YouTube linket^[Például: https://www.youtube.com/watch?v=dQw4w9WgXcQ]. Kattintson a Play gombra | A jobb oldali előnézeten megjelenik a videó. A videó szintén megjelenik a megjelenítő kliensen. A videó alapértelmezetten szüneteltetve van, egy Play gomb jelenik meg az előnézet alatt. |
 | Videó indítása | Szoba megnyitva, közvetítési állapotban, konfiguráló módban. Videó betöltve, szüneteltetve | Kattintson az előnézet alatti Play gombra. | A videó mindegyik kliensen elindul. |
 | Videó szüneteltetése | Szoba megnyitva, közvetítési állapotban, konfiguráló módban. Videó betöltve, elindítva | Kattintson az előnézet alatti Pause gombra. | A videó mindegyik kliensen megállt, illetve a lejátszás ideje szinkronizálódik. |
