@@ -869,6 +869,10 @@ Szerializációkor, ha a videó szünetel, akkor az adatbázisban tárolt videó
 
 #### iFrame médiatartalom típus
 
+Az iFrame egy egyszerűbb médiatartalom típus, ami nem kezel se fájlfeltöltést, se szinkronizációt, mert itt a beágyazott tartalomnak kell azt biztosítania.
+
+A "Play" gomb megnyomása után a médiatartalom `type` átáll `iframe`-re, és a médiatartalom `url`-be bele kerül a beágyazott tartalom címe.
+
 ## NGINX
 
 Ahhoz, hogy mindegyik komponenst egy címről elérhetővé tegyünk szükséges egy reverse proxy. Ehhez az NGINX[@nginx] nevű szoftvert használom, hiszen az egyik leghasználtabb HTTP[@rfc2616] kiszolgáló a világon[@netcraft], és egy konfigurációs fájllal könnyen személyre lehet szabni.
