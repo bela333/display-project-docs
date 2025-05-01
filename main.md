@@ -6,7 +6,7 @@ nocite: |
 
 # Bevezetés
 
-A mai világban körbevesznek minket a számítógépek. A zsebünkben lévő okostelefontól kezdve, a nappalinkban lévő televízión és számítógépen át, egészen a bolti vásárlásainkat segítő kioszkokig. Egyes kutatások szerint, egy személynek átlagosan **3,6**[@cisco] okos eszköze van. Ezeknek az eszközöknek viszont a lehetőségeit korlátozza, hogy eredendően számítási és I/O kapacitása megoszlik. Ezekkel a problémákkal többen is foglalkoznak, mind számítási^[például Slurm, Spark és egyéb HPC szoftverek], mind bemeneti oldalról^[KVM-ek, a Synergy nevű program], de a kimeneti kérdésre kevesebb megoldás létezik, és azok vagy komplexek és nehezen kezelhetőek, vagy elavultak.
+A mai világban körbevesznek minket a számítógépek. A zsebünkben lévő okostelefontól kezdve, a nappalinkban lévő televízión és számítógépen át, egészen a bolti vásárlásainkat segítő kioszkokig. Egyes kutatások szerint, egy személynek átlagosan **3,6**[@cisco] okos eszköze van. Ezeknek az eszközöknek viszont a lehetőségeit korlátozza, hogy eredendően számítási és I/O kapacitása megoszlik. Ezekkel a problémákkal többen is foglalkoznak, mind számítási^[például Slurm[@slurm], Spark[@spark] és egyéb HPC szoftverek], mind bemeneti oldalról^[KVM-ek, a Synergy[@synergy] nevű program], de a kimeneti kérdésre kevesebb megoldás létezik, és azok vagy komplexek és nehezen kezelhetőek, vagy elavultak.
 
 Szakdolgozatom egy interaktív webes alkalmazás, ami ezt az űrt hivatott betölteni. Segítségével több webböngészésre képes eszköz kijelzőjét fel tudjuk használni egy kijelzőként. Ezeket az egyesített kijelzőket (továbbiakban virtuális kijelzőket) használhatjuk különböző médiatartalmak megjelenítésére, például képek, videók, prezentációk.
 
@@ -25,7 +25,7 @@ Az alapértelmezett konfiguráció egy szerverről szolgálja ki az összes szol
 A szükséges domainek (zárójelben a központilag kiszolgált domainek)
 
 - A fő alkalmazás domainje (`getcrossview.com`/`www.getcrossview.com`)
-- A Minio (S3 tárhely) domainje (`minio.getcrossview.com`)
+- A Minio[@minio] (S3[@s3] tárhely) domainje (`minio.getcrossview.com`)
 - A Minio műszerfal domainje (`dashboard.getcrossview.com`)
 
 Lokális futtatás esetén elég a HOSTS fájl szerkesztése. Erről több információt a -@sec:hosts fejezetben találhat.
@@ -76,7 +76,7 @@ Lokális futtatás esetén elég a HOSTS fájl szerkesztése. Erről több infor
         ```
 
    5. Hozzon létre egy hozzáférési kulcsot az Access Keys oldalon. Mentse el biztonságos helyre az Access Key-t és a Secret Key-t is.
-6. Szerkessze a `main.env` fájl a most létrehozott hozzáférési kulccsal
+6. Szerkessze a `main.env` fájlt a most létrehozott hozzáférési kulccsal
    - az `S3_ACCESS_KEY_ID` legyen az Access Key
    - az `S3_SECRET_ACCESS_KEY_ID` legyen a Secret Key
 7. Indítsa újra a szolgáltatásokat
@@ -87,7 +87,7 @@ Az alkalmazást megnyitva a főoldalt láthatjuk (-@fig:main. ábra). Ezen az ol
 
 ![A főoldal](images/main.png){#fig:main}
 
-A szobák nézete két fő dologtól függ: a szoba **állapotától**, és a kliens **szerepétől**.
+A szobák nézete két fő változótól függ: a szoba **állapotától**, és a kliens **szerepétől**.
 
 A szobákban lévő klienseknek két lehetséges **szerepe** van:
 
@@ -180,7 +180,7 @@ Egy egyszerű példa a VDO.ninja[@video-ninja] szolgáltatás használata, egy k
 5. Menjünk át a CrossView szobánkba, ami már be van állítva Közvetítési állapotra
 6. Válasszuk ki az iFrame médiatartalom típust
 7. Másoljuk be az előbbi linket
-8. Adjuk hozzá a következő tagot: `&na` (ez kikapcsolja a hangot, ezzel engedélyezve az automatikus lejátszást)
+8. Adjuk hozzá a következő tagot: `&na`[@noaudio] (ez kikapcsolja a hangot, ezzel engedélyezve az automatikus lejátszást)
 
 A [vdo.ninja](https://vdo.ninja) szolgáltatást több más dologra is lehet használni, például webkamerák megosztására, [Android illetve iOS eszközökről való közvetítésre](https://docs.vdo.ninja/steves-helper-apps/native-mobile-app-versions)^[https://docs.vdo.ninja/steves-helper-apps/native-mobile-app-versions] (natív alkalmazások segítségével), vagy akár az [OBS nevű szoftverből közvetíteni](https://docs.vdo.ninja/guides/from-obs-to-vdo.ninja-using-whip)^[https://docs.vdo.ninja/guides/from-obs-to-vdo.ninja-using-whip].
 
@@ -188,11 +188,11 @@ A vdo.ninja további lehetőségeiről a [dokumentációjában](https://docs.vdo
 
 # Fejlesztői dokumentáció
 
-A projekt magja a "Main Service" nevű React alapú full-stack alkalmazás. Ez implementálja mind a backend, mind a frontend funkcionalitást.
+A projekt magja a "Main Service" nevű React[@react] alapú full-stack alkalmazás. Ez implementálja mind a backend, mind a frontend funkcionalitást.
 
-A kalibráláshoz készült egy "Apriltag Service" nevű Pythonos komponens is, ami egy microservice-ként funkcionál, és a kalibráló jelek felismerését, illetve egyes kalibráláshoz kapcsolódó matematikai számításokat hajt végre.
+A kalibráláshoz készült egy "Apriltag Service" nevű Python-os[@python] komponens is, ami egy microservice-ként funkcionál, és a kalibráló jelek felismerését, illetve egyes kalibráláshoz kapcsolódó matematikai számításokat hajt végre.
 
-Külső fejlesztésű szolgáltatásként van használva a Redis mint adatbázis, és a Minio mint S3 kompatibilis tárhely.
+Külső fejlesztésű szolgáltatásként van használva a Redis[@redis] mint adatbázis, és a Minio[@minio] mint S3[@s3] kompatibilis tárhely.
 
 A komponensek külső elérését egy NGINX[@nginx] proxy segíti.
 
@@ -203,7 +203,7 @@ A komponensek külső elérését egy NGINX[@nginx] proxy segíti.
 
 A fejlesztői környezet telepítése hasonló a prod környezetéhez. A főbb különbség, hogy a `docker-compose.prod.yml` és az `nginx.prod.conf` helyett a `docker-compose.dev.yml` és az `nginx.dev.conf` fájlokat kell módosítani.
 
-1. Telepítse fel a Docker-t. Ehhez elérhető segédletet a [docker.com](https://docs.docker.com/engine/install/)^[https://docs.docker.com/engine/install/] oldalon találhat.
+1. Telepítse fel a Docker-t. Ehhez segédletet a [docker.com](https://docs.docker.com/engine/install/)^[https://docs.docker.com/engine/install/] oldalon találhat.
 2. Hozza létre a szükséges .env fájlokat
 
    - `main.env`
@@ -249,7 +249,7 @@ A fejlesztői környezet telepítése hasonló a prod környezetéhez. A főbb k
         ```
 
    5. Hozzon létre egy hozzáférési kulcsot az Access Keys oldalon. Mentse el biztonságos helyre az Access Key-t és a Secret Key-t is.
-6. Szerkessze a `main.env` fájl a most létrehozott hozzáférési kulccsal
+6. Szerkessze a `main.env` fájlt a most létrehozott hozzáférési kulccsal
    - az `S3_ACCESS_KEY_ID` legyen az Access Key
    - az `S3_SECRET_ACCESS_KEY_ID` legyen a Secret Key
 7. Indítsa újra a szolgáltatásokat
@@ -316,7 +316,7 @@ A `ScreenContent` komponens a szoba jelenlegi adatai szerint töltődik fel a me
 
 ## Adatbázis
 
-A projekthez a Redis adatbázis szoftvert használtam. A Redis egy kulcs-érték adatbázis, ahol minden elérhető rögtön a memóriából, ezért gyakran használják például gyorsítótárakhoz.
+A projekthez a Redis[@redis] adatbázis szoftvert használtam. A Redis egy kulcs-érték adatbázis, ahol minden elérhető rögtön a memóriából, ezért gyakran használják például gyorsítótárakhoz[@redis-cache].
 
 A Redis több szempontból is előnyös ehhez a projekthez:
 
@@ -346,7 +346,7 @@ A kulcsban `NAGY BETŰVEL` vannak jelölve a dinamikusan beillesztendő tagok:
 
 | Kulcs | Típus | Leírás |
 | ---- | --- | --------- |
-| roomCount | Szám | A létrehozott szobák számát tárolja. Értelmezhető úgy is, mint a legutoljára létrehozott szoba sorszáma. |
+| `roomCount` | Szám | A létrehozott szobák számát tárolja. Értelmezhető úgy is, mint a legutoljára létrehozott szoba sorszáma. |
 | `room:ROOM` | PubSub csatorna | Ezzel a kulccsal nem létezik kulcs-érték páros. Ez a kulcs a [Pub/Sub](https://redis.io/docs/latest/develop/interact/pubsub/)^[https://redis.io/docs/latest/develop/interact/pubsub/] üzeneteknek van fenntartva. Jelenleg csak a `ping` string küldhető el rajta. További információ: -@sec:pubsub. fejezet |
 | `room:ROOM:mode` | string | A szoba jelenlegi állapota. Értéke csak `calibration` (kalibrálás) vagy `viewing` (közvetítés) lehet. |
 | `room:ROOM:image` | string | A szoba jelenlegi kalibrációs képének S3-beli neve, kiterjesztéssel együtt. |
@@ -396,7 +396,7 @@ export function keyToCode(key: number, length = CODE_LENGTH) {
 
 Egyes esetekben nem lehet egyértelműen eldönteni, hogy a megjelenítő kliens mikor csatlakozott le. Ennek az észlelésére van beépítve egy pingelő rendszer az alkalmazásba. A kliens 30 másodpercenként hívja meg a `sendPing` szerveroldali függvényt, amely a `room:ROOM:screen:SCREEN:ping` kulcsú értéket `1`-re állítja, 2 perces EXPIRE értékkel. Így a kulcs nem fog eltűnni, amíg létezik a megjelenítő kliens. 
 
-A kulcs eltűnését egy [keyspace notification](https://redis.io/docs/latest/develop/use/keyspace-notifications/)^[https://redis.io/docs/latest/develop/use/keyspace-notifications/] segítségével vesszük észre. 
+A kulcs eltűnését egy [keyspace notification](https://redis.io/docs/latest/develop/use/keyspace-notifications/)^[https://redis.io/docs/latest/develop/use/keyspace-notifications/] segítségével vesszem észre. 
 
 ```ts
 // A ping kulcsot match-elő regex
@@ -447,7 +447,7 @@ Jelenleg a `deregisterScreen` függvény használaton kívül áll.
 
 A fájlok tárolására egy S3[@s3] kompatibilis tárhely szolgáltatást használok. Ennek oka, hogy ez a de-facto szabvány, és nagyban megkönnyíti a fájlok le- és feltöltését.
 
-A tárhely szolgáltatás amit használok, alapértelmezetten a Minio[@minio], hiszen jól támogatott és széleskörűen használt ^[a TheirStack[@theirstack] szerint több mint 1000 cég használja]. Természetesen bármilyen más S3 kompatibilis szolgáltatást le lehetne cserélni.
+A tárhely szolgáltatás amit használok alapértelmezetten a Minio[@minio], hiszen jól támogatott és széleskörűen használt^[a TheirStack[@theirstack] szerint több mint 1000 cég használja]. A Minio-t bármely más S3 kompatibilis szolgáltatásra le lehetne cserélni
 
 Az alkalmazás két S3 bucket-et (vödröt) használ:
 
@@ -475,14 +475,14 @@ Pre-signed URL-ek két helyen vannak használatban az alkalmazásban:
 
 ## Main service
 
-A projekthez a React keretrendszert használtam, mivel sokoldalú és széles körű használata miatt jól támogatott. Manapság sokféle "ízben" lehet használni a React-et. Én a Next.js[@nextjs] alapú `create-t3-app`-et[@t3] használtam. Ennek a választásnak több oka is volt:
+A projekthez a React[@react] keretrendszert használtam, mivel sokoldalú és széles körű használata miatt jól támogatott. Manapság sokféle "ízben" lehet használni a React-et. Én a Next.js[@nextjs] alapú `create-t3-app`-et[@t3] használtam. Ennek a választásnak több oka is volt:
 
 - A Next.js az egyik legelterjedtebb keretrendszer még a React-es framework-ök között is, így ennek van a legjobb támogatottsága is
 - A Next.js egy full stack rendszer. Szerver komponensek és akciók segítségével egyben lehet megírni vele a frontend-et és a backend-et^[https://nextjs.org/docs#what-is-nextjs].
 - A `create-t3-app` egy kezdőcsomag, amely több gyakori konfigurációt beállít, illetve sok hasznos csomagot tartalmaz:
   - szigorú TypeScript[@typescript] támogatással érkezik, hogy biztosítsa minden sor kód típus helyességét
   - a `tRPC`[@trpc] könyvtárral egyszerűen lehet a szerver és a kliens kód között valós idejű kommunikációt végrehajtani
-  - ezeken felül támogatja a Prisma ORM-et, a NextAuth.js autentikációs könyvtárat és a Tailwind-et, de ezekre ebben a projektben nem volt szükség
+  - ezeken felül támogatja a Prisma ORM-et[@prisma], a NextAuth.js[@nextauth] autentikációs könyvtárat és a Tailwind-et[@tailwind], de ezekre ebben a projektben nem volt szükség
 
 Az oldal UI felépítéséhez a Mantine[@mantine] stíluskönyvtárat használtam, amely az oldal felépítését nagyban megkönnyítette, ezen kívül sok hasznos hook-ot tartalmaz.
 
@@ -533,7 +533,7 @@ Az alkalmazás különböző komponenseinek elérési oldalai, célja és a layo
 
 Mivel a Redis nem relációs adatbázis, ezért a klasszikus értelemben vett ORM-ek itt nem használhatóak. Az adatok kinyerésének egyszerűsítéséért új adatbázis elem esetén két dolgot kell létrehozni: egy kulcs helper-t, és egy adatbázis objektumot.
 
-A kulcs helper az egy függvény a `src/db/redis-keys.ts` fájlban. Itt minden adatbázis elemhez tartozik egy függvény, ami megadja az elemnek a kulcsát Redis-ben Ez egy low-level absztrakció a Redis-hez, nem kezel se típusokat, se hibákat. A hierarchikus felépítés segítésének érdekében a hierarchia belső csúcsaihoz rendelek egy `...Root` helper-t A csúcs alatt lévő elemek ezt a root helper-t használják a saját kulcsuk létrehozására.
+A kulcs helper az egy függvény a `src/db/redis-keys.ts` fájlban. Itt minden adatbázis elemhez tartozik egy függvény, ami megadja az elemnek a kulcsát Redis-ben. Ez egy low-level absztrakció a Redis-hez, nem kezel se típusokat, se hibákat. A hierarchikus felépítés segítésének érdekében a hierarchia belső csúcsaihoz rendelek egy `...Root` helper-t A csúcs alatt lévő elemek ezt a root helper-t használják a saját kulcsuk létrehozására.
 
 Például:
 
@@ -563,7 +563,7 @@ Ahhoz, hogy fenntartsuk az adatbázis egységes használatát, minden adatbázis
 
 Az adatbázis objektumok típusozottak, de nem szükséges, hogy a típust ellenőrizzék, amíg ezt a szignatúra fenntartja (feltételezve az adatbázis objektumok exkluzív használatát).
 
-A Redis adatbázis objektumot a `node-redis` könyvtár segítségével érem el. A `db/redis.ts` fájlból exportált `getRedis` aszinkron függvény teszi elérhetővé az adatbázis singleton-t.
+A Redis adatbázis objektumot a `node-redis`[@node-redis] könyvtár segítségével érem el. A `db/redis.ts` fájlból exportált `getRedis` aszinkron függvény teszi elérhetővé az adatbázis singleton-t.
 
 Egy pár példa:
 
@@ -828,7 +828,7 @@ A panelen kell lennie egy gombnak, amely elindítja a médiatartalmat. Ekkor a `
 
 ##### Megjelenés
 
-A "megjelenés" az az a tartalom, ami a virtuális kijelzőn meg fog jelenni. Belépési pontja a `src/app/room/[id]/_screenContent/ScreenContent.tsx` komponens fájl, ami a virtuális kijelző tartalma. Ehhez a fájlhoz lehet hozzáadni az új médiatípushoz tartozó megjelenést. Célszerű ide a `_screenContent` mappába létrehozni egy új komponenst a megjelenésnek, és azt felhasználni. Fontos, hogy ez a komponens kitöltse a szülő komponenst, hiszen így lesz teljes képernyős a tartalom.
+A "megjelenés" az az a tartalom, ami a virtuális kijelzőn meg fog jelenni. Belépési pontja a `src/app/room/[id]/_screenContent/ScreenContent.tsx` komponens fájl, ami a virtuális kijelző tartalma. Ehhez a fájlhoz lehet hozzáadni az új médiatípushoz tartozó megjelenést. Célszerű ide az `_screenContent` mappába létrehozni egy új komponenst a megjelenésnek, és azt felhasználni. Fontos, hogy ez a komponens méretben kitöltse a szülő komponenst, hiszen így lesz teljes képernyős a tartalom.
 
 Például, ha a megjelenés komponens `PresentationContent` és a médiatípus type-ja `presentation`, akkor a következő sorokat kell hozzáadni a ScreenContent-hez:
 
@@ -873,7 +873,7 @@ Szerializációkor, ha a videó szünetel, akkor az adatbázisban tárolt videó
 
 Az iFrame egy egyszerűbb médiatartalom típus, ami nem kezel se fájlfeltöltést, se szinkronizációt, mert itt a beágyazott tartalomnak kell azt biztosítania.
 
-A "Play" gomb megnyomása után a médiatartalom `type` átáll `iframe`-re, és a médiatartalom `url`-be bele kerül a beágyazott tartalom címe.
+A "Play" gomb megnyomása után a médiatartalom `type` átáll `iframe`-re, és a médiatartalom `url`-be belekerül a beágyazott tartalom címe.
 
 ## NGINX
 
@@ -916,11 +916,11 @@ A különböző futási környezetekre tekintettel egyik konfiguráció sem érk
 
 A kijelzők helyének pontos megállapításához szükséges egy kalibrálási fázis. Ehhez Apriltag[@wang2016iros]-eket használunk, amiknek gyorsan és pontosan <!--citation-->meg lehet határozni a helyzetét. 
 
-Mivel a legtöbb számítógépes látás könyvtár és eszköz Python-ban érhető el, ezért ezt a lépést egy külön szolgáltatásban hajtom végre, melyet Apriltag Service-nek hívok. A következő könyvtárakat használom: 
+Mivel a legtöbb számítógépes látás könyvtár és eszköz Python-ban[@python] érhető el, ezért ezt a lépést egy külön szolgáltatásban hajtom végre, melyet Apriltag Service-nek hívok. A következő könyvtárakat használom: 
 
 - Az Apriltag-ek feldolgozására a `pupil-apriltags` könyvtárat
 - A fényképek megnyitására, mentésére, perspektíva korrigálására az OpenCV könyvtárat (`opencv-python-headless`).
-- Az egyéb mátrixos számításokhoz a `numpy` könyvtárat
+- Az egyéb mátrixos számításokhoz a `numpy`[@numpy] könyvtárat
 - A Main Service-el való kommunikálás segítéséhez a FastAPI keretrendszert
 
 Számítógépes látásban a különböző síkok közötti perspektíva transzformációkat egy homográfia mátrixszal lehet jellemezni[@opencv-homography]. Az Apriltag könyvtár egy ilyen homográfiát ad vissza minden kalibráló jelhez, ami az Apriltag saját koordináta-rendszeréből képez a fénykép koordináta-rendszerébe. Ezt kombinálva egy saját homográfiával, ami a megjelenítő kliens koordináta-rendszeréből (lásd: `room:ROOM:screen:SCREEN:config` ) képez az Apriltag koordináta-rendszerébe, kapunk egy homográfiát ami a kliens kijelzőjét jellemzi a fénykép keretein belül. Ez után a kliensek közül kiválasztunk egy "sablon kijelzőt" (ez a legkisebb sorszámú kliens jelenleg), és arra ortogonálisan létrehozunk egy olyan koordináta-rendszert, amelybe belefér az összes kliens kijelzője. Így jön létre a virtuális kijelző.
@@ -946,7 +946,7 @@ A fejezetben a következő jelöléseket fogom használni:
 - $C$ - A kalibráló jel mérete pixelben
 - $C_x, C_y$ - A kalibráló jel x és y eltolása a kijelzőn pixelben
 
-Az Apriltag könyvtár minden megtalált kalibráló jelhez visszaadja a hozzá tartozó homográfiát. Ez a homográfia a jel koordináta-rendszeréből, ami $[-1, 1], [-1, 1]$ között van, átképez a fénykép koordináta-rendszerére, ahol pixel koordinátákkal dolgozunk ($[0, image\_width], [0, image\_height]$). Ezzel két probléma van. Egyrészt, a $[0, 1], [0, 1]$ koordinátákkal lehet a legegyszerűbben dolgozni, úgyhogy mind a forrás és a cél koordináta-rendszert erre át kell fordítani. Másrészt, a programban nem a kalibráló jel homográfiájára van szükségünk, hanem a teljes kijelzőjére.
+Az Apriltag könyvtár minden megtalált kalibráló jelhez visszaadja a hozzá tartozó homográfiát. Ez a homográfia a jel koordináta-rendszeréből, ami $[-1, 1], [-1, 1]$ között van, átképez a fénykép koordináta-rendszerére, ahol pixel koordinátákkal dolgozunk ($[0, image\_width], [0, image\_height]$). Ezzel két probléma van. Egyrészt, a $[0, 1], [0, 1]$ koordinátákkal lehet a legegyszerűbben dolgozni, úgyhogy a forrás és a cél koordináta-rendszert is át kell erre fordítani. Másrészt, a programban nem a kalibráló jel homográfiájára van szükségünk, hanem a teljes kijelzőjére.
 
 Az első probléma megoldására két másik homográfiát lehet felhasználni: az egyik egy $[0, 1]$-es mátrixot alakít át $[-1, 1]$-essé (egy nagyítással és egy eltolással), a másik pedig a fénykép méretű koordinátát alakítja át $[0, 1]$ méretűvé:
 
@@ -1014,7 +1014,7 @@ Az így kapott $M_i'$ mátrixok lesznek a kész homográfiák, amelyek a kliense
 
 A sablon kijelző felbontásából és a virtuális kijelzőn felvett méretéből ki tudunk számolni a virtuális kijelzőnek is egy felbontást: $virtual\_width$ és $virtual\_height$
 
-Megjelenítéskor a frontend-en még szükség van egy átalakításra, hiszen a CSS `matrix3d` transzformáció pixel egységekben dolgozik. A transzformáció a virtuális kijelzőt reprezentáló `div`-re lesz alkalmazva, ezért a bemeneten annak a koordináta-rendszeréből kell egység méretű koordináta-rendszerbe hozni az értékeket. Viszont a kimeneten a transzformáció már a kliens kijelző méreteivel dolgozik, úgyhogy ott az egység méretű értékeket kell felnagyítani a kijelző méretére. Ezt a következő mátrixszal lehet megtenni:
+Megjelenítéskor a frontend-en még szükség van egy átalakításra, hiszen a CSS `matrix3d` transzformáció pixel egységekben dolgozik[@css-transforms-lvl2]. A transzformáció a virtuális kijelzőt reprezentáló `div`-re lesz alkalmazva, ezért a bemeneten annak a koordináta-rendszeréből kell egység méretű koordináta-rendszerbe hozni az értékeket. Viszont a kimeneten a transzformáció már a kliens kijelző méreteivel dolgozik, úgyhogy ott az egység méretű értékeket kell felnagyítani a kijelző méretére. Ezt a következő mátrixszal lehet megtenni:
 
 $$T_i \coloneqq
 \begin{bmatrix}
@@ -1050,7 +1050,7 @@ A teszteléshez használt képek a `apriltagservice/test` mappában találhatóa
 
 #### Felállítás
 
-A tesztek futtatásához szükséges egy Python környezet, amelynek verziószáma legalább 3.12. Ajánlott verzió: `3.12.9`. Ajánlott Linux[@linux]-ot használni, vagy vagy Windows[@windows] rendszereken WSL-t[@wsl].
+A tesztek futtatásához szükséges egy Python[@python] környezet, amelynek verziószáma legalább 3.12. Ajánlott verzió: `3.12.9`. Ajánlott Linux[@linux]-ot használni, vagy Windows[@windows] rendszereken WSL-t[@wsl].
 
 1. Lépjen be az `apriltagservice` mappába
 2. Hozzon létre új venv-et[@venv]: `python3.12 venv venv`
@@ -1064,7 +1064,7 @@ A tesztek futtatásához szükséges egy Python környezet, amelynek verziószá
 | Teszt neve | Leírása | Kimenet |
 | ----- | ---- | --- |
 | `test_no_tag_no_screen` | Egy tesztkártya[@testcard] annak az esetnek a tesztelésére, ha nincs a képen Apriltag, és a Mainservice sem adott át kijelző méret adatokat. | `No tags have been found` hiba |
-| `test_no_tag` | Egy tesztkártya[@testcard] annak az esetnek a tesztelésére, ha nincs a képen Apriltag. Egy kijelző dimenzió meg vannak adva. | `No tags have been found` hiba, mivel a kijelzők mérete nem ismert. |
+| `test_no_tag` | Egy tesztkártya[@testcard] annak az esetnek a tesztelésére, ha nincs a képen Apriltag. Egy kijelző dimenzió meg vannak adva. | `No tags have been found` hiba |
 | `test_one_tag_no_screen` | Egy Apriltag-ről készült kép, de kijelző dimenziók nélkül. | `No tags have been found` hiba, mivel a kijelzők mérete nem ismert. |
 | `test_one_tag` | Egy teljes képernyős kép a megjelenítő kliens kalibrációs oldaláról. A dimenziók helyesen meg vannak adva. | Sikeres visszatérés, eredetivel megegyező felbontás, egy kijelző felismerve, amely az egész virtuális kijelzőt kitölti. |
 | `test_one_tag_perspective` | Egy teljes képernyős kép a megjelenítő kliens kalibrációs oldaláról. A dimenziók helyesen meg vannak adva. A kép oldalasan készült. | Sikeres visszatérés, eredetivel megegyező felbontás, egy kijelző felismerve, amely az egész virtuális kijelzőt kitölti. |
