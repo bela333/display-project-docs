@@ -743,7 +743,7 @@ A komponens konfigurálásához négy paraméter szükséges:
   Azoknak a MIME[@rfc2046] típusoknak a tömbje, amelyeket engedünk feltölteni (ez csak frontend-en van ellenőrizve)
 - `handleRequest`
 
-  Egy szerver akció, ami megkapja a feltöltendő fájl nevét, méretét és a szoba kódját. Fontos, hogy ezeket az értékeket a kliens generálja, így ellenőrizendők: a szoba kódja a `codeValidation` Zod validációval, a fájl mérete a pre-signed URL-be égetett `Content-Length` fejléccel. Visszatérési értéke generikus, de mindenképpen tartalmaznia kell a pre-signed URL-t.
+  Egy szerver akció, ami megkapja a feltöltendő fájl nevét, méretét és a szoba kódját. Fontos, hogy ezeket az értékeket a kliens generálja, így ellenőrizendők: a szoba kódja a `codeValidation` Zod[@zod] validációval, a fájl mérete a pre-signed URL-be égetett `Content-Length` fejléccel. Visszatérési értéke generikus, de mindenképpen tartalmaznia kell a pre-signed URL-t.
 - `onUpload`
 
   Frontend oldalon hívott callback a sikeres feltöltés esetén. Paraméterként megkapja a handleRequest eredményét.
