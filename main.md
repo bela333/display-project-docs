@@ -1,5 +1,7 @@
 ---
 numbersections: true
+nocite: |
+  @twemoji, @twemoji-latex, @csl
 ---
 
 # Bevezetés
@@ -143,7 +145,7 @@ A konfiguráló kliensnek lehetősége van médiatartalmak típusát kiválaszta
 
 Bal oldalon található a típus kiválasztó **(1)**, tőle jobbra az adott típus konfigurációs panelje **(2)**, majd a jobb oldalon egy előnézet **(3)**. Az előnézet alatt opcionálisan megjelenhetnek az adott típushoz tartozó vezérlők is **(4)**.
 
-![A konfiguráló kliens nézete a közvetítési állapotban](images/broadcast.png){width=50%}
+![A konfiguráló kliens nézete a közvetítési állapotban[@pexels] ](images/broadcast.png){width=50%}
 
 Jelenleg három médiatartalom típus elérhető:
 
@@ -256,7 +258,7 @@ A fejlesztői környezet telepítése hasonló a prod környezetéhez. A főbb k
 
 Lokális tesztelés esetén hasznos lehet, ha nem kell egy külső domaint használni. Ennek a legegyszerűbb módszere egy HOSTS fájl létrehozása.
 
-#### HOSTS fájl Windows[@windows] operációs rendszeren
+#### HOSTS fájl Windows operációs rendszeren
 
 1. Indítsa el a Jegyzettömböt rendszergazda jogosultságokkal
 2. Nyissa meg a `C:\Windows\System32\drivers\etc\hosts` fájlt (szükséges lehet kiválasztani a "Minden fájl (\*.\*)" opciót)

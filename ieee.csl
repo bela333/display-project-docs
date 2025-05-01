@@ -59,6 +59,7 @@
       <term name="chapter-number" form="short">ch.</term>
       <term name="presented at">presented at the</term>
       <term name="available at">available</term>
+      <term name="note">note</term>
     </terms>
   </locale>
   <!-- Macros -->
@@ -507,6 +508,14 @@
           <text macro="access"/>
         </else>
       </choose>
+      <choose>
+        <if variable="note">
+            <group delimiter=": " prefix=". ">
+              <text term="note" text-case="capitalize-first"/>
+              <text variable="note" form="text"/>
+            </group>
+        </if>
+        </choose>
     </layout>
   </bibliography>
 </style>
